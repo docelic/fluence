@@ -14,7 +14,7 @@ before_all do |env|
   file = get_file_path(env)
   begin
     rfile = File.real_path(file)
-    chroot = Dir.current
+    chroot = Mdwikiface::ARG.basedir
     raise "Out of chroot" if chroot != rfile[0..(chroot.size - 1)]
     raise "Git directory" if "#{chroot}/.git" == rfile[0..(chroot.size + 4)]
   rescue
