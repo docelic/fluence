@@ -1,5 +1,8 @@
 private def get_file_path(env)
-  "." + env.request.resource + ".md"
+  rpath = env.request.resource.gsub(/^\/\w+/, "")
+  gpath = "." + rpath + ".md"
+  puts "File read: #{gpath}"
+  gpath
 end
 
 error 404 do
@@ -11,6 +14,7 @@ error 403 do
 end
 
 before_all do |env|
+  next if env.request.resource == "/"
   file = get_file_path(env)
   begin
     rfile = File.real_path(file)
@@ -22,7 +26,18 @@ before_all do |env|
   end
 end
 
-get "/*" do |env|
+get "/" { |env| env.redirect "/show/README" }
+
+get "/new" do |env|
+end
+
+get "/edit/*" do |env|
+end
+
+get "/delete/*" do |env|
+end
+
+get "/show/*" do |env|
   Markdown.to_html(File.read(get_file_path(env))) rescue env.response.status_code = 404
 end
 
@@ -32,10 +47,6 @@ end
 
 put "/*" do |env|
   # .. replace something ..
-end
-
-patch "/*" do |env|
-  # .. modify something ..
 end
 
 delete "/*" do |env|
