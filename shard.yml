@@ -1,0 +1,21 @@
+name: mdwikiface
+version: 0.1.0
+
+authors:
+  - Arthur Poulet <arthur.poulet@mailoo.org>
+
+targets:
+  mdwikiface:
+    main: src/mdwikiface.cr
+
+crystal: 0.20.5+?
+
+license: GPL-3.0
+
+dependencies:
+  kemal:
+      github: sdogruyol/kemal
+      branch: master
+  crystal-libgit2:
+    github: puppetpies/crystal-libgit2
+    branch: master
