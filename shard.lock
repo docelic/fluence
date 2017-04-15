@@ -1,0 +1,18 @@
+version: 1.0
+shards:
+  crystal-libgit2:
+    github: puppetpies/crystal-libgit2
+    commit: e6992b53f6af9c2bef0f1f4fcb4424ce6ada956b
+
+  kemal:
+    github: sdogruyol/kemal
+    commit: 0b4856b7417592743a27fc3e30867fd141395bf6
+
+  kilt:
+    github: jeromegn/kilt
+    version: 0.3.3
+
+  radix:
+    github: luislavena/radix
+    version: 0.3.8
+
