@@ -1,14 +1,19 @@
 # mdwikiface
 
-TODO: Write a description here
+Wiki in crystal and markdown
+
+The pages of the wiki are written in markdown and commited on the git repository where it is started.
 
 ## Installation
 
-TODO: Write installation instructions here
+    make
 
 ## Usage
 
-TODO: Write usage instructions here
+    mdwikiface --help
+    Usage: mdwikiface [arguments]
+        -b=PATH, --basedir=PATH          Directory where the wiki must start (default: $PWD)
+        -h, --help                       Show this help
 
 ## Development
 
