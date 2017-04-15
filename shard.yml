@@ -8,14 +8,17 @@ targets:
   mdwikiface:
     main: src/mdwikiface.cr
 
-crystal: 0.20.5+?
+crystal: 0.21.1
 
 license: GPL-3.0
 
 dependencies:
   kemal:
-      github: sdogruyol/kemal
-      branch: master
+    github: sdogruyol/kemal
+    branch: master
+  slang:
+    github: jeromegn/slang
+    branch: master
   crystal-libgit2:
     github: puppetpies/crystal-libgit2
     branch: master

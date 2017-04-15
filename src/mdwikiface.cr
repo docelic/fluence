@@ -2,6 +2,7 @@ require "markdown"
 require "option_parser"
 
 require "kemal"
+require "kilt/slang"
 require "crystal-libgit2"
 
 module Mdwikiface

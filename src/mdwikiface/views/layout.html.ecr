@@ -1,0 +1,15 @@
+<html>
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <nav>
+    <a href="/new">New page</a>
+    <a href="/edit/<%= current_path %>">Edit</a>
+    <a href="/delete/<%= current_path %>">Delete</a>
+  </nav>
+  <content>
+    <%= content %>
+  </content>
+</body>
+</html>
