@@ -1,0 +1,8 @@
+h1.small.page-header
+  | Wiki page: #{locals[:title]}
+
+.col-xs-8
+  == locals[:body_html]
+.col-xs-4
+  a href="#{locals[:display_path]}?edit"
+    | Edit

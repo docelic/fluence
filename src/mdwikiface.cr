@@ -1,5 +1,5 @@
 require "markdown"
-require "option_parser"
+#require "option_parser"
 
 require "kemal"
 require "kilt/slang"
@@ -12,11 +12,11 @@ module Mdwikiface
     def initialize
       @basedir = Dir.current
 
-      OptionParser.parse! do |parser|
-        parser.banner = "Usage: mdwikiface [arguments]"
-        parser.on("-b=PATH", "--basedir=PATH", "Directory where the wiki must start (default: #{@basedir})") { |path| @basedir = path }
-        parser.on("-h", "--help", "Show this help") { puts parser; exit }
-      end
+      #OptionParser.parse! do |parser|
+      #  parser.banner = "Usage: mdwikiface [arguments]"
+      #  parser.on("-b=PATH", "--basedir=PATH", "Directory where the wiki must start (default: #{@basedir})") { |path| @basedir = path }
+      #  parser.on("-h", "--help", "Show this help") { puts parser; exit }
+      #end
     end
   end
 
