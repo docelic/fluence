@@ -1,0 +1,13 @@
+form#edit-page {
+    textarea {
+        overflow: hidden;
+        outline: none;
+        display: block;
+        border-radius: 4px;
+        border: 4px solid #556677;
+
+        padding: 10px;
+        margin: 50px auto;
+        resize: vertical;
+    }
+}

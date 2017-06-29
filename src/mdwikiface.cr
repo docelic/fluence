@@ -1,5 +1,5 @@
 require "markdown"
-#require "option_parser"
+# require "option_parser"
 
 require "kemal"
 require "kilt/slang"
@@ -10,23 +10,24 @@ module Mdwikiface
     getter basedir : String
 
     def initialize
-      @basedir = Dir.current
+      @basedir = File.expand_path "data", Dir.current
+      Dir.mkdir_p(@basedir) rescue nil
 
-      #OptionParser.parse! do |parser|
+      # OptionParser.parse! do |parser|
       #  parser.banner = "Usage: mdwikiface [arguments]"
       #  parser.on("-b=PATH", "--basedir=PATH", "Directory where the wiki must start (default: #{@basedir})") { |path| @basedir = path }
       #  parser.on("-h", "--help", "Show this help") { puts parser; exit }
-      #end
+      # end
     end
   end
 
-  ARG  = Options.new
-  REPO = Libgitit2.open_repository(ARG.basedir)
+  OPTIONS = Mdwikiface::Options.new
+  REPO    = Libgitit2.open_repository(OPTIONS.basedir)
 end
 
 require "./version"
 require "./helpers"
 require "./controllers"
 
-puts "Wiki is written on #{Mdwikiface::ARG.basedir}"
+puts "Wiki is written on #{Mdwikiface::OPTIONS.basedir}"
 Kemal.run
