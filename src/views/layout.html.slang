@@ -17,6 +17,18 @@ html
     / script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"
   body
     nav
-      / a href="/pages/new" New page
-    div#content.container
-      == content
+      .pull-left
+        a.btn.btn-md href="/" Home
+      .pull-right
+        form#search-page action="/pages/search" method="get" role="form"
+          .form-inline
+            input.form-control name="q" type="text" placeholder="Search query"
+            button.btn.btn-md
+              span.glyphicon.glyphicon-search
+              | Search
+    div.container
+      .col-xs-12
+        h1.small.page-header
+          | #{locals[:title]}
+        #content
+          == content
