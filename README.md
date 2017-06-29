@@ -54,6 +54,9 @@ The pages of the wiki are written in markdown and commited on the git repository
   * [ ] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
   * [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
 
+### Other
+
+  * [ ] take a look at https://github.com/kemalyst/kemalyst
 
 ## Contributing
 
