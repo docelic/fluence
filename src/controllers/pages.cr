@@ -17,7 +17,7 @@ private def fetch_params(env)
 end
 
 macro render_page(page)
-  render {{ "src/mdwikiface/views/pages/" + page + ".html.slang" }}, "src/mdwikiface/views/layout.html.slang"
+  render {{ "src/views/pages/" + page + ".html.slang" }}, "src/views/layout.html.slang"
 end
 
 require "markdown"

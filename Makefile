@@ -1,4 +1,4 @@
-NAME=`ls src/*/ -d | cut -f2 -d'/'`
+NAME=mdwikiface
 
 all: deps_opt build
 
@@ -18,5 +18,7 @@ deps_opt:
 	@[ -d lib/ ] || make deps
 doc:
 	crystal docs
+clean:
+	rm $(NAME)
 
-.PHONY: all run build release test deps deps_update doc
+.PHONY: all run build release test deps deps_update clean doc
