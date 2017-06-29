@@ -40,7 +40,7 @@ The pages of the wiki are written in markdown and commited on the git repository
 ### Web
 
   * [ ] (web)  Add content table: if titles are written, give a content table with them and links to anchors
-  * [ ] (web)  Sitemap: add a list of all the files available
+  * [x] (web)  Sitemap: add a list of all the files available
   * [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
   * [ ] (web)  User login / registration: keep a file with login:group:bcryptpassords
   * [ ] (web)  User LDAP basic (read / write): the groups have rights on directories
