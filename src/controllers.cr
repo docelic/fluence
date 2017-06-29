@@ -1,2 +1,1 @@
-require "./page"
 require "./controllers/*"

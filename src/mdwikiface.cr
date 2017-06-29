@@ -24,7 +24,9 @@ module Mdwikiface
   REPO = Libgitit2.open_repository(ARG.basedir)
 end
 
-require "./mdwikiface/*"
+require "./version"
+require "./helpers"
+require "./controllers"
 
 puts "Wiki is written on #{Mdwikiface::ARG.basedir}"
 Kemal.run
