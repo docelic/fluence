@@ -11,9 +11,12 @@ The pages of the wiki are written in markdown and commited on the git repository
 ## Usage
 
     mdwikiface --help
-    Usage: mdwikiface [arguments]
-        -b=PATH, --basedir=PATH          Directory where the wiki must start (default: $PWD)
-        -h, --help                       Show this help
+      -b HOST, --bind HOST             Host to bind (defaults to 0.0.0.0)
+      -p PORT, --port PORT             Port to listen for connections (defaults to 3000)
+      -s, --ssl                        Enables SSL
+      --ssl-key-file FILE              SSL key file
+      --ssl-cert-file FILE             SSL certificate file
+      -h, --help                       Shows this help
 
 ## Development
 
