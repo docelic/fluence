@@ -19,6 +19,7 @@ html
     nav
       .pull-left
         a.btn.btn-md href="/" Home
+        a.btn.btn-md href="/sitemap" Sitemap
       .pull-right
         form#search-page action="/pages/search" method="get" role="form"
           .form-inline
