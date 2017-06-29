@@ -1,4 +1,4 @@
-NAME=mdwikiface
+NAME=wikicr
 
 all: deps_opt build
 

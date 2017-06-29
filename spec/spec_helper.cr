@@ -1,2 +1,2 @@
 require "spec"
-require "../src/mdwikiface"
+require "../src/wikicr"
