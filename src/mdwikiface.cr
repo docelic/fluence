@@ -22,7 +22,7 @@ module Mdwikiface
   end
 
   OPTIONS = Mdwikiface::Options.new
-  REPO    = Libgitit2.open_repository(OPTIONS.basedir)
+  # REPO    = Libgitit2.open_repository(OPTIONS.basedir)
 end
 
 require "./version"
