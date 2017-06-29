@@ -24,6 +24,7 @@ require "markdown"
 get "/pages/*path" do |env|
   locals = fetch_params(env).to_h
   locals[:body] = (File.read(locals[:file_path]) rescue "")
+  puts "File.read #{locals[:file_path]}"
   if (env.params.query["edit"]?) || !File.exists?(locals[:file_path])
     render_page("edit")
   else
@@ -37,6 +38,7 @@ post "/pages/*path" do |env|
   if (env.params.body["body"]?)
     Dir.mkdir_p(File.dirname(locals[:file_path]))
     File.write locals[:file_path], env.params.body["body"]
+    puts "File.write #{locals[:file_path]}, ..."
     env.redirect "/pages/#{locals[:path]}"
   else
     File.delete locals[:file_path] rescue nil

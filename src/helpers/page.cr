@@ -13,9 +13,9 @@ module Mdwikiface
 
     # verify if the file is in the current dir (avoid ../ etc.)
     def self.jail(file : String, basedir : String? = nil) : String
-      chroot = basedir || Mdwikiface::ARG.basedir
+      chroot = basedir || Mdwikiface::OPTIONS.basedir
       # TODO: consider security of ".git/"
-      rfile = File.expand_path(file =~ /\.md$/ ? file : Page.file(file))
+      rfile = File.expand_path(file =~ /\.md$/ ? file : Page.file(file), Mdwikiface::OPTIONS.basedir)
       raise Error403.new "Out of chroot (#{rfile} on #{chroot})" if chroot != rfile[0..(chroot.size - 1)]
       rfile
     end
