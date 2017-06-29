@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-describe Mdwikiface do
+describe Wikicr do
   # TODO: Write tests
 
   it "works" do

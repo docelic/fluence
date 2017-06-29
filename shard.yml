@@ -1,12 +1,12 @@
-name: mdwikiface
+name: wikicr
 version: 0.1.0
 
 authors:
   - Arthur Poulet <arthur.poulet@mailoo.org>
 
 targets:
-  mdwikiface:
-    main: src/mdwikiface.cr
+  wikicr:
+    main: src/wikicr.cr
 
 crystal: 0.21.1
 

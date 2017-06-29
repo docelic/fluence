@@ -12,7 +12,7 @@ private def fetch_params(env)
   path = env.params.url["path"]
   {
     path:         path,                        # basic path from the params unmodified
-    file_path:    Mdwikiface::Page.jail(path), # jail the path (safety)
+    file_path:    Wikicr::Page.jail(path), # jail the path (safety)
     display_path: path,                        # TODO: clean the path
     title:        path.split("/").last,        # keep only the name of the file
   }
