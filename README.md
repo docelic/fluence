@@ -18,6 +18,13 @@ The pages of the wiki are written in markdown and commited on the git repository
       --ssl-cert-file FILE             SSL certificate file
       -h, --help                       Shows this help
 
+### Configuration
+
+#### Environment variables
+
+- WIKI_DATA (default "data/"): set the directory where the data will be stored. It will be removed in the future for a configuation manager
+
+
 ## Development
 
 ### Operations
