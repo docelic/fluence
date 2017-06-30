@@ -51,10 +51,10 @@ The pages of the wiki are written in markdown and commited on the git repository
 ### Advanced usage
 
   * [ ] (core) Extensions loader (.so files + extended markdown ?): extend the wiki features with hooks
-  * [ ] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
   * [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
+  * [ ] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
 
-### Other
+ ### Other
 
   * [ ] take a look at https://github.com/kemalyst/kemalyst
 
