@@ -11,10 +11,10 @@ end
 private def fetch_params(env)
   path = env.params.url["path"]
   {
-    path:         path,                    # basic path from the params unmodified
-    file_path:    Wikicr::Page.jail(path), # jail the path (safety)
-    display_path: path,                    # TODO: clean the path
-    title:        path.split("/").last,    # keep only the name of the file
+    path:         path,                             # basic path from the params unmodified
+    file_path:    Wikicr::Page.new(path).jail.file, # jail the path (safety)
+    display_path: path,                             # TODO: clean the path
+    title:        path.split("/").last,             # keep only the name of the file
   }
 end
 
