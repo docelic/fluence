@@ -18,10 +18,6 @@ private def fetch_params(env)
   }
 end
 
-macro render_page(page)
-  render {{ "src/views/pages/" + page + ".html.slang" }}, "src/views/layout.html.slang"
-end
-
 get "/pages/search" do |env|
   query = env.params.query["q"]
   # TODO: a real search
@@ -37,10 +33,10 @@ get "/pages/*path" do |env|
   locals[:body] = (File.read(locals[:file_path]) rescue "")
   puts "File.read #{locals[:file_path]}"
   if (env.params.query["edit"]?) || !File.exists?(locals[:file_path])
-    render_page("edit")
+    render_page(edit)
   else
     locals[:body_html] = Markdown.to_html(locals[:body])
-    render_page("show")
+    render_page(show)
   end
 end
 

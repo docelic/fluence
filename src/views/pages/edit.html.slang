@@ -1,5 +1,5 @@
 form#edit-page method="post"
-  fieldset
+  fieldset.col-xs-6
     legend
       | New wiki page: #{locals[:title]}
     div.input-group.col-xs-12

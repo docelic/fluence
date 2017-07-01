@@ -20,6 +20,8 @@ html
       .pull-left
         a.btn.btn-md href="/" Home
         a.btn.btn-md href="/sitemap" Sitemap
+        a.btn.btn-md href="/users/register" Register
+        a.btn.btn-md href="/users/login" Login
       .pull-right
         form#search-page action="/pages/search" method="get" role="form"
           .form-inline
