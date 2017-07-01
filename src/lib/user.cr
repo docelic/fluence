@@ -22,7 +22,7 @@ class Wikicr::User
     @groups = split[2].split(",")
   end
 
-  def encrypt
+  def encrypt!
     @password = Crypto::Bcrypt::Password.create(@password).to_s
     self
   end

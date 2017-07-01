@@ -14,6 +14,8 @@ class Wikicr::Users
 
   def initialize(@file)
     @list = {} of String => User
+    # TODO: set UNIX permissions
+    File.touch(@file)
   end
 
   # read the users from the file (erase the modifications !)
@@ -67,9 +69,27 @@ class Wikicr::Users
     @list[name]
   end
 
+  ##################
+  # HIGH LEVEL API #
+  ##################
+
   # find an user by its name and check the password
-  def auth?(name : String, password : String)
-    find(name).password_encrypted == password
+  def auth?(name : String, password : String) : User?
+    user = find(name)
+    user.password_encrypted == password ? user : nil
+  end
+
+  def auth!(name : String, password : String) : User?
+    self.read!
+    auth?(name, password)
+  end
+
+  def register!(name : String, password : String, groups : Array(String) = %w(user))
+    user = User.new(name, password, groups).encrypt!
+    self.read!
+    self.add(user)
+    self.save!
+    user
   end
 end
 
