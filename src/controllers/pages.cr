@@ -1,11 +1,7 @@
 require "markdown"
 
-before_all "/pages/*" do |env|
-  if false
-    puts "You are authenticated"
-  else
-    puts "You are not authenticated"
-  end
+before_all do |env|
+  # env.session = Session.new(env.cookies)
 end
 
 private def fetch_params(env)
@@ -19,16 +15,19 @@ private def fetch_params(env)
 end
 
 get "/pages/search" do |env|
+  user_must_be_logged!(env)
   query = env.params.query["q"]
   # TODO: a real search
   env.redirect query.empty? ? "/pages" : query
 end
 
 get "/pages/" do |env|
+  user_must_be_logged!(env)
   env.redirect("/pages/home")
 end
 
 get "/pages/*path" do |env|
+  user_must_be_logged!(env)
   locals = fetch_params(env).to_h
   locals[:body] = (File.read(locals[:file_path]) rescue "")
   puts "File.read #{locals[:file_path]}"
@@ -41,6 +40,7 @@ get "/pages/*path" do |env|
 end
 
 post "/pages/*path" do |env|
+  user_must_be_logged!(env)
   locals = fetch_params(env).to_h
   if (env.params.body["body"]?.to_s.empty?)
     File.delete locals[:file_path] rescue nil

@@ -23,6 +23,7 @@ post "/users/login" do |env|
   if user.nil?
     env.redirect "/users/login"
   else
+    env.session.string("username", user.name)
     env.redirect "/pages"
   end
 end

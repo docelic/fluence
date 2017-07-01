@@ -5,8 +5,12 @@ shards:
     commit: e6992b53f6af9c2bef0f1f4fcb4424ce6ada956b
 
   kemal:
-    github: sdogruyol/kemal
+    github: kemalcr/kemal
     commit: eb3e83d5903ce8f18d796a97ae200009fdf2c9a2
+
+  kemal-session:
+    github: kemalcr/kemal-session
+    commit: bbef25f36fe6505d3221de9952f94a1023225b85
 
   kilt:
     github: jeromegn/kilt
