@@ -14,7 +14,10 @@ license: GPL-3.0
 
 dependencies:
   kemal:
-    github: sdogruyol/kemal
+    github: kemalcr/kemal
+    branch: master
+  kemal-session:
+    github: kemalcr/kemal-session
     branch: master
   slang:
     github: jeromegn/slang
