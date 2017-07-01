@@ -49,7 +49,7 @@ The pages of the wiki are written in markdown and commited on the git repository
   * [ ] (web)  Add content table: if titles are written, give a content table with them and links to anchors
   * [x] (web)  Sitemap: add a list of all the files available
   * [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
-  * [ ] (web)  User login / registration: keep a file with login:group:bcryptpassords
+  * [x] (web)  User login / registration: keep a file with login:group:bcryptpassords
   * [ ] (web)  User LDAP basic (read / write): the groups have rights on directories
   * [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
   * [ ] (web)  Template loader (files in public/): load css, js etc. from public/
@@ -60,6 +60,7 @@ The pages of the wiki are written in markdown and commited on the git repository
   * [ ] (core) Extensions loader (.so files + extended markdown ?): extend the wiki features with hooks
   * [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
   * [ ] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
+  * [ ] (conf) Handle environemnt variables in a .env file
 
 ### Other
 

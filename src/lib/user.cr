@@ -15,7 +15,6 @@ class Wikicr::User
 
   def initialize(line : String)
     split = line.split SEP
-    pp line, split
     raise Invalid.new("Cannot parse this line (split.size = #{split.size}, should be 3)") if split.size != 3
     @name = split[0]
     @password = split[1]
