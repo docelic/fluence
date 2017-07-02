@@ -40,15 +40,18 @@ struct Wikicr::Page
 
   # verify if the file is in the current dir (avoid ../ etc.)
   def jail(user : User)
-    chroot = Wikicr::OPTIONS.basedir
     # TODO: consider security of ".git/"
     # TODO: read ACL for user
 
     # the @file is already expanded (File.expand_path) in the constructor
-    if chroot != @file[0..(chroot.size - 1)]
-      raise Error403.new "Out of chroot (#{@file} on #{chroot})"
+    if Wikicr::OPTIONS.basedir != @file[0..(Wikicr::OPTIONS.basedir.size - 1)]
+      raise Error403.new "Out of chroot (#{@file} on #{Wikicr::OPTIONS.basedir})"
     end
     self
+  end
+
+  private def jailed_file(user)
+    @file[Wikicr::OPTIONS.basedir.size..-1].strip("/")
   end
 
   def dirname
@@ -63,16 +66,32 @@ struct Wikicr::Page
   def write(body, user : User)
     self.jail user
     Dir.mkdir_p self.dirname
+    is_new = File.exists? self.file
     File.write self.file, body
+    commit!(user, is_new ? "create" : "update")
   end
 
   def delete(user : User)
     self.jail user
     File.delete self.file
+    commit!(user, "delete")
   end
 
   def exists?(user : User)
     self.jail user
     File.exists? self.file
   end
+
+  def commit!(user, message)
+    # TODO: lock before commit
+    dir = Dir.current
+    Dir.cd Wikicr::OPTIONS.basedir
+    puts `git add -- #{jailed_file(user)}`
+    puts `git commit -s --author \"#{user.name}\" -m \"#{message} #{self.name}\" -- #{jailed_file(user)}`
+    Dir.cd dir
+  end
 end
+
+require "./users"
+require "./git"
+Wikicr::Page.new("testX").write("OK", Wikicr::USERS.read!.find("arthur.poulet@mailoo.org"))
