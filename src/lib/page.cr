@@ -84,6 +84,7 @@ struct Wikicr::Page
 
   def commit!(user, message)
     # TODO: lock before commit
+    # TODO: security of jailed_file and self.name ?
     dir = Dir.current
     Dir.cd Wikicr::OPTIONS.basedir
     puts `git add -- #{jailed_file(user)}`
@@ -92,6 +93,6 @@ struct Wikicr::Page
   end
 end
 
-require "./users"
-require "./git"
-Wikicr::Page.new("testX").write("OK", Wikicr::USERS.read!.find("arthur.poulet@mailoo.org"))
+# require "./users"
+# require "./git"
+# Wikicr::Page.new("testX").write("OK", Wikicr::USERS.read!.find("arthur.poulet@mailoo.org"))

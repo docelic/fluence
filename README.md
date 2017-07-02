@@ -18,6 +18,9 @@ The pages of the wiki are written in markdown and commited on the git repository
       --ssl-cert-file FILE             SSL certificate file
       -h, --help                       Shows this help
 
+A repository (data/) is created and contains the wiki pages.
+Each time a file is changed, the repository is commited.
+
 ### Configuration
 
 #### Environment variables
@@ -40,7 +43,7 @@ The pages of the wiki are written in markdown and commited on the git repository
 
 ### Git
 
-  * [ ] (git)  Commit when write on a file: every modification on data/ should be commited
+  * [x] (git)  Commit when write on a file: every modification on data/ should be commited
   * [ ] (git)  List of revisions on a file (using git): list the revision of a file
   * [ ] (git)  Revert a revision (avoid vandalism): button to remove a revision (git revert)
 
