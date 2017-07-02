@@ -5,6 +5,7 @@ module Wikicr::Git
 
   def init!
     Dir.mkdir_p Wikicr::OPTIONS.basedir
+    `git init #{Wikicr::OPTIONS.basedir}`
   end
 end
 
