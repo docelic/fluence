@@ -7,6 +7,10 @@ struct Wikicr::Page
   getter file : String
   getter name : String
 
+  def initialize(@name)
+    @file = Page.name_to_file(@name)
+  end
+
   # translate a name ("/test/title" for example)
   # into a file path ("/srv/data/test/ttle.md)
   def self.name_to_file(name : String)
@@ -19,10 +23,6 @@ struct Wikicr::Page
   # def self.file_to_name(file : String)
   #   file.chomp(".md")[Wikicr::OPTIONS.basedir.size..-1]
   # end
-
-  def initialize(@name)
-    @file = Page.name_to_file(@name)
-  end
 
   # :unused:
   # # set a new file name, an update the file path
@@ -48,5 +48,30 @@ struct Wikicr::Page
       raise Error403.new "Out of chroot (#{@file} on #{chroot})"
     end
     self
+  end
+
+  def dirname
+    File.dirname self.file
+  end
+
+  def read
+    self.jail
+    File.read self.file
+  end
+
+  def write(body)
+    self.jail
+    Dir.mkdir_p self.dirname
+    File.write self.file, body
+  end
+
+  def delete
+    self.jail
+    File.delete self.file
+  end
+
+  def exists?
+    self.jail
+    File.exists? self.file
   end
 end

@@ -1,6 +1,6 @@
 module Wikicr
-  Dir.mkdir("meta") rescue nil
-  File.touch("meta/users") rescue nil
+  Dir.mkdir_p("meta")
+  File.touch("meta/users")
   USERS = Wikicr::Users.new("meta/users")
 end
 
