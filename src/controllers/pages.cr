@@ -7,11 +7,12 @@ end
 private def fetch_params(env)
   path = env.params.url["path"]
   {
-    path:         path,                             # basic path from the params unmodified
-    file_path:    Wikicr::Page.new(path).jail.file, # jail the path (safety)
-    display_path: path,                             # TODO: clean the path
-    title:        path.split("/").last,             # keep only the name of the file
+    path:         path,                   # basic path from the params unmodified
+    display_path: path,                   # TODO: clean the path
+    title:        path.split("/").last,   # keep only the name of the file
+    page:         Wikicr::Page.new(path), # page handler
   }
+  # file_path:    Wikicr::Page.new(path).jail.file, # jail the path (safety)
 end
 
 get "/pages/search" do |env|
@@ -29,12 +30,11 @@ end
 get "/pages/*path" do |env|
   user_must_be_logged!(env)
   locals = fetch_params(env).to_h
-  locals[:body] = (File.read(locals[:file_path]) rescue "")
-  puts "File.read #{locals[:file_path]}"
-  if (env.params.query["edit"]?) || !File.exists?(locals[:file_path])
+  locals[:body] = (locals[:page].as(Wikicr::Page).read rescue "")
+  if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?
     render_page(edit)
   else
-    locals[:body_html] = Markdown.to_html(locals[:body])
+    locals[:body_html] = Markdown.to_html(locals[:body].as(String))
     render_page(show)
   end
 end
@@ -43,12 +43,10 @@ post "/pages/*path" do |env|
   user_must_be_logged!(env)
   locals = fetch_params(env).to_h
   if (env.params.body["body"]?.to_s.empty?)
-    File.delete locals[:file_path] rescue nil
+    locals[:page].as(Wikicr::Page).delete rescue nil
     env.redirect "/pages/"
   else
-    Dir.mkdir_p(File.dirname(locals[:file_path]))
-    File.write locals[:file_path], env.params.body["body"]
-    puts "File.write #{locals[:file_path]}, ..."
+    locals[:page].as(Wikicr::Page).write env.params.body["body"]
     env.redirect "/pages/#{locals[:path]}"
   end
 end
