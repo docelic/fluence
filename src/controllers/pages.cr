@@ -30,8 +30,8 @@ end
 get "/pages/*path" do |env|
   user_must_be_logged!(env)
   locals = fetch_params(env).to_h
-  locals[:body] = (locals[:page].as(Wikicr::Page).read rescue "")
-  if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?
+  locals[:body] = (locals[:page].as(Wikicr::Page).read(current_user(env)) rescue "")
+  if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?(current_user(env))
     render_page(edit)
   else
     locals[:body_html] = Markdown.to_html(locals[:body].as(String))
@@ -43,10 +43,10 @@ post "/pages/*path" do |env|
   user_must_be_logged!(env)
   locals = fetch_params(env).to_h
   if (env.params.body["body"]?.to_s.empty?)
-    locals[:page].as(Wikicr::Page).delete rescue nil
+    locals[:page].as(Wikicr::Page).delete(current_user(env)) rescue nil
     env.redirect "/pages/"
   else
-    locals[:page].as(Wikicr::Page).write env.params.body["body"]
+    locals[:page].as(Wikicr::Page).write env.params.body["body"], current_user(env)
     env.redirect "/pages/#{locals[:path]}"
   end
 end

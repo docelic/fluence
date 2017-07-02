@@ -39,11 +39,12 @@ struct Wikicr::Page
   # end
 
   # verify if the file is in the current dir (avoid ../ etc.)
-  def jail
+  def jail(user : User)
     chroot = Wikicr::OPTIONS.basedir
     # TODO: consider security of ".git/"
+    # TODO: read ACL for user
 
-    # the @file is already exanded (File.expand_path) in the constructor
+    # the @file is already expanded (File.expand_path) in the constructor
     if chroot != @file[0..(chroot.size - 1)]
       raise Error403.new "Out of chroot (#{@file} on #{chroot})"
     end
@@ -54,24 +55,24 @@ struct Wikicr::Page
     File.dirname self.file
   end
 
-  def read
-    self.jail
+  def read(user : User)
+    self.jail user
     File.read self.file
   end
 
-  def write(body)
-    self.jail
+  def write(body, user : User)
+    self.jail user
     Dir.mkdir_p self.dirname
     File.write self.file, body
   end
 
-  def delete
-    self.jail
+  def delete(user : User)
+    self.jail user
     File.delete self.file
   end
 
-  def exists?
-    self.jail
+  def exists?(user : User)
+    self.jail user
     File.exists? self.file
   end
 end

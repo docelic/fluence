@@ -5,7 +5,7 @@ Session.config do |config|
 end
 
 macro user_must_be_logged!(env)
-  if env.session.string?("username")
+  if user_signed_in?(env)
     puts "You are authenticated"
     # continue
   else
@@ -13,4 +13,14 @@ macro user_must_be_logged!(env)
     env.redirect "/users/login"
     next
   end
+end
+
+macro user_signed_in?(env)
+  env.session.string?("username")
+end
+
+macro current_user(env)
+  %name = user_signed_in?(env)
+  raise "User not signed in" if %name.nil?
+  Wikicr::USERS.find(%name)
 end
