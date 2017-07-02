@@ -9,5 +9,4 @@ end
 
 module Wikicr
   OPTIONS = Wikicr::Options.new
-  # REPO    = Libgitit2.open_repository(OPTIONS.basedir)
 end
