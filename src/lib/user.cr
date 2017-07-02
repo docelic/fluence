@@ -11,6 +11,7 @@ class Wikicr::User
   getter groups : Array(String)
 
   def initialize(@name, @password, @groups = [] of String)
+    raise "Invalid name #{@name}" if !@name =~ /^[A-Za-z0-9 _.-]+$/ # Security: Avoid escaping and injection of code
   end
 
   def initialize(line : String)
