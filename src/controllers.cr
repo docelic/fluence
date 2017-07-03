@@ -1,3 +1,5 @@
+require "./wikicr"
+
 macro new_render(name)
   macro render_{{name.id}}(page)
     render {{ "src/views/" + name.stringify + "s/\{\{page}}.html.slang" }}, "src/views/layout.html.slang"

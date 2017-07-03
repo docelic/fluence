@@ -1,4 +1,4 @@
-require "markdown"
+require "../lib/*"
 
 before_all do |env|
   # env.session = Session.new(env.cookies)

@@ -1,8 +1,8 @@
 require "./errors"
 require "./sfile"
 
-# A Page is a file and an url part
-# Is is used to jail files into the OPTIONS.basedir
+# A `Page` is a file and an url part
+# Is is used to jail files into the *OPTIONS.basedir*
 struct Wikicr::Page
   getter file : String
   getter name : String
@@ -38,7 +38,8 @@ struct Wikicr::Page
   #   @name = Page.file_to_name @file
   # end
 
-  # verify if the file is in the current dir (avoid ../ etc.)
+  # verify if the *file* is in the current dir (avoid ../ etc.)
+  # it will raise a `Error403` if the file is not accessible to the user
   def jail(user : User)
     # TODO: consider security of ".git/"
     # TODO: read ACL for user
@@ -54,15 +55,18 @@ struct Wikicr::Page
     @file[Wikicr::OPTIONS.basedir.size..-1].strip("/")
   end
 
+  # Get the directory of the *file*
   def dirname
     File.dirname self.file
   end
 
+  # Reads the *file*
   def read(user : User)
     self.jail user
     File.read self.file
   end
 
+  # Writes into the *file*, and commit
   def write(body, user : User)
     self.jail user
     Dir.mkdir_p self.dirname
@@ -71,17 +75,20 @@ struct Wikicr::Page
     commit!(user, is_new ? "create" : "update")
   end
 
+  # Deletes the *file*, and commit
   def delete(user : User)
     self.jail user
     File.delete self.file
     commit!(user, "delete")
   end
 
+  # Checks if the *file* exists
   def exists?(user : User)
     self.jail user
     File.exists? self.file
   end
 
+  # Save the modifications on the *file* into the git repository
   def commit!(user, message)
     # TODO: lock before commit
     # TODO: security of jailed_file and self.name ?

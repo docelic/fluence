@@ -1,10 +1,12 @@
 require "crypto/bcrypt/password"
 require "./acl/entity"
 
+# An `User` is a couple name/password/groups.
 class Wikicr::User
   class Invalid < Exception
   end
 
+  # separator for name/password/groups
   SEP = ':'
 
   getter name : String
@@ -23,11 +25,13 @@ class Wikicr::User
     @groups = split[2].split(",")
   end
 
+  # encrypt the passwod using `Crypto::Bcrypt`
   def encrypt!
     @password = Crypto::Bcrypt::Password.create(@password).to_s
     self
   end
 
+  # read the password using `Crypto::Bcrypt`
   def password_encrypted
     Crypto::Bcrypt::Password.new(@password)
   end

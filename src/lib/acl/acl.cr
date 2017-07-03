@@ -1,5 +1,11 @@
+# Permission levels of the ACL system
 enum Wikicr::ACL::Perm
-  None  = 0 # level 0
-  Read  = 1 # level 1
-  Write = 3 # level 2 (can read too)
+  # level 0. Cannot read, cannot write.
+  None = 0
+
+  # level 1. Can read, cannot write.
+  Read = 1
+
+  # level 3. Can read, can write.
+  Write = 3
 end
