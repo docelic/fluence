@@ -13,6 +13,12 @@ class Wikicr::ACL::Group
   # - *name* is the name of the group (arbitrary `String`).
   # - *permissions* is a hash of ``{"path" => `Perm`}``.
   # - *default* is the value used for every path not defined in the *permissions*.
+  #
+  # ```
+  # guest = ACL::Group.new(name: "guest", default: ACL::Perm::None, permissions: {"/public" => ACL::Perm::Read})
+  # user = ACL::Group.new(name: "user", default: ACL::Perm::Read, permissions: {"/protected" => ACL::Perm::None})
+  # admin = ACL::Group.new(name: "admin", default: ACL::Perm::Write)
+  # ```
   def initialize(@name,
                  @permissions = Hash(String, ACL::Perm).new,
                  @default : ACL::Perm = ACL::Perm::None)
@@ -22,6 +28,12 @@ class Wikicr::ACL::Group
   #
   # - *path* is the path that must be checked
   # - *access* is the minimal `ACL::Perm` required for a given operation
+  # ```
+  # guest = ACL::Group.new(name: "guest", default: ACL::Perm::None, permissions: {"/public" => ACL::Perm::Read})
+  # guest.permitted "/public", ACL::Perm::Read  # => true
+  # guest.permitted "/public", ACL::Perm::Write # => false
+  # guest.permitted "/other", ACL::Perm::Read   # => false
+  # ```
   def permitted?(path : String, access : ACL::Perm) : Bool
     permissions.fetch(path, default).to_i >= access.to_i
   end

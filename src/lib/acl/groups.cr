@@ -6,11 +6,24 @@ require "./entity"
 class Wikicr::ACL::Groups
   @groups : Hash(String, ACL::Group)
 
+  # ```
+  # acls = ACL::Groups.new
+  # g1 = ACL::Group.new(name: "user", default: ACL::Perm::Read, permissions: {"/tmp/protected" => ACL::Perm::None})
+  # g2 = ACL::Group.new(name: "admin", default: ACL::Perm::Write)
+  # acls.add g1
+  # acls.add g2
+  # ```
   def initialize
     @groups = Hash(String, ACL::Group).new
   end
 
-  # Check if an `Entity` has a group with the required permissions to operate
+  # Check if an `Entity` has a group with the required permissions to operate.
+  #
+  # ```
+  # acls = Groups.new ...
+  # user = User.new ...
+  # acls.permitted?(user, "/my/path", Perm::Read)
+  # ```
   def permitted?(entity : ACL::Entity, path : String, access : ACL::Perm)
     entity.groups.map do |group|
       @groups[group].permitted?(path, access)

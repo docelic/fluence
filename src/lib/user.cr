@@ -13,10 +13,17 @@ class Wikicr::User
   getter password : String
   getter groups : Array(String)
 
+  # ```
+  # User.new "admin", "password", %w(admin user)
+  # User.new "nephos", "password", %w(user guest)
+  # ```
   def initialize(@name, @password, @groups = [] of String)
     raise "Invalid name #{@name}" if !@name =~ /^[A-Za-z0-9 _.-]+$/ # Security: Avoid escaping and injection of code
   end
 
+  # ```
+  # User.new("admin:password:admin,user")
+  # ```
   def initialize(line : String)
     split = line.split SEP
     raise Invalid.new("Cannot parse this line (split.size = #{split.size}, should be 3)") if split.size != 3
@@ -25,13 +32,17 @@ class Wikicr::User
     @groups = split[2].split(",")
   end
 
-  # encrypt the passwod using `Crypto::Bcrypt`
+  # Encrypts the passwod using `Crypto::Bcrypt`.
+  #
+  # ```
+  # Wikicr::User.new("admin", "password", %w(admin)).encrypt!.password # => "$2a$11$G2i2.Km1DRbJtqDBFRhKXuSn8IwNVt7AypAP328T1OYq0wBugkgCm"
+  # ```
   def encrypt!
     @password = Crypto::Bcrypt::Password.create(@password).to_s
     self
   end
 
-  # read the password using `Crypto::Bcrypt`
+  # Reads the password using `Crypto::Bcrypt`
   def password_encrypted
     Crypto::Bcrypt::Password.new(@password)
   end
