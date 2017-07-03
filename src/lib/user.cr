@@ -1,4 +1,5 @@
 require "crypto/bcrypt/password"
+require "./acl/entity"
 
 class Wikicr::User
   class Invalid < Exception
@@ -40,5 +41,16 @@ class Wikicr::User
     io << password << SEP
     groups.each { |g| io << g; io << ',' if g != groups.last }
     io << '\n'
+  end
+
+  #########################
+  # Implement ACL::Entity #
+  #########################
+  include ACL::Entity
+
+  # getter groups : Array(String)
+
+  def has_group?(group : String) : Bool
+    @groups.includes?(group)
   end
 end

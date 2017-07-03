@@ -1,2 +1,4 @@
 require "spec"
-require "../src/wikicr"
+
+require "../src/lib/user"
+require "../src/lib/acl"
