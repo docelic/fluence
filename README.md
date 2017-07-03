@@ -25,10 +25,14 @@ Each time a file is changed, the repository is commited.
 
 #### Environment variables
 
-- WIKI_DATA (default "data/"): set the directory where the data will be stored. It will be removed in the future for a configuation manager
-- WIKI_SECRET: random value that init the sessions (`crystal eval 'require "secure_random"; puts SecureRandom.hex(64)'`)
+- `WIKI_DATA`: (default "data/") set the directory where the data will be stored. It will be removed in the future for a configuation manager
+- `WIKI_SECRET`: random value that init the sessions (`crystal eval 'require "secure_random"; puts SecureRandom.hex(64)'`)
 
 ## Development
+
+### Other
+
+  * [ ] clean up the requirements (`require "./xxx"`)
 
 ### Operations
 
@@ -53,7 +57,7 @@ Each time a file is changed, the repository is commited.
   * [x] (web)  Sitemap: add a list of all the files available
   * [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
   * [x] (web)  User login / registration: keep a file with login:group:bcryptpassords
-  * [ ] (web)  User LDAP basic (read / write): the groups have rights on directories
+  * [ ] (web)  User ACL basic (read / write): the groups have rights on directories
   * [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
   * [ ] (web)  Template loader (files in public/): load css, js etc. from public/
   * [ ] (web)  File upload and lists: page that add a file in uploads/
@@ -79,4 +83,4 @@ Each time a file is changed, the repository is commited.
 
 ## Contributors
 
-- [Nephos](https://github.com/Nephos) Arthur Poulet - creator, maintainer
+- [Nephos](attps://github.com/Neph) Arthur Poulet - creator, maintainer

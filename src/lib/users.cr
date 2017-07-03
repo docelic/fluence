@@ -1,6 +1,8 @@
 require "./user"
 
-# Handle an user list and file associated
+# The class `Users` handles a list of `User`, with add, remove, update an find operation.
+# An instance of `Users` must be linked with a file which can be read of updated
+#
 # TODO: mutex on add/remove/update
 class Wikicr::Users
   class AlreadyExist < Exception
@@ -79,17 +81,28 @@ class Wikicr::Users
   # HIGH LEVEL API #
   ##################
 
-  # find an user by its name and check the password
+  # No file operation.
+  #
+  # Finds an user by its name and check the password.
+  #
+  # Returns nil if it fails
   def auth?(name : String, password : String) : User?
     user = find(name)
     user.password_encrypted == password ? user : nil
   end
 
+  # Operation read (erase the internal list).
+  #
+  # see `#auth?`
   def auth!(name : String, password : String) : User?
     self.read!
     auth?(name, password)
   end
 
+  # Operation read and write (erase the internal list and the file)
+  #
+  # Registers a new user by create a new `User` with `name`, `password` and `groups`
+  # and then update the file with the new list of users.
   def register!(name : String, password : String, groups : Array(String) = %w(user))
     user = User.new(name, password, groups).encrypt!
     self.read!
