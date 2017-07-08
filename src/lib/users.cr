@@ -43,17 +43,17 @@ class Wikicr::Users
     self
   end
 
-  # remove an user from the list
-  # @see .remove(String)
-  def remove(u : User)
-    remove u.name
+  # Removes an user from the list
+  # @see #delete(String)
+  def delete(u : User)
+    delete u.name
     self
   end
 
-  # remove an user from the list
-  def remove(name : String)
+  # Remove an user from the list
+  def delete(name : String)
     raise NotExist.new "User #{name} is not in the list" if (!@list[name]?)
-    @list.remove(name)
+    @list.delete(name)
     self
   end
 
@@ -75,6 +75,18 @@ class Wikicr::Users
   def find(name : String) : User
     raise NotExist.new "User #{name} is not in the list" if (!@list[name]?)
     @list[name]
+  end
+
+  def each
+    @list.each { |_, user| yield user }
+  end
+
+  def map
+    @list.map { |_, user| yield user }
+  end
+
+  def map!
+    @list.map! { |name, user| {name, yield user} }
   end
 
   ##################

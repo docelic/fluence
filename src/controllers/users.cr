@@ -11,9 +11,12 @@ private def fetch_params(env)
   }
 end
 
+require "./users/*"
+
+# Login
 get "/users/login" do |env|
   locals = {title: "Login"}
-  render_user(login)
+  render_users(login)
 end
 
 post "/users/login" do |env|
@@ -28,9 +31,10 @@ post "/users/login" do |env|
   end
 end
 
+# Registration
 get "/users/register" do |env|
   locals = {title: "Register"}
-  render_user(register)
+  render_users(register)
 end
 
 post "/users/register" do |env|
