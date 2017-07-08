@@ -1,16 +1,17 @@
 require "./wikicr"
 
-macro new_render(name)
+macro new_render(name, dir)
   macro render_{{name.id}}(page)
-    render {{ "src/views/" + name.stringify + "s/\{\{page}}.html.slang" }}, "src/views/layout.html.slang"
+    render {{"src/views/" + dir + "/\{\{page}}.html.slang"}}, "src/views/layout.html.slang"
   end
 end
 
-new_render(page)
-new_render(user)
+macro new_render(name)
+  new_render({{name}}, {{name}})
+end
 
-# macro render_page(page)
-#   render {{ "src/views/pages/" + page + ".html.slang" }}, "src/views/layout.html.slang"
-# end
+new_render("pages")
+new_render("users")
+new_render("users_admin", "users/admin")
 
 require "./controllers/*"

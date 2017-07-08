@@ -32,10 +32,10 @@ get "/pages/*path" do |env|
   locals = fetch_params(env).to_h
   locals[:body] = (locals[:page].as(Wikicr::Page).read(current_user(env)) rescue "")
   if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?(current_user(env))
-    render_page(edit)
+    render_pages(edit)
   else
     locals[:body_html] = Markdown.to_html(locals[:body].as(String))
-    render_page(show)
+    render_pages(show)
   end
 end
 

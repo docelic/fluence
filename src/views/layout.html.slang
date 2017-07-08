@@ -22,6 +22,8 @@ html
         a.btn.btn-md href="/sitemap" Sitemap
         - if env.session.string?("username")
           = env.session.string("username")
+          - if current_user.has_group? "admin"
+            a.btn.btn-md href="/users/admin" Admin
         - else
           a.btn.btn-md href="/users/register" Register
           a.btn.btn-md href="/users/login" Login
