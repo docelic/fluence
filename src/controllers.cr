@@ -12,6 +12,6 @@ end
 
 new_render("pages")
 new_render("users")
-new_render("users_admin", "users/admin")
+new_render("admin", "admin")
 
 require "./controllers/*"

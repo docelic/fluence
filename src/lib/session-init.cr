@@ -43,10 +43,22 @@ end
 
 macro current_user(env)
   %name = user_signed_in?(env)
-  raise "User not signed in" if %name.nil?
-  Wikicr::USERS.find(%name)
+  if (%name.nil?)
+    Wikicr::USERS.default || raise "User not signed in"
+  else
+    Wikicr::USERS.find(%name)
+  end
 end
 
 macro current_user
   current_user(env)
+end
+
+macro acl_permit!(perm, env)
+  # read env.query.path ...
+  # Wikicr::ACL.permitted?(current_user, path, env)
+end
+
+macro acl_permit!(perm)
+  acl_permit!(perm, env)
 end

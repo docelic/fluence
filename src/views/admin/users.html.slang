@@ -10,7 +10,7 @@ table.table.table-condensed
         td= user.name
         td= user.groups.join(", ")
         td
-          form method="post" action="/users/admin/delete"
+          form method="post" action="/admin/users/delete"
             input type="hidden" name="username" value=user.name
             input.form-control.btn.btn-md.btn-danger name="delete" type="submit" value="delete"
 

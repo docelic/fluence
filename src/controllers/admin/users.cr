@@ -1,29 +1,28 @@
 # Admin
-get "/users/admin" do |env|
-  user_must_be_admin!
+get "/admin/users" do |env|
+  acl_permit! :write
   locals = {title: "Users admin", users: Wikicr::USERS.read!}
-  render_users_admin(admin)
+  render_admin(users)
 end
 
-# post "/users/admin" do |env|
+# post "/admin/users" do |env|
 #   user_must_be_admin!
 #   data = env.params.body
-#   env.redirect "/users/admin"
+#   env.redirect "/admin/users"
 # end
 
-post "/users/admin/delete" do |env|
-  user_must_be_admin!
+post "/admin/users/delete" do |env|
+  acl_permit! :write
   data = env.params.body
   Wikicr::USERS.read!
   Wikicr::USERS.delete(data["username"]).save!
-  puts "TRY TO DELETE #{data["username"]}"
   Wikicr::USERS.read!
-  env.redirect "/users/admin"
+  env.redirect "/admin/users"
 end
 
-post "/users/admin/register" do |env|
-  user_must_be_admin!
+post "/admin/users/register" do |env|
+  acl_permit! :write
   data = env.params.body
   user = Wikicr::USERS.register! data["username"], data["password"], data["groups"].split(",").map(&.strip)
-  env.redirect "/users/admin"
+  env.redirect "/admin/users"
 end
