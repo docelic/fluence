@@ -8,7 +8,7 @@ targets:
   wikicr:
     main: src/wikicr.cr
 
-crystal: 0.22.0
+crystal: 0.23.0
 
 license: GPL-3.0
 
