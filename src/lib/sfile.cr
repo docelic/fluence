@@ -12,6 +12,7 @@ class Wikicr::SFile
 
     all_files = Dir.entries(".")
     all_files.select! { |file| !(file =~ /^\./) }
+    all_files.sort!
 
     files = all_files
       .select { |file| !File.directory? file }

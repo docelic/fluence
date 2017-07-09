@@ -1,12 +1,20 @@
+require "yaml"
+
 require "./acl"
 
 # The Group is identified by a *name* and has *permissions* on a set of paths.
 # It is used by `Groups`.
 # NOTE: I did not used Hash().new(default) because it is annoying with passing the permissions in the constructor
-class Wikicr::ACL::Group
-  getter name : String
-  getter permissions : Hash(String, ACL::Perm)
-  property default : ACL::Perm
+class Wikicr::Acl::Group
+  # getter name : String
+  # getter permissions : Hash(String, Acl::Perm)
+  # property default : Acl::Perm
+
+  YAML.mapping(
+    name: String,
+    permissions: Hash(String, Wikicr::Acl::Perm),
+    default: Wikicr::Acl::Perm
+  )
 
   # Create a new named Group with optional parameters.
   #
@@ -15,30 +23,30 @@ class Wikicr::ACL::Group
   # - *default* is the value used for every path not defined in the *permissions*.
   #
   # ```
-  # guest = ACL::Group.new(name: "guest", default: ACL::Perm::None, permissions: {"/public" => ACL::Perm::Read})
-  # user = ACL::Group.new(name: "user", default: ACL::Perm::Read, permissions: {"/protected" => ACL::Perm::None})
-  # admin = ACL::Group.new(name: "admin", default: ACL::Perm::Write)
+  # guest = Acl::Group.new(name: "guest", default: Acl::Perm::None, permissions: {"/public" => Acl::Perm::Read})
+  # user = Acl::Group.new(name: "user", default: Acl::Perm::Read, permissions: {"/protected" => Acl::Perm::None})
+  # admin = Acl::Group.new(name: "admin", default: Acl::Perm::Write)
   # ```
   def initialize(@name,
-                 @permissions = Hash(String, ACL::Perm).new,
-                 @default : ACL::Perm = ACL::Perm::None)
+                 @permissions = Hash(String, Acl::Perm).new,
+                 @default : Acl::Perm = Acl::Perm::None)
   end
 
-  # Check if the group as the `ACL::Perm` required to have access to a given path.
+  # Check if the group as the `Acl::Perm` required to have access to a given path.
   #
   # - *path* is the path that must be checked
-  # - *access* is the minimal `ACL::Perm` required for a given operation
+  # - *access* is the minimal `Acl::Perm` required for a given operation
   # ```
-  # guest = ACL::Group.new(name: "guest", default: ACL::Perm::None, permissions: {"/public" => ACL::Perm::Read})
-  # guest.permitted "/public", ACL::Perm::Read  # => true
-  # guest.permitted "/public", ACL::Perm::Write # => false
-  # guest.permitted "/other", ACL::Perm::Read   # => false
+  # guest = Acl::Group.new(name: "guest", default: Acl::Perm::None, permissions: {"/public" => Acl::Perm::Read})
+  # guest.permitted "/public", Acl::Perm::Read  # => true
+  # guest.permitted "/public", Acl::Perm::Write # => false
+  # guest.permitted "/other", Acl::Perm::Read   # => false
   # ```
-  def permitted?(path : String, access : ACL::Perm) : Bool
+  def permitted?(path : String, access : Acl::Perm) : Bool
     permissions.fetch(path, default).to_i >= access.to_i
   end
 
-  # def if_permitted(path : String, access : ACL::Perm) : Bool
+  # def if_permitted(path : String, access : Acl::Perm) : Bool
   #   yield if permitted? path, access
   # end
 end

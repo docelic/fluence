@@ -12,9 +12,10 @@ class Wikicr::Users
   end
 
   getter file : String
+  getter default : User?
   @list : Hash(String, User)
 
-  def initialize(@file)
+  def initialize(@file, @default : User? = nil)
     @list = {} of String => User
     # TODO: set UNIX permissions
     File.touch(@file)

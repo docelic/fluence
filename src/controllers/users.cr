@@ -1,9 +1,3 @@
-module Wikicr
-  Dir.mkdir_p("meta")
-  File.touch("meta/users")
-  USERS = Wikicr::Users.new("meta/users")
-end
-
 private def fetch_params(env)
   {
     username: (env.params.body["username"]?),
@@ -11,15 +5,15 @@ private def fetch_params(env)
   }
 end
 
-require "./users/*"
-
 # Login
 get "/users/login" do |env|
+  acl_permit! :read
   locals = {title: "Login"}
   render_users(login)
 end
 
 post "/users/login" do |env|
+  acl_permit! :write
   locals = fetch_params(env)
   user = Wikicr::USERS.auth! locals[:username].to_s, locals[:password].to_s
   # TODO: make a notification
@@ -33,11 +27,13 @@ end
 
 # Registration
 get "/users/register" do |env|
+  acl_permit! :read
   locals = {title: "Register"}
   render_users(register)
 end
 
 post "/users/register" do |env|
+  acl_permit! :write
   locals = fetch_params(env)
   # TODO: make a notification
   begin

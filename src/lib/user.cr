@@ -59,9 +59,9 @@ class Wikicr::User
   end
 
   #########################
-  # Implement ACL::Entity #
+  # Implement Acl::Entity #
   #########################
-  include ACL::Entity
+  include Acl::Entity
 
   # getter groups : Array(String)
 

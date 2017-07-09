@@ -42,7 +42,7 @@ struct Wikicr::Page
   # it will raise a `Error403` if the file is not accessible to the user
   def jail(user : User)
     # TODO: consider security of ".git/"
-    # TODO: read ACL for user
+    # TODO: read Acl for user
 
     # the @file is already expanded (File.expand_path) in the constructor
     if Wikicr::OPTIONS.basedir != @file[0..(Wikicr::OPTIONS.basedir.size - 1)]

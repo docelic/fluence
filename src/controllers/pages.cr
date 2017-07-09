@@ -5,7 +5,7 @@ before_all do |env|
 end
 
 private def fetch_params(env)
-  path = env.params.url["path"]
+  path = env.params.url["path"].gsub(/[^\w\/]/, "-")
   {
     path:         path,                   # basic path from the params unmodified
     display_path: path,                   # TODO: clean the path
@@ -16,19 +16,18 @@ private def fetch_params(env)
 end
 
 get "/pages/search" do |env|
-  user_must_be_logged!(env)
+  # user_must_be_logged!(env)
   query = env.params.query["q"]
   # TODO: a real search
   env.redirect query.empty? ? "/pages" : query
 end
 
 get "/pages/" do |env|
-  user_must_be_logged!(env)
   env.redirect("/pages/home")
 end
 
 get "/pages/*path" do |env|
-  user_must_be_logged!(env)
+  acl_permit! :read
   locals = fetch_params(env).to_h
   locals[:body] = (locals[:page].as(Wikicr::Page).read(current_user(env)) rescue "")
   if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?(current_user(env))
@@ -40,7 +39,7 @@ get "/pages/*path" do |env|
 end
 
 post "/pages/*path" do |env|
-  user_must_be_logged!(env)
+  acl_permit! :write
   locals = fetch_params(env).to_h
   if (env.params.body["body"]?.to_s.empty?)
     locals[:page].as(Wikicr::Page).delete(current_user(env)) rescue nil
