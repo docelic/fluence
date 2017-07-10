@@ -1,4 +1,4 @@
-require "./errors"
+require "../errors"
 require "./sfile"
 
 # A `Page` is a file and an url part
