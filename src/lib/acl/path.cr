@@ -1,11 +1,11 @@
 class Acl::Path
-  getter path : String
+  getter value : String
 
-  def initialize(@path : String)
+  def initialize(@value : String)
   end
 
-  def acl_validates?(other_path : String) : Bool
-    return @path == other_path unless @path.includes?("*")
-    !!Regex.new(@path.gsub("*", ".*")).match(other_path)
+  def acl_match?(other_path : String) : Bool
+    return @value == other_path unless @value.includes?("*")
+    !!Regex.new(@value.gsub("*", ".*")).match(other_path)
   end
 end
