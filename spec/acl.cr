@@ -23,14 +23,18 @@ describe Acl do
     acls.permitted?(u1, "/tmp", Acl::Perm::Write).should be_false
     acls.permitted?(u1, "/tmp/protected", Acl::Perm::Read).should be_false
     acls.permitted?(u2, "/tmp/protected", Acl::Perm::Read).should be_true
+
+    # matching
+    acls.permitted?(u1, "/tmp/write/test", Acl::Perm::Read).should be_true
+    acls.permitted?(u1, "/tmp/write/test", Acl::Perm::Write).should be_true
   end
 
   it "test the paths matching" do
-    Acl::Path.new("/*").acl_validates?("/a/test").should eq(true)
-    Acl::Path.new("/a*").acl_validates?("/a/test").should eq(true)
-    Acl::Path.new("/a/test*").acl_validates?("/a/test").should eq(true)
-    Acl::Path.new("/a/test*").acl_validates?("/a/test/").should eq(true)
-    Acl::Path.new("/a/test*").acl_validates?("/b/test").should eq(false)
-    Acl::Path.new("/a/test*").acl_validates?("/a/other").should eq(false)
+    Acl::Path.new("/*").acl_match?("/a/test").should eq(true)
+    Acl::Path.new("/a*").acl_match?("/a/test").should eq(true)
+    Acl::Path.new("/a/test*").acl_match?("/a/test").should eq(true)
+    Acl::Path.new("/a/test*").acl_match?("/a/test/").should eq(true)
+    Acl::Path.new("/a/test*").acl_match?("/b/test").should eq(false)
+    Acl::Path.new("/a/test*").acl_match?("/a/other").should eq(false)
   end
 end

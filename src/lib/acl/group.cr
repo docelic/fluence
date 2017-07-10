@@ -12,9 +12,25 @@ class Acl::Group
 
   YAML.mapping(
     name: String,
-    permissions: Hash(String, Acl::Perm),
+    permissions: Hash(Acl::Path, Acl::Perm),
     default: Acl::Perm
   )
+
+  # Create a new named Group with optional parameters.
+  #
+  # - *name* is the name of the group (arbitrary `String`).
+  # - *permissions* is a hash of ``{Acl::Path.new("path") => `Perm`}``.
+  # - *default* is the value used for every path not defined in the *permissions*.
+  #
+  # ```
+  # guest = Acl::Group.new(name: "guest", default: Acl::Perm::None, permissions: {Acl::Path.new "/public" => Acl::Perm::Read})
+  # user = Acl::Group.new(name: "user", default: Acl::Perm::Read, permissions: {Acl::Path.new "/protected" => Acl::Perm::None})
+  # admin = Acl::Group.new(name: "admin", default: Acl::Perm::Write)
+  # ```
+  def initialize(@name,
+                 @permissions = Hash(Acl::Path, Acl::Perm).new,
+                 @default : Acl::Perm = Acl::Perm::None)
+  end
 
   # Create a new named Group with optional parameters.
   #
@@ -28,8 +44,9 @@ class Acl::Group
   # admin = Acl::Group.new(name: "admin", default: Acl::Perm::Write)
   # ```
   def initialize(@name,
-                 @permissions = Hash(String, Acl::Perm).new,
+                 permissions = Hash(String, Acl::Perm).new,
                  @default : Acl::Perm = Acl::Perm::None)
+    @permissions = permissions.map{|k, v| {Acl::Path.new(k), v} }.to_h
   end
 
   # Check if the group as the `Acl::Perm` required to have access to a given path.
@@ -43,9 +60,13 @@ class Acl::Group
   # guest.permitted "/other", Acl::Perm::Read   # => false
   # ```
   def permitted?(path : String, access : Acl::Perm) : Bool
-    return true if permissions.fetch(path, default).to_i >= access.to_i
-    # TODO
-    return false
+    permissions.fetch(path, default).to_i >= access.to_i
+    matched_permissions = (permissions.select { |pe, acl| pe.acl_match?(path) })
+    if matched_permissions.empty?
+      default.to_i >= access.to_i
+    else
+      matched_permissions.any? { |_, acl| acl.to_i >= access.to_i }
+    end
   end
 
   # def if_permitted(path : String, access : Acl::Perm) : Bool
