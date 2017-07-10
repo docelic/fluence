@@ -74,6 +74,14 @@ Each time a file is changed, the repository is commited.
 
   * [ ] take a look at https://github.com/kemalyst/kemalyst
 
+## ACL
+
+  * Admin panel to manage the directories and pages
+  * Rules on directories are terminated with a \*
+  * If several rules conflict, take the more specific one
+    * Directories with the longer name prevailes
+    * Files rules prevailes over directory rules
+
 ## Contributing
 
 1. Fork it ( https://github.com/Nephos/wikicr/fork )

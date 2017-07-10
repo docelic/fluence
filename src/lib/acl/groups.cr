@@ -32,10 +32,13 @@ class Acl::Groups
 
   # Read the file and erase the content, skip if the file does not exists
   def read!
-    return self unless File.exists? @file
-    groups = Acl::Groups.read(@file)
-    @file = groups.file
-    @groups = groups.groups
+    if File.exists? @file
+      groups = Acl::Groups.read(@file)
+      @file = groups.file
+      @groups = groups.groups
+    else
+      @groups = Hash(String, Acl::Group).new
+    end
     self
   end
 
@@ -62,18 +65,22 @@ class Acl::Groups
 
   def add(group : String)
     @groups[group] = Group.new(group)
+    self
   end
 
   def add(group : Acl::Group)
     @groups[group.name] = group
+    group
   end
 
   def delete(group : String)
     @groups.delete(group)
+    self
   end
 
   def delete(group : Acl::Group)
     @groups.delete(group.name)
+    self
   end
 
   def [](group : String) : Acl::Group
@@ -92,9 +99,44 @@ class Acl::Groups
     (@groups[group.name]?)
   end
 
-  def groups_having(path : String) : Hash(String, Acl::Perm)
-    @groups.map do |_, group|
-      {group.name, @groups[group.name].permissions[path]?}
-    end.to_h.compact
+  def group_exists?(group : String) : Bool
+    @groups.keys.includes? group
+  end
+
+  def group_exists?(group : Acl::Groum) : Bool
+    group_exists?(group.name)
+  end
+
+  # List the groups having at least the permission *acl_min* on a path
+  def groups_having(path : String, acl_min : Acl::Perm, not_more : Bool = false) : Array(String)
+    @groups.select do |_, group|
+      current_acl = (group[path]? || Acl::Perm::None).to_i
+      if not_more
+        current_acl == acl_min.to_i
+      else
+        current_acl >= acl_min.to_i
+      end
+    end.keys
+  end
+
+  def add_permissions_to(path : String, groups : Array(String), acl : Acl::Perm)
+    groups.each do |group|
+      self.add(group) unless group_exists? group
+      old_acl = self[group][path]?
+      self[group][path] = acl if old_acl.nil? || old_acl.to_i < acl.to_i
+    end
+    self
+  end
+
+  def clear_permissions_of(path : String)
+    self.clear_permissions_of(path, Acl::Perm::Read)
+    self.clear_permissions_of(path, Acl::Perm::Write)
+  end
+
+  def clear_permissions_of(path : String, acl : Acl::Perm)
+    @groups.each do |_, group|
+      group.delete(path) if group[path]? == acl
+    end
+    self
   end
 end

@@ -3,7 +3,7 @@ private def fetch_params(env)
   page = Wikicr::Page.new path
   {
     :title => page.title,
-    :path  => page.path,
+    :path  => page.url,
     :page  => page,
   }
 end
@@ -26,7 +26,15 @@ get "/pages/*path" do |env|
   if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?(current_user(env))
     render_pages(edit)
   else
-    locals[:body_html] = Markdown.to_html(locals[:body].as(String))
+    body_html = Markdown.to_html(locals[:body].as(String))
+    Wikicr::ACL.read!
+    groups_read = Wikicr::ACL.groups_having(locals[:path].as(String), Acl::Perm::Read, true)
+    groups_write = Wikicr::ACL.groups_having(locals[:path].as(String), Acl::Perm::Write, true)
+    locals = locals.merge({
+      :body_html => body_html,
+      :groups_read => groups_read.join(","),
+      :groups_write => groups_write.join(",")
+    })
     render_pages(show)
   end
 end
