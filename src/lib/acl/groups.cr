@@ -5,7 +5,7 @@ require "./group"
 require "./entity"
 
 # The Groups is used to handle a set of uniq `Group`, by *name*.
-class Wikicr::Acl::Groups
+class Acl::Groups
   # @groups : Hash(String, Acl::Group)
   # property file : String
 

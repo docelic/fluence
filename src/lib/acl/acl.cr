@@ -1,5 +1,5 @@
 # Permission levels of the Acl system
-enum Wikicr::Acl::Perm
+enum Acl::Perm
   # level 0. Cannot read, cannot write.
   None = 0
 

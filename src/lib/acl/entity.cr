@@ -2,7 +2,7 @@ require "./acl"
 require "./group"
 
 # Entity that have access to the Acl system.
-module Wikicr::Acl::Entity
+module Acl::Entity
   # Returns `true` if the *group* is owned by the `Entity`, else `false`
   abstract def has_group?(group : String) : Bool
 
