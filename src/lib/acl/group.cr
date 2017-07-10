@@ -43,7 +43,9 @@ class Acl::Group
   # guest.permitted "/other", Acl::Perm::Read   # => false
   # ```
   def permitted?(path : String, access : Acl::Perm) : Bool
-    permissions.fetch(path, default).to_i >= access.to_i
+    return true if permissions.fetch(path, default).to_i >= access.to_i
+    # TODO
+    return false
   end
 
   # def if_permitted(path : String, access : Acl::Perm) : Bool
