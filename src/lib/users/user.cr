@@ -1,5 +1,5 @@
 require "crypto/bcrypt/password"
-require "./acl/entity"
+require "../acl/entity"
 
 # An `User` is a couple name/password/groups.
 class Wikicr::User

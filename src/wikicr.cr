@@ -8,7 +8,7 @@ require "kilt/slang"
 require "markdown"
 
 require "./version"
-require "./lib"
+require "./lib/init"
 require "./controllers"
 
 puts "Wiki is written on #{Wikicr::OPTIONS.basedir}"
