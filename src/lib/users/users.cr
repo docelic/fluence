@@ -11,9 +11,15 @@ class Wikicr::Users
   class NotExist < Exception
   end
 
-  getter file : String
-  getter default : User?
-  @list : Hash(String, User)
+  # getter file : String
+  # getter default : User?
+  # @list : Hash(String, User)
+
+  YAML.mapping(
+    file: String,
+    default: User?,
+    list: Hash(String, User)
+  )
 
   def initialize(@file, @default : User? = nil)
     @list = {} of String => User
@@ -23,18 +29,19 @@ class Wikicr::Users
 
   # read the users from the file (erase the modifications !)
   def read!
-    @list = File.read(@file).split("\n")
-                            .select { |line| !line.empty? }
-                            .map { |line| u = User.new(line); {u.name, u} }.to_h
+    if File.exists?(@file) && (new_users = Users.from_yaml(File.read(@file)) rescue nil)
+      @list = new_users.list
+      @default = new_users.default
+      @file = new_users.file
+    else
+      @list = {} of String => User
+    end
     self
   end
 
   # save the users into the file
   def save!
-    File.open(@file, "w") do |fd|
-      @list.each { |name, user| user.to_s(fd) }
-    end
-    self
+    File.write @file, self.to_yaml
   end
 
   # add an user to the list

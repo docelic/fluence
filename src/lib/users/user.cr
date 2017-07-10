@@ -9,9 +9,15 @@ class Wikicr::User
   # separator for name/password/groups
   SEP = ':'
 
-  getter name : String
-  getter password : String
-  getter groups : Array(String)
+  # getter name : String
+  # getter password : String
+  # getter groups : Array(String)
+
+  YAML.mapping(
+    name: String,
+    password: String,
+    groups: Array(String)
+  )
 
   # ```
   # User.new "admin", "password", %w(admin user)
@@ -45,17 +51,6 @@ class Wikicr::User
   # Reads the password using `Crypto::Bcrypt`
   def password_encrypted
     Crypto::Bcrypt::Password.new(@password)
-  end
-
-  def to_s
-    "#{name}#{SEP}#{password}#{SEP}#{groups.join(",")}"
-  end
-
-  def to_s(io : IO)
-    io << name << SEP
-    io << password << SEP
-    groups.each { |g| io << g; io << ',' if g != groups.last }
-    io << '\n'
   end
 
   #########################
