@@ -74,7 +74,7 @@ Each time a file is changed, the repository is commited.
 
   * [ ] take a look at https://github.com/kemalyst/kemalyst
 
-## ACL
+## Security and ACLs
 
   * Admin panel to manage the directories and pages
   * Rules on directories are terminated with a \*
