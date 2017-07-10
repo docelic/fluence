@@ -39,7 +39,8 @@ post "/users/register" do |env|
   begin
     user = Wikicr::USERS.register! locals[:username].to_s, locals[:password].to_s
     env.redirect "/users/login"
-  rescue
+  rescue err
+    pp err
     env.redirect "/users/register"
   end
 end

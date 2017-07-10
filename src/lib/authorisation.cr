@@ -1,7 +1,6 @@
 module Wikicr
   Dir.mkdir_p "meta"
 
-  File.touch "meta/users"
   DEFAULT_USER = Wikicr::User.new "guest", "guest", %w(guest)
   USERS        = Wikicr::Users.new "meta/users", DEFAULT_USER
 
