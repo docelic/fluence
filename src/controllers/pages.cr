@@ -31,9 +31,9 @@ get "/pages/*path" do |env|
     groups_read = Wikicr::ACL.groups_having(locals[:path].as(String), Acl::Perm::Read, true)
     groups_write = Wikicr::ACL.groups_having(locals[:path].as(String), Acl::Perm::Write, true)
     locals = locals.merge({
-      :body_html => body_html,
-      :groups_read => groups_read.join(","),
-      :groups_write => groups_write.join(",")
+      :body_html    => body_html,
+      :groups_read  => groups_read.join(","),
+      :groups_write => groups_write.join(","),
     })
     render_pages(show)
   end
