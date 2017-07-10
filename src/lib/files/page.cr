@@ -1,5 +1,5 @@
 require "../errors"
-require "./sfile"
+require "./file_tree"
 
 # A `Page` is a file and an url part
 # Is is used to jail files into the *OPTIONS.basedir*
