@@ -5,7 +5,7 @@ require "./file_tree"
 # Is is used to jail files into the *OPTIONS.basedir*
 struct Wikicr::Page
   PAGES_SUB_DIRECTORY = "pages/"
-  URL_PREFIX = "/pages"
+  URL_PREFIX          = "/pages"
 
   getter path : String
   getter url : String
