@@ -6,9 +6,6 @@ class Wikicr::User
   class Invalid < Exception
   end
 
-  # separator for name/password/groups
-  SEP = ':'
-
   # getter name : String
   # getter password : String
   # getter groups : Array(String)
