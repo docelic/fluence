@@ -2,7 +2,7 @@
   == locals[:body_html]
 .col-xs-4
   .col-xs-12
-    a.btn.btn-md href="/pages/#{locals[:display_path]}?edit"
+    a.btn.btn-md href="/pages/#{locals[:path]}?edit"
       | Edit
   / TODO: remove true
   - if current_user.has_group?("admin") || true
@@ -22,4 +22,3 @@
           input.form-control name="groups" type="text"
         .input-group
           input.form-control.btn.btn-md.btn-warning name="change" type="submit" value="write"
-
