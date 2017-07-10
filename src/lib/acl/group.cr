@@ -28,7 +28,7 @@ class Acl::Group
   # admin = Acl::Group.new(name: "admin", default: Acl::Perm::Write)
   # ```
   def initialize(@name,
-                 @permissions = Hash(Acl::Path, Acl::Perm).new,
+                 @permissions : Hash(Acl::Path, Acl::Perm) = Hash(Acl::Path, Acl::Perm).new,
                  @default : Acl::Perm = Acl::Perm::None)
   end
 
@@ -38,7 +38,7 @@ class Acl::Group
   # admin = Acl::Group.new(name: "admin", default: Acl::Perm::Write)
   # ```
   def initialize(@name,
-                 permissions = Hash(String, Acl::Perm).new,
+                 permissions : Hash(String, Acl::Perm),
                  @default : Acl::Perm = Acl::Perm::None)
     @permissions = permissions.map { |k, v| {Acl::Path.new(k), v} }.to_h
   end
@@ -63,15 +63,27 @@ class Acl::Group
     end
   end
 
-  # Same than Path[String]? but raises KeyError if not found
+  # TODO: do not use acl_match? and replace it with another function
+  #
+  # Tries to match the *path* with the permissions of this group.
+  # If select every matching path and get the maximum permission among them.
+  def []?(path : String) : Acl::Perm?
+    founds = @permissions.select { |ppath, pgroup| ppath.acl_match?(path) }
+    return nil if founds.empty?
+    found_min_size = founds.reduce { |left, right| left[0].size >= right[0].size ? left : right }
+    found_min_size[1]
+  end
+
+  # Same than Path[String]? but returns the defaut value if not found
   def [](path : String) : Acl::Perm
     acl = self[path]?
-    raise KeyError.new "No match for path `#{path}`" if acl.nil?
+    return @default if acl.nil?
     acl
   end
 
+  # If a path exists, replace it with the given permission *acl*, else create it.
   def []=(path : String, acl : Acl::Perm)
-    replace = @permissions.find{|ppath, _| ppath == path}
+    replace = @permissions.find { |ppath, _| ppath == path }
     if replace
       @permissions[replace[0]] = acl
     else
@@ -79,15 +91,7 @@ class Acl::Group
     end
   end
 
-  # Tries to match the *path* with the permissions of this group.
-  # If select every matching path and get the maximum permission among them.
-  def []?(path : String) : Acl::Perm?
-    founds = @permissions.select { |ppath, pgroup| ppath.acl_match?(path) }
-    return nil if founds.empty?
-    found_min_size = founds.reduce { |left, right| left[0].size >= right[0].size ? left : right}
-    found_min_size[1]
-  end
-
+  # Remove the permissions associated to the path
   def delete(path : String)
     @permissions.delete_if { |current_path| current_path.to_s == path }
     self
