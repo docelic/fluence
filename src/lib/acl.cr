@@ -8,7 +8,7 @@ module Wikicr
   USERS        = Wikicr::Users.new "meta/users", DEFAULT_USER
 
   # File.touch "meta/acl"
-  ACL = Wikicr::Acl::Groups.new("meta/acl")
+  ACL = Acl::Groups.new("meta/acl")
 end
 
 pp Wikicr::ACL.read!.groups_having "/home"

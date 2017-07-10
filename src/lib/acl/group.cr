@@ -5,15 +5,15 @@ require "./acl"
 # The Group is identified by a *name* and has *permissions* on a set of paths.
 # It is used by `Groups`.
 # NOTE: I did not used Hash().new(default) because it is annoying with passing the permissions in the constructor
-class Wikicr::Acl::Group
+class Acl::Group
   # getter name : String
   # getter permissions : Hash(String, Acl::Perm)
   # property default : Acl::Perm
 
   YAML.mapping(
     name: String,
-    permissions: Hash(String, Wikicr::Acl::Perm),
-    default: Wikicr::Acl::Perm
+    permissions: Hash(String, Acl::Perm),
+    default: Acl::Perm
   )
 
   # Create a new named Group with optional parameters.

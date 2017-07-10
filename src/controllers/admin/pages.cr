@@ -9,12 +9,12 @@ post "/admin/pages/*path" do |env|
   if data["change"] == "read"
     data["groups"].split(",").map(&.strip).each do |group|
       Wikicr::ACL.add group if Wikicr::ACL[group]?.nil?
-      Wikicr::ACL[group].permissions[path] = Wikicr::Acl::Perm::Read
+      Wikicr::ACL[group].permissions[path] = Acl::Perm::Read
     end
   elsif data["change"] == "write"
     data["groups"].split(",").map(&.strip).each do |group|
       Wikicr::ACL.add group if Wikicr::ACL[group]?.nil?
-      Wikicr::ACL[group].permissions[path] = Wikicr::Acl::Perm::Write
+      Wikicr::ACL[group].permissions[path] = Acl::Perm::Write
     end
   end
   Wikicr::ACL.save!
