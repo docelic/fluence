@@ -9,3 +9,11 @@ enum Acl::Perm
   # level 3. Can read, can write.
   Write = 3
 end
+
+module Acl
+  PERM = {
+    none:  Acl::Perm::None,
+    read:  Acl::Perm::Read,
+    write: Acl::Perm::Write,
+  }
+end

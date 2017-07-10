@@ -61,10 +61,13 @@ macro current_user
 end
 
 macro acl_permit!(perm, env)
-  # read env.query.path ...
-  # Wikicr::ACL.permitted?(current_user, path, env)
+  if Wikicr::ACL.permitted?(current_user, env.request.path, Acl::PERM[{{perm}}])
+    puts "PERMITTED #{current_user} #{env.request.path} #{Acl::PERM[{{perm}}]}"
+  else
+    puts "NOT PERMITTED #{current_user} #{env.request.path} #{Acl::PERM[{{perm}}]}"
+  end
 end
 
 macro acl_permit!(perm)
-  acl_permit!(perm, env)
+  acl_permit!({{perm}}, env)
 end

@@ -55,6 +55,7 @@ class Acl::Groups
   # ```
   def permitted?(entity : Acl::Entity, path : String, access : Acl::Perm)
     entity.groups.map do |group|
+      pp path, access, @groups[group].permitted?(path, access)
       @groups[group].permitted?(path, access)
     end.reduce(false) { |l, r| l | r }
   end
