@@ -22,14 +22,15 @@ end
 get "/pages/*path" do |env|
   acl_permit! :read
   locals = fetch_params(env)
-  locals[:body] = (locals[:page].as(Wikicr::Page).read(current_user(env)) rescue "")
-  if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?(current_user(env))
+  page = locals[:page].as(Wikicr::Page)
+  locals[:body] = (page.read(current_user(env)) rescue "")
+  if (env.params.query["edit"]?) || !page.exists?(current_user(env))
     render_pages(edit)
   else
     body_html = Markdown.to_html(locals[:body].as(String))
     Wikicr::ACL.read!
-    groups_read = Wikicr::ACL.groups_having(locals[:path].as(String), Acl::Perm::Read, true)
-    groups_write = Wikicr::ACL.groups_having(locals[:path].as(String), Acl::Perm::Write, true)
+    groups_read = Wikicr::ACL.groups_having(page.real_url, Acl::Perm::Read, true)
+    groups_write = Wikicr::ACL.groups_having(page.real_url, Acl::Perm::Write, true)
     locals = locals.merge({
       :body_html    => body_html,
       :groups_read  => groups_read.join(","),

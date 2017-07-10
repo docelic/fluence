@@ -5,14 +5,17 @@ require "./file_tree"
 # Is is used to jail files into the *OPTIONS.basedir*
 struct Wikicr::Page
   PAGES_SUB_DIRECTORY = "pages/"
+  URL_PREFIX = "/pages"
 
   getter path : String
   getter url : String
   getter title : String
+  getter real_url : String
 
   def initialize(@url)
     @path = Page.url_to_file @url
     @title = File.basename @url
+    @real_url = File.expand_path @url, URL_PREFIX
   end
 
   def self.sanitize_url(url : String)
