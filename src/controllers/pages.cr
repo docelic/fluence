@@ -1,18 +1,11 @@
-require "../lib/*"
-
-before_all do |env|
-  # env.session = Session.new(env.cookies)
-end
-
 private def fetch_params(env)
-  path = env.params.url["path"].gsub(/[^\w\/]/, "-")
+  path = env.params.url["path"]
+  page = Wikicr::Page.new path
   {
-    path:         path,                   # basic path from the params unmodified
-    display_path: path,                   # TODO: clean the path
-    title:        path.split("/").last,   # keep only the name of the file
-    page:         Wikicr::Page.new(path), # page handler
+    :title => page.title,
+    :path  => page.path,
+    :page  => page,
   }
-  # file_path:    Wikicr::Page.new(path).jail.file, # jail the path (safety)
 end
 
 get "/pages/search" do |env|
@@ -28,7 +21,7 @@ end
 
 get "/pages/*path" do |env|
   acl_permit! :read
-  locals = fetch_params(env).to_h
+  locals = fetch_params(env)
   locals[:body] = (locals[:page].as(Wikicr::Page).read(current_user(env)) rescue "")
   if (env.params.query["edit"]?) || !locals[:page].as(Wikicr::Page).exists?(current_user(env))
     render_pages(edit)
@@ -40,7 +33,7 @@ end
 
 post "/pages/*path" do |env|
   acl_permit! :write
-  locals = fetch_params(env).to_h
+  locals = fetch_params(env)
   if (env.params.body["body"]?.to_s.empty?)
     locals[:page].as(Wikicr::Page).delete(current_user(env)) rescue nil
     env.redirect "/pages/"

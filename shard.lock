@@ -6,11 +6,11 @@ shards:
 
   kemal:
     github: kemalcr/kemal
-    commit: eb3e83d5903ce8f18d796a97ae200009fdf2c9a2
+    commit: dbbe05a610e3c86b774a6bc546341329a408fa18
 
   kemal-session:
     github: kemalcr/kemal-session
-    commit: bbef25f36fe6505d3221de9952f94a1023225b85
+    commit: 5353aecb9d6a8aee54a0d3cc9fc50ee540dc6781
 
   kilt:
     github: jeromegn/kilt
