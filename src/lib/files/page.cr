@@ -40,10 +40,6 @@ struct Wikicr::Page
     self
   end
 
-  private def jailed_file(user)
-    @path[Wikicr::OPTIONS.basedir.size..-1].strip("/")
-  end
-
   # Get the directory of the *file*
   def dirname
     File.dirname @path
@@ -83,8 +79,8 @@ struct Wikicr::Page
     # TODO: security of jailed_file and self.name ?
     dir = Dir.current
     Dir.cd Wikicr::OPTIONS.basedir
-    puts `git add -- #{jailed_file(user)}`
-    puts `git commit -s --author \"#{user.name}\" -m \"#{message} #{@url}\" -- #{jailed_file(user)}`
+    puts `git add -- #{@url}`
+    puts `git commit -s --author \"#{user.name}\" -m \"#{message} #{@url}\" -- #{@url}`
     Dir.cd dir
   end
 end
