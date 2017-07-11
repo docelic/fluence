@@ -16,9 +16,9 @@ class ApplicationController < Amber::Controller::Base
 
   macro acl_permit!(perm)
     if Wikicr::ACL.permitted?(current_user, request.path, Acl::PERM[{{perm}}])
-      puts "PERMITTED #{current_user} #{request.path} #{Acl::PERM[{{perm}}]}"
+      puts "PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
     else
-      puts "NOT PERMITTED #{current_user} #{request.path} #{Acl::PERM[{{perm}}]}"
+      puts "NOT PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
       flash["danger"] = "You are not permitted to access this resource."
       # redirect_to "/"
     end

@@ -7,7 +7,7 @@ end
 class PagesController < ApplicationController
   private def fetch_params
     path = params["path"]
-    page = Wikicr::Page.new path
+    page = Wikicr::Page.new url: path, read_title: true
     {
       :title => page.title,
       :path  => page.url,
@@ -48,7 +48,7 @@ class PagesController < ApplicationController
       render "edit.slang"
     else
       body_html = Markdown.to_html(locals[:body].as(String))
-      Wikicr::ACL.read!
+      Wikicr::ACL.load!
       groups_read = Wikicr::ACL.groups_having_any_access_to(page.real_url, Acl::Perm::Read, true)
       groups_write = Wikicr::ACL.groups_having_any_access_to(page.real_url, Acl::Perm::Write, true)
       locals = locals.merge({
@@ -67,10 +67,12 @@ class PagesController < ApplicationController
     if (params["body"]?.to_s.empty?)
       locals[:page].as(Wikicr::Page).delete(current_user) rescue nil
       flash["info"] = "The page #{locals[:path]} has been deleted."
+      Wikicr::PAGES.transaction! { |index| index.delete locals[:page].as(Wikicr::Page) }
       redirect_to "/pages/"
     else
       locals[:page].as(Wikicr::Page).write params["body"], current_user
       flash["info"] = "The page #{locals[:path]} has been updated."
+      Wikicr::PAGES.transaction! { |index| index.add locals[:page].as(Wikicr::Page) }
       redirect_to "/pages/#{locals[:path]}"
     end
   end

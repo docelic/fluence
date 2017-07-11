@@ -5,7 +5,7 @@ require "./group"
 require "./entity"
 
 # The Groups is used to handle a set of uniq `Group`, by *name*.
-class Acl::Groups
+class Acl::Groups < Lockable
   # @groups : Hash(String, Acl::Group)
   # property file : String
 
@@ -22,7 +22,7 @@ class Acl::Groups
   # acls.add g2
   # ```
   def initialize(@file)
-    @groups = Hash(String, Acl::Group).new
+    @groups = {} of String => Acl::Group
   end
 
   def save!
@@ -31,13 +31,12 @@ class Acl::Groups
   end
 
   # Read the file and erase the content, skip if the file does not exists
-  def read!
-    if File.exists? @file
-      groups = Acl::Groups.read(@file)
-      @file = groups.file
-      @groups = groups.groups
+  def load!
+    if File.exists?(@file) && (new_groups = Acl::Groups.read(@file) rescue nil)
+      @groups = new_groups.groups
+      # @file = groups.file
     else
-      @groups = Hash(String, Acl::Group).new
+      @groups = {} of String => Acl::Group
     end
     self
   end
