@@ -4,11 +4,12 @@ nav
   .pull-left
     a.btn.btn-md href="/" Home
     a.btn.btn-md href="/sitemap" Sitemap
-    - if session["username"]
+    - if session["username"] || true
       = session["username"]
-      - if current_user.has_group? "admin"
-        a.btn.btn-md href="/users/admin" Admin
-    - else
+      - if current_user.has_group?("admin") || true
+        a.btn.btn-md href="/admin/users" Users
+        a.btn.btn-md href="/admin/acls" ACLs
+        /- else
       a.btn.btn-md href="/users/register" Register
       a.btn.btn-md href="/users/login" Login
   .pull-right

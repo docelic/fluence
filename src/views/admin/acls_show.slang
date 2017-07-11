@@ -1,0 +1,54 @@
+h1.page-header ACLs management
+
+h2 Create a new ACL
+form#acl-create method="post" action="/admin/acl"
+  fieldset
+    div.input-group.col-xs-12
+      label Group
+      input.form-control name="group" type="text" required="true"
+    div.input-group.col-xs-12
+      label Path
+      input.form-control name="path" type="text" required="true"
+    div.input-group.col-xs-12
+      label Permission
+      select.form-control name="perm" value="None" required="true"
+        option value="none" None
+        option value="read" Read
+        option value="write" Write
+    div.input-group
+      input.form-control.btn.btn-md.btn-success name="create" type="submit" value="create"
+
+h2 Manage existing ACL
+table.table.table-condensed
+  thead
+    tr
+      th Concerned
+      th Path
+      th Permission
+      th Action
+  tbody
+    - Wikicr::ACL.groups.each do |_, group|
+      - group.permissions.each do |path, perm|
+        tr
+          td.col-xs-2 = group.name
+          td.col-xs-6 = path.to_s
+          - case perm.to_s
+            - when "Write"
+              td.col-xs-1.bg-success = perm.to_s
+            - when "Read"
+              td.col-xs-1.bg-info = perm.to_s
+            - when "None"
+              td.col-xs-1.bg-warning = perm.to_s
+          td.col-xs-3
+            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
+              button.btn.btn-xs.btn-success name="change" type="submit" value="write"
+                span Write
+            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
+              button.btn.btn-xs.btn-info name="change" type="submit" value="read"
+                Span Read
+            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
+              button.btn.btn-xs.btn-warning name="change" type="submit" value="none"
+                Span None
+            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
+              button.btn.btn-xs.btn-danger name="change" type="submit" value="delete"
+                Span Delete

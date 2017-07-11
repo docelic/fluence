@@ -1,3 +1,6 @@
+h1.page-header
+  | #{locals[:title]}
+
 .col-xs-8
   == locals[:body_html]
 .col-xs-4
@@ -7,18 +10,14 @@
   / TODO: remove true
   - if current_user.has_group?("admin") || true
     .col-xs-12
-      form#admin-pages-read method="post" action="/admin/pages/#{locals[:path]}"
-        .input-group.col-xs-12
-          label
-            | Limited read to the groups:
-          input.form-control name="groups" type="text" value=locals[:groups_read]
-        .input-group
-          input.form-control.btn.btn-md.btn-warning name="change" type="submit" value="read"
-    .col-xs-12
-      form#admin-pages-write method="post" action="/admin/pages/#{locals[:path]}"
-        .input-group.col-xs-12
-          label
-            | Limited write to the groups:
-          input.form-control name="groups" type="text" value=locals[:groups_write]
-        .input-group
-          input.form-control.btn.btn-md.btn-warning name="change" type="submit" value="write"
+      ol.breadcrumb
+        span.label.label-default Read
+        - locals[:groups_read].as(Array(String)).each do |group|
+          li
+            | #{group}
+
+      ol.breadcrumb
+        span.label.label-default Write
+        - locals[:groups_write].as(Array(String)).each do |group|
+          li
+            | #{group}

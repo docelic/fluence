@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title Wikicr using Amber
+    title Wikicr
     meta charset="utf-8"
     meta http-equiv="X-UA-Compatible" content="IE=edge"
     meta name="viewport" content="width=device-width, initial-scale=1"
@@ -28,7 +28,4 @@ html
           p = flash[key]
       div.row
         div.col-sm-12.main
-          h1.small.page-header
-            | #{locals[:title]}
-          #content
-            == content
+          == content

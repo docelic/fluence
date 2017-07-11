@@ -22,6 +22,7 @@ Amber::Server.instance.config do |app|
   end
 
   routes :web do
+
     get "/", HomeController, :index
 
     get "/sitemap", PagesController, :sitemap
@@ -30,15 +31,17 @@ Amber::Server.instance.config do |app|
     get "/pages/*path", PagesController, :show
     post "/pages/*path", PagesController, :update
 
-    post "/admin/pages/*path", PagesController, :admin
-
     get "/users/login", UsersController, :login
     post "/users/login", UsersController, :login_validates
     get "/users/register", UsersController, :register
     post "/users/register", UsersController, :register_validates
 
-    get "/admin/users", UsersController, :admin
-    post "/admin/users/delete", UsersController, :admin_delete
-    post "/admin/users", UsersController, :admin_register
+    get "/admin/users", AdminController, :users_show
+    post "/admin/users/delete", AdminController, :user_delete
+    post "/admin/users", AdminController, :user_create
+
+    get "/admin/acls", AdminController, :acls_show
+    post "/admin/acl/:group/*path", AdminController, :acl_update
+    post "/admin/acl", AdminController, :acl_create
   end
 end

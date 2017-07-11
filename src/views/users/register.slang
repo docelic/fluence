@@ -1,3 +1,5 @@
+h1.page-header Register
+
 form#register method="post"
   fieldset
     legend
