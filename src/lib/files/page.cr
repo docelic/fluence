@@ -16,7 +16,7 @@ struct Wikicr::Page
     @path = Page.url_to_file @url
     @title = File.basename @url
     @real_url = File.expand_path @url, URL_PREFIX
-    @title = Page.read_title(@path) || @title if read_title
+    @title = Page.read_title(@path) || @title if read_title && File.exists?(@path)
   end
 
   def self.read_title(path : String) : String?
