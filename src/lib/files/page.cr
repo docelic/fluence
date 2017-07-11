@@ -12,10 +12,16 @@ struct Wikicr::Page
   getter title : String
   getter real_url : String
 
-  def initialize(@url)
+  def initialize(@url, read_title : Bool = false)
     @path = Page.url_to_file @url
     @title = File.basename @url
     @real_url = File.expand_path @url, URL_PREFIX
+    @title = Page.read_title(@path) || @title if read_title
+  end
+
+  def self.read_title(path : String) : String?
+    title = File.read(path).split("\n").find { |l| l.starts_with? "# " }
+    title && title.strip("# ").strip
   end
 
   def self.sanitize_url(url : String)
@@ -90,4 +96,4 @@ end
 
 # require "./users"
 # require "./git"
-# Wikicr::Page.new("testX").write("OK", Wikicr::USERS.read!.find("arthur.poulet@mailoo.org"))
+# Wikicr::Page.new("testX").write("OK", Wikicr::USERS.load!.find("arthur.poulet@mailoo.org"))

@@ -4,7 +4,7 @@ require "./user"
 # An instance of `Users` must be linked with a file which can be read of updated
 #
 # TODO: mutex on add/remove/update
-class Wikicr::Users
+class Wikicr::Users < Lockable
   class AlreadyExist < Exception
   end
 
@@ -28,11 +28,11 @@ class Wikicr::Users
   end
 
   # read the users from the file (erase the modifications !)
-  def read!
+  def load!
     if File.exists?(@file) && (new_users = Users.from_yaml(File.read(@file)) rescue nil)
       @list = new_users.list
       @default = new_users.default
-      @file = new_users.file
+      # @file = new_users.file
     else
       @list = {} of String => User
     end
@@ -115,7 +115,7 @@ class Wikicr::Users
   #
   # see `#auth?`
   def auth!(name : String, password : String) : User?
-    self.read!
+    self.load!
     auth?(name, password)
   end
 
@@ -125,7 +125,7 @@ class Wikicr::Users
   # and then update the file with the new list of users.
   def register!(name : String, password : String, groups : Array(String) = %w(user))
     user = User.new(name, password, groups).encrypt!
-    self.read!
+    self.load!
     self.add(user)
     self.save!
     user
@@ -136,7 +136,7 @@ end
 # File.touch(file)
 # include Wikicr
 # users = Users.new(file)
-# users.read!
+# users.load!
 # pp users
 # user = User.new("arthur", "passwd", %w(admin,user)).encrypt
 # users.add user

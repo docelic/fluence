@@ -2,7 +2,7 @@ class AdminController < ApplicationController
   # get /admin/users
   def users_show
     acl_permit! :write
-    locals = {title: "Users admin", users: Wikicr::USERS.read!}
+    locals = {title: "Users admin", users: Wikicr::USERS.load!}
     render "users_show.slang"
   end
 
@@ -23,9 +23,9 @@ class AdminController < ApplicationController
   def user_delete
     acl_permit! :write
     data = params
-    Wikicr::USERS.read!
+    Wikicr::USERS.load!
     Wikicr::USERS.delete(data["username"]).save!
-    Wikicr::USERS.read!
+    Wikicr::USERS.load!
     flash["success"] = "The user #{data["username"]} has been deleted."
     redirect_to "/admin/users"
   end
@@ -44,7 +44,7 @@ class AdminController < ApplicationController
     path = params["path"]
     perm_str = params["perm"]
     perm = Acl::PERM_STR[perm_str]
-    Wikicr::ACL.read!
+    Wikicr::ACL.load!
     Wikicr::ACL[group][path] = perm
     Wikicr::ACL.save!
     flash["success"] = "ACL #{group} :: #{path} :: #{perm} has been added"
@@ -58,7 +58,7 @@ class AdminController < ApplicationController
       group = params["group"]
       path = params["path"]
       perm_str = params["change"]
-      Wikicr::ACL.read!
+      Wikicr::ACL.load!
       perm = Acl::PERM_STR[perm_str]
       acl = Wikicr::ACL[group][path] = perm
       Wikicr::ACL.save!
@@ -74,7 +74,7 @@ class AdminController < ApplicationController
     acl_permit! :write
     group = params["group"]
     path = params["path"]
-    Wikicr::ACL.read!
+    Wikicr::ACL.load!
     Wikicr::ACL[group].delete path
     Wikicr::ACL.save!
     flash["success"] = "ACL #{group} :: #{path} has been deleted."
