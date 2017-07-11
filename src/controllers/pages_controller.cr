@@ -28,8 +28,9 @@ class PagesController < ApplicationController
   def search
     # user_must_be_logged!
     query = params["q"]
+    page = Wikicr::Page.new(query)
     # TODO: a real search
-    redirect_to query.empty? ? "/pages" : query
+    redirect_to query.empty? ? "/pages" : page.real_url
   end
 
   def home
