@@ -27,7 +27,7 @@ table.table.table-condensed
       th Permission
       th Action
   tbody
-    - Wikicr::ACL.groups.each do |_, group|
+    - acls.groups.each do |_, group|
       - group.permissions.each do |path, perm|
         tr
           td.col-xs-2 = group.name

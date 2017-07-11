@@ -26,7 +26,7 @@ table.table.table-condensed
       th Groups
       th Action
   tbody
-    - locals[:users].each do |user|
+    - users.each do |user|
       tr
         td= user.name
         td= user.groups.join(", ")
