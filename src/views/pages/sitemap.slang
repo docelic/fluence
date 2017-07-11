@@ -1,3 +1,3 @@
 h1.page-header Sitemap
 
-== add_page(locals[:pages])
+== add_page pages

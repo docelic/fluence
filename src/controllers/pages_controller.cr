@@ -5,20 +5,10 @@ def add_page(page, stack = [] of String)
 end
 
 class PagesController < ApplicationController
-  private def fetch_params
-    path = params["path"]
-    page = Wikicr::Page.new url: path, read_title: true
-    {
-      :title => page.title,
-      :path  => page.url,
-      :page  => page,
-    }
-  end
-
   # get /sitemap
   def sitemap
     acl_permit! :read
-    locals = {title: "sitemap", pages: Wikicr::FileTree.build(Wikicr::OPTIONS.basedir)}
+    pages = Wikicr::FileTree.build Wikicr::OPTIONS.basedir
     render "sitemap.slang"
   end
 
@@ -36,26 +26,23 @@ class PagesController < ApplicationController
     redirect_to query.empty? ? "/pages" : page.real_url
   end
 
+  macro fetch_params
+  end
+
   # get /pages/*path
   def show
     acl_permit! :read
-    locals = fetch_params
-    page = locals[:page].as(Wikicr::Page)
-    locals[:body] = (page.read(current_user) rescue "")
+    page = Wikicr::Page.new url: params["path"], read_title: true
     if (params["edit"]?) || !page.exists?(current_user)
-      flash["info"] = "The page #{locals[:path]} does not exist yet."
+      body = page.read(current_user) rescue ""
+      flash["info"] = "The page #{page.url} does not exist yet."
       acl_permit! :write
       render "edit.slang"
     else
-      body_html = Markdown.to_html locals[:body].as(String)
+      body_html = Markdown.to_html page.read(current_user)
       Wikicr::ACL.load!
       groups_read = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
       groups_write = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
-      locals = locals.merge({
-        :body_html    => body_html,
-        :groups_read  => groups_read,
-        :groups_write => groups_write,
-      })
       render "show.slang"
     end
   end
@@ -63,17 +50,17 @@ class PagesController < ApplicationController
   # post /pages/*path
   def update
     acl_permit! :write
-    locals = fetch_params
+    page = Wikicr::Page.new url: params["path"], read_title: true
     if (params["body"]?.to_s.empty?)
-      locals[:page].as(Wikicr::Page).delete(current_user) rescue nil
-      flash["info"] = "The page #{locals[:path]} has been deleted."
-      Wikicr::PAGES.transaction! { |index| index.delete locals[:page].as(Wikicr::Page) }
+      page.delete current_user rescue nil
+      flash["info"] = "The page #{page.url} has been deleted."
+      Wikicr::PAGES.transaction! { |index| index.delete page }
       redirect_to "/pages/"
     else
-      locals[:page].as(Wikicr::Page).write params["body"], current_user
-      flash["info"] = "The page #{locals[:path]} has been updated."
-      Wikicr::PAGES.transaction! { |index| index.add locals[:page].as(Wikicr::Page) }
-      redirect_to "/pages/#{locals[:path]}"
+      page.write params["body"], current_user
+      flash["info"] = "The page #{page.url} has been updated."
+      Wikicr::PAGES.transaction! { |index| index.add page }
+      redirect_to page.real_url
     end
   end
 end
