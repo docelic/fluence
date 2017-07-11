@@ -37,11 +37,12 @@ Amber::Server.instance.config do |app|
     post "/users/register", UsersController, :register_validates
 
     get "/admin/users", AdminController, :users_show
+    post "/admin/users/create", AdminController, :user_create
     post "/admin/users/delete", AdminController, :user_delete
-    post "/admin/users", AdminController, :user_create
 
     get "/admin/acls", AdminController, :acls_show
-    post "/admin/acl/:group/*path", AdminController, :acl_update
-    post "/admin/acl", AdminController, :acl_create
+    post "/admin/acls/update", AdminController, :acl_update
+    post "/admin/acls/create", AdminController, :acl_create
+    post "/admin/acls/delete", AdminController, :acl_delete
   end
 end

@@ -1,7 +1,7 @@
 h1.page-header ACLs management
 
 h2 Create a new ACL
-form#acl-create method="post" action="/admin/acl"
+form#acl-create method="post" action="/admin/acls/create"
   fieldset
     div.input-group.col-xs-12
       label Group
@@ -40,15 +40,23 @@ table.table.table-condensed
             - when "None"
               td.col-xs-1.bg-warning = perm.to_s
           td.col-xs-3
-            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
-              button.btn.btn-xs.btn-success name="change" type="submit" value="write"
+            form.col-xs-3#admin-acl method="post" action="/admin/acls/update"
+              input type="hidden" name="group" value=group.name
+              input type="hidden" name="path" value=path.to_s
+              button.btn.btn-xs.btn-success type="submit" name="change" value="write"
                 span Write
-            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
-              button.btn.btn-xs.btn-info name="change" type="submit" value="read"
+            form.col-xs-3#admin-acl method="post" action="/admin/acls/update"
+              input type="hidden" name="group" value=group.name
+              input type="hidden" name="path" value=path.to_s
+              button.btn.btn-xs.btn-info type="submit" name="change" value="read"
                 Span Read
-            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
-              button.btn.btn-xs.btn-warning name="change" type="submit" value="none"
+            form.col-xs-3#admin-acl method="post" action="/admin/acls/update"
+              input type="hidden" name="group" value=group.name
+              input type="hidden" name="path" value=path.to_s
+              button.btn.btn-xs.btn-warning type="submit" name="change" value="none"
                 Span None
-            form.col-xs-3#admin-acl method="post" action="/admin/acl/#{group.name}/#{path.to_s}"
-              button.btn.btn-xs.btn-danger name="change" type="submit" value="delete"
+            form.col-xs-3#admin-acl method="post" action="/admin/acls/delete"
+              input type="hidden" name="group" value=group.name
+              input type="hidden" name="path" value=path.to_s
+              button.btn.btn-xs.btn-danger type="submit" name="change" value="delete"
                 Span Delete

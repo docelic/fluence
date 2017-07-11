@@ -1,7 +1,7 @@
 h1.page-header Users Management
 
 h2 Create a new User
-form#register-new-user method="post" action="/users/admin/register"
+form#register-new-user method="post" action="/admin/users/create"
   fieldset
     legend
       | Admin

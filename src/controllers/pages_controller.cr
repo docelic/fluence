@@ -5,16 +5,6 @@ def add_page(page, stack = [] of String)
 end
 
 class PagesController < ApplicationController
-  def sitemap
-    acl_permit! :read
-    locals = {title: "sitemap", pages: Wikicr::FileTree.build(Wikicr::OPTIONS.basedir)}
-    render "sitemap.slang"
-  end
-
-  def index
-    redirect_to "/pages/home"
-  end
-
   private def fetch_params
     path = params["path"]
     page = Wikicr::Page.new path
@@ -25,6 +15,19 @@ class PagesController < ApplicationController
     }
   end
 
+  # get /sitemap
+  def sitemap
+    acl_permit! :read
+    locals = {title: "sitemap", pages: Wikicr::FileTree.build(Wikicr::OPTIONS.basedir)}
+    render "sitemap.slang"
+  end
+
+  # get /pages
+  def index
+    redirect_to "/pages/home"
+  end
+
+  # get /pages/search?q=
   def search
     # user_must_be_logged!
     query = params["q"]
@@ -33,10 +36,7 @@ class PagesController < ApplicationController
     redirect_to query.empty? ? "/pages" : page.real_url
   end
 
-  def home
-    redirect_to("/pages/home")
-  end
-
+  # get /pages/*path
   def show
     acl_permit! :read
     locals = fetch_params
@@ -60,6 +60,7 @@ class PagesController < ApplicationController
     end
   end
 
+  # post /pages/*path
   def update
     acl_permit! :write
     locals = fetch_params
