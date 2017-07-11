@@ -12,9 +12,11 @@ abstract class Lockable
     @lock ||= Mutex.new
     @lock.as(Mutex).synchronize do
       begin
+        # puts "#{self.inspect} LOAD!"
         self.load!
         yield self
       ensure
+        # puts "#{self.inspect} SAVE!"
         self.save!
         return self
       end

@@ -23,9 +23,7 @@ class AdminController < ApplicationController
   def user_delete
     acl_permit! :write
     data = params
-    Wikicr::USERS.load!
-    Wikicr::USERS.delete(data["username"]).save!
-    Wikicr::USERS.load!
+    Wikicr::USERS.transaction! { |users| users.delete data["username"] }
     flash["success"] = "The user #{data["username"]} has been deleted."
     redirect_to "/admin/users"
   end
@@ -44,9 +42,10 @@ class AdminController < ApplicationController
     path = params["path"]
     perm_str = params["perm"]
     perm = Acl::PERM_STR[perm_str]
-    Wikicr::ACL.load!
-    Wikicr::ACL[group][path] = perm
-    Wikicr::ACL.save!
+    Wikicr::ACL.transaction! do |acls|
+      acls.add Acl::Group.new group if acls[group]?.nil?
+      acls[group][path] = perm
+    end
     flash["success"] = "ACL #{group} :: #{path} :: #{perm} has been added"
     redirect_to "/admin/acls"
   end
@@ -58,10 +57,10 @@ class AdminController < ApplicationController
       group = params["group"]
       path = params["path"]
       perm_str = params["change"]
-      Wikicr::ACL.load!
       perm = Acl::PERM_STR[perm_str]
-      acl = Wikicr::ACL[group][path] = perm
-      Wikicr::ACL.save!
+      Wikicr::ACL.transaction! do |acls|
+        acls[group][path] = perm
+      end
       flash["success"] = "ACL #{group} :: #{path} :: #{perm} has been updated."
     rescue err
       flash["danger"] = "Unable to process that: #{err.message}."
@@ -74,9 +73,9 @@ class AdminController < ApplicationController
     acl_permit! :write
     group = params["group"]
     path = params["path"]
-    Wikicr::ACL.load!
-    Wikicr::ACL[group].delete path
-    Wikicr::ACL.save!
+    Wikicr::ACL.transaction! do |acls|
+      acls[group].delete path
+    end
     flash["success"] = "ACL #{group} :: #{path} has been deleted."
     redirect_to "/admin/acls"
   end
