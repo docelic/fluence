@@ -58,7 +58,7 @@ Each time a file is changed, the repository is commited.
   * [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
   * [x] (web)  User login / registration: keep a file with login:group:bcryptpassords
   * [ ] (web)  User ACL basic (read / write): the groups have rights on directories (globing)
-  * [ ] (web)  Groups ACL on EVERY wiki url
+  * [x] (web)  Groups ACL on EVERY wiki url
   * [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
   * [ ] (web)  Template loader (files in public/): load css, js etc. from public/
   * [ ] (web)  File upload and lists: page that add a file in uploads/
@@ -72,7 +72,7 @@ Each time a file is changed, the repository is commited.
 
 ### Other
 
-  * [ ] take a look at https://github.com/kemalyst/kemalyst
+  * [x] Improve the controller/routes architecture (Amber)
 
 ## Security and ACLs
 
