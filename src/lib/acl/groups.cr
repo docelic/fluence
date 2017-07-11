@@ -108,9 +108,20 @@ class Acl::Groups
   end
 
   # List the groups having at least the permission *acl_min* on a path
-  def groups_having(path : String, acl_min : Acl::Perm, not_more : Bool = false) : Array(String)
+  def groups_having_direct_access_to(path : String, acl_min : Acl::Perm, not_more : Bool = false) : Array(String)
     @groups.select do |_, group|
       current_acl = (group[path]? || Acl::Perm::None).to_i
+      if not_more
+        current_acl == acl_min.to_i
+      else
+        current_acl >= acl_min.to_i
+      end
+    end.keys
+  end
+
+  def groups_having_any_access_to(path : String, acl_min : Acl::Perm, not_more : Bool = false) : Array(String)
+    @groups.select do |_, group|
+      current_acl = (group.matching?(path) || Acl::Perm::None).to_i
       if not_more
         current_acl == acl_min.to_i
       else

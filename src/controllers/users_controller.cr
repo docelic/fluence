@@ -46,33 +46,4 @@ class UsersController < ApplicationController
       redirect_to "/users/register"
     end
   end
-
-  # Admin
-  def admin
-    acl_permit! :write
-    locals = {title: "Users admin", users: Wikicr::USERS.read!}
-    render "admin.slang"
-  end
-
-  def admin_delete
-    acl_permit! :write
-    data = params
-    Wikicr::USERS.read!
-    Wikicr::USERS.delete(data["username"]).save!
-    Wikicr::USERS.read!
-    flash["success"] = "The user #{data["username"]} has been deleted."
-    redirect_to "/admin/users"
-  end
-
-  def admin_register
-    acl_permit! :write
-    data = params
-    begin
-      user = Wikicr::USERS.register! data["username"], data["password"], data["groups"].split(",").map(&.strip)
-      flash["success"] = "The user #{user.name} has been added."
-    rescue err
-      flash["danger"] = "Cannot register this account: #{err.message}."
-      redirect_to "/admin/users"
-    end
-  end
 end

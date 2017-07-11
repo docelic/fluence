@@ -1,3 +1,6 @@
+h1.page-header
+  | Edit #{locals[:title]}
+
 form#edit-page method="post"
   fieldset.col-xs-6
     legend

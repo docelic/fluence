@@ -33,6 +33,7 @@ Each time a file is changed, the repository data/ is commited.
   * [ ] (core) Index of pages: each modification of a page should update and index with all thes pages (with first h1 and url)
   * [ ] (core) Choose between sqlite3 and the filesystem for the index: sqlite = sql, fs = easier
   * [ ] (core) Move page (rename): box with "mv X Y" and git commit
+  * [ ] (core) Lock system for acl/users/index: A thread safe method should be provided to avoid conflict when executing read+write or write operations
 
 ### Git
 

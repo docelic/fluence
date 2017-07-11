@@ -20,8 +20,6 @@ module Wikicr
     ACL["user"]["/pages*"] = Acl::Perm::Write
     ACL.save!
   end
-
-  GUEST = ACL["guest"]
 end
 
 macro user_signed_in?

@@ -48,12 +48,12 @@ class PagesController < ApplicationController
     else
       body_html = Markdown.to_html(locals[:body].as(String))
       Wikicr::ACL.read!
-      groups_read = Wikicr::ACL.groups_having(page.real_url, Acl::Perm::Read, true)
-      groups_write = Wikicr::ACL.groups_having(page.real_url, Acl::Perm::Write, true)
+      groups_read = Wikicr::ACL.groups_having_any_access_to(page.real_url, Acl::Perm::Read, true)
+      groups_write = Wikicr::ACL.groups_having_any_access_to(page.real_url, Acl::Perm::Write, true)
       locals = locals.merge({
         :body_html    => body_html,
-        :groups_read  => groups_read.join(","),
-        :groups_write => groups_write.join(","),
+        :groups_read  => groups_read,
+        :groups_write => groups_write,
       })
       render "show.slang"
     end
@@ -71,28 +71,5 @@ class PagesController < ApplicationController
       flash["info"] = "The page #{locals[:path]} has been updated."
       redirect_to "/pages/#{locals[:path]}"
     end
-  end
-
-  def admin
-    acl_permit! :write
-    data = params
-    page = Wikicr::Page.new params["path"]
-
-    Wikicr::ACL.read!
-    # Set the new permissions
-    groups = data["groups"].strip.split(",").map(&.strip)
-    groups.delete ""
-    if data["change"] == "read"
-      Wikicr::ACL.clear_permissions_of(page.real_url, Acl::Perm::Read)
-      Wikicr::ACL.add_permissions_to(page.real_url, groups, Acl::Perm::Read)
-      Wikicr::GUEST[page.real_url] = Acl::Perm::None unless groups.empty?
-    elsif data["change"] == "write"
-      Wikicr::ACL.clear_permissions_of(page.real_url, Acl::Perm::Write)
-      Wikicr::ACL.add_permissions_to(page.real_url, groups, Acl::Perm::Write)
-    end
-    Wikicr::ACL.save!
-    flash["info"] = "The permissions of the page #{page.url} have been updated"
-
-    redirect_to page.real_url
   end
 end
