@@ -10,29 +10,18 @@ The pages of the wiki are written in markdown and commited on the git repository
 
 ## Usage
 
-    wikicr --help
-      -b HOST, --bind HOST             Host to bind (defaults to 0.0.0.0)
-      -p PORT, --port PORT             Port to listen for connections (defaults to 3000)
-      -s, --ssl                        Enables SSL
-      --ssl-key-file FILE              SSL key file
-      --ssl-cert-file FILE             SSL certificate file
-      -h, --help                       Shows this help
+    ./wikicr
 
-A repository (data/) is created and contains the wiki pages.
-Each time a file is changed, the repository is commited.
+A repository (data/pages) is created and contains the wiki pages.
+Each time a file is changed, the repository data/ is commited.
 
 ### Configuration
 
 #### Environment variables
 
 - `WIKI_DATA`: (default "data/") set the directory where the data will be stored. It will be removed in the future for a configuation manager
-- `WIKI_SECRET`: random value that init the sessions (`crystal eval 'require "secure_random"; puts SecureRandom.hex(64)'`)
 
 ## Development
-
-### Other
-
-  * [ ] clean up the requirements (`require "./xxx"`)
 
 ### Operations
 
@@ -92,4 +81,4 @@ Each time a file is changed, the repository is commited.
 
 ## Contributors
 
-- [Nephos](attps://github.com/Neph) Arthur Poulet - creator, maintainer
+- [Nephos](https://github.com/Nephos) Arthur Poulet - creator, maintainer
