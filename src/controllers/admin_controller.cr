@@ -2,7 +2,7 @@ class AdminController < ApplicationController
   # get /admin/users
   def users_show
     acl_permit! :write
-    locals = {title: "Users admin", users: Wikicr::USERS.load!}
+    users = Wikicr::USERS.load!
     render "users_show.slang"
   end
 
@@ -31,7 +31,7 @@ class AdminController < ApplicationController
   # get /admin/acls
   def acls_show
     acl_permit! :read
-    locals = {title: "Admin ACLs"}
+    acls = Wikicr::ACL.load!
     render "acls_show.slang"
   end
 

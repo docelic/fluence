@@ -9,7 +9,6 @@ class UsersController < ApplicationController
   # get /users/login
   def login
     acl_permit! :read
-    locals = {title: "Login"}
     render "login.slang"
   end
 
@@ -31,7 +30,6 @@ class UsersController < ApplicationController
   # get /users/register
   def register
     acl_permit! :read
-    locals = {title: "Register"}
     render "register.slang"
   end
 
