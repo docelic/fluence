@@ -125,9 +125,9 @@ class Wikicr::Users < Lockable
   # and then update the file with the new list of users.
   def register!(name : String, password : String, groups : Array(String) = %w(user))
     user = User.new(name, password, groups).encrypt!
-    self.load!
-    self.add(user)
-    self.save!
+    self.transaction! do |users|
+      users.add user
+    end
     user
   end
 end
