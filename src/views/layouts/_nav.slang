@@ -4,14 +4,14 @@ nav
   .pull-left
     a.btn.btn-md href="/" Home
     a.btn.btn-md href="/sitemap" Sitemap
-    - if session["username"] || true
+    - if session["username"]
       = session["username"]
-      - if current_user.has_group?("admin") || true
-        a.btn.btn-md href="/admin/users" Users
-        a.btn.btn-md href="/admin/acls" ACLs
-        /- else
+    - else
       a.btn.btn-md href="/users/register" Register
       a.btn.btn-md href="/users/login" Login
+    - if Wikicr::ACL.permitted?(current_user, "/admin/", Acl::Perm::Write)
+      a.btn.btn-md href="/admin/users" Users
+      a.btn.btn-md href="/admin/acls" ACLs
   .pull-right
     form#search-page action="/pages/search" method="get" role="form"
       .form-inline

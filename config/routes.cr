@@ -22,7 +22,6 @@ Amber::Server.instance.config do |app|
   end
 
   routes :web do
-
     get "/", HomeController, :index
 
     get "/sitemap", PagesController, :sitemap
