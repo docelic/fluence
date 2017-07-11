@@ -1,0 +1,23 @@
+---
+file: meta/acl
+groups:
+  guest:
+    name: guest
+    permissions:
+      ? value: /users/*
+      : 3
+      ? value: /sitemap
+      : 1
+      ? value: /pages*
+      : 1
+    default: 0
+  user:
+    name: user
+    permissions:
+      ? value: /*
+      : 1
+      ? value: /users*
+      : 0
+      ? value: /pages*
+      : 3
+    default: 0

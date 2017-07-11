@@ -5,5 +5,4 @@ require "./acl/*"
 require "./users/*"
 require "./files/*"
 
-require "./session-init"
 require "./authorisation"

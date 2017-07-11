@@ -35,4 +35,20 @@ class Acl::Path
   def ==(rhs)
     self.to_s == rhs.to_s
   end
+
+  def <=(rhs : Path)
+    self.size <= rhs.size
+  end
+
+  def <(rhs : Path)
+    self.size < rhs.size
+  end
+
+  def >=(rhs : Path)
+    self.size >= rhs.size
+  end
+
+  def >(rhs : Path)
+    self.size > rhs.size
+  end
 end

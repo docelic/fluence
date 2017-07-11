@@ -55,11 +55,12 @@ class Acl::Group
   # ```
   def permitted?(path : String, access : Acl::Perm) : Bool
     matched_permissions = @permissions.select { |pe, _| pe.acl_match?(path) }
-    pp matched_permissions, default, path
     if matched_permissions.empty?
       default.to_i >= access.to_i
     else
-      matched_permissions.any? { |_, acl| acl.to_i >= access.to_i }
+      # keep the longuest path
+      match = matched_permissions.reduce { |l, r| l[0] >= r[0] ? l : r }
+      match[1].to_i >= access.to_i
     end
   end
 
