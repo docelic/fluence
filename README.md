@@ -83,3 +83,15 @@ Each time a file is changed, the repository data/ is commited.
 ## Contributors
 
 - [Nephos](https://github.com/Nephos) Arthur Poulet - creator, maintainer
+
+## Tutorial
+
+### Administrate users
+
+<img width=240 src="http://imgur.com/uOipDUl.png" />
+
+### Edit / Create a page
+<img width=240 src="http://imgur.com/5uSurNa.png" />
+
+### Show a page
+<img width=240 src="http://imgur.com/gsUr3zq.png" />
