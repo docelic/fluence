@@ -15,6 +15,9 @@ describe Acl do
       })
     g2 = Acl::Group.new(
       name: "admin",
+      permissions: {
+        "/match/*" => Acl::Perm::Read,
+      },
       default: Acl::Perm::Write)
     acls.add g1
     acls.add g2
@@ -57,10 +60,12 @@ describe Acl do
     acls["guest"]["/write/*"] = Acl::Perm::Write
     acls["guest"]["/write/admin"] = Acl::Perm::Read
     acls["admin"]["/*"] = Acl::Perm::Write
-    acls.groups_having("/", Acl::Perm::Read).should eq(["guest", "admin"])
-    acls.groups_having("/", Acl::Perm::Write).should eq(["admin"])
-    acls.groups_having("/write", Acl::Perm::Write).should eq(["admin"])
-    acls.groups_having("/write/anypage", Acl::Perm::Write).should eq(["guest", "admin"])
-    acls.groups_having("/write/admin", Acl::Perm::Write).should eq(["admin"])
+    acls.groups_having_any_access_to("/", Acl::Perm::Read).should eq(["guest", "admin"])
+    acls.groups_having_any_access_to("/", Acl::Perm::Write).should eq(["admin"])
+    acls.groups_having_any_access_to("/write", Acl::Perm::Write).should eq(["admin"])
+    acls.groups_having_any_access_to("/write/anypage", Acl::Perm::Write).should eq(["guest", "admin"])
+    acls.groups_having_any_access_to("/write/admin", Acl::Perm::Write).should eq(["admin"])
+    acls.groups_having_direct_access_to("/*", Acl::Perm::Read).should eq(["guest", "admin"])
+    acls.groups_having_direct_access_to("/*", Acl::Perm::Write).should eq(["admin"])
   end
 end
