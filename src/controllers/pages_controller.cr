@@ -42,7 +42,9 @@ class PagesController < ApplicationController
     page = locals[:page].as(Wikicr::Page)
     locals[:body] = (page.read(current_user) rescue "")
     if (params["edit"]?) || !page.exists?(current_user)
-      render("edit.slang")
+      flash["info"] = "The page #{locals[:path]} does not exist yet."
+      acl_permit! :write
+      render "edit.slang"
     else
       body_html = Markdown.to_html(locals[:body].as(String))
       Wikicr::ACL.read!
@@ -53,7 +55,7 @@ class PagesController < ApplicationController
         :groups_read  => groups_read.join(","),
         :groups_write => groups_write.join(","),
       })
-      render("show.slang")
+      render "show.slang"
     end
   end
 
@@ -62,9 +64,11 @@ class PagesController < ApplicationController
     locals = fetch_params
     if (params["body"]?.to_s.empty?)
       locals[:page].as(Wikicr::Page).delete(current_user) rescue nil
+      flash["info"] = "The page #{locals[:path]} has been deleted."
       redirect_to "/pages/"
     else
       locals[:page].as(Wikicr::Page).write params["body"], current_user
+      flash["info"] = "The page #{locals[:path]} has been updated."
       redirect_to "/pages/#{locals[:path]}"
     end
   end
@@ -87,6 +91,7 @@ class PagesController < ApplicationController
       Wikicr::ACL.add_permissions_to(page.real_url, groups, Acl::Perm::Write)
     end
     Wikicr::ACL.save!
+    flash["info"] = "The permissions of the page #{page.url} have been updated"
 
     redirect_to page.real_url
   end

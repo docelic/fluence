@@ -24,27 +24,6 @@ module Wikicr
   GUEST = ACL["guest"]
 end
 
-macro user_must_be_logged!
-  if user_signed_in?
-    puts "You are authenticated"
-    # continue
-  else
-    puts "You are not authenticated"
-    redirect_to "/users/login"
-    next
-  end
-end
-
-macro user_must_be_admin!
-  if current_user.has_group?("admin")
-    puts "You are admin"
-  else
-    puts "You are not admin"
-    redirect_to "/"
-    next
-  end
-end
-
 macro user_signed_in?
   session["username"]
 end
@@ -63,5 +42,7 @@ macro acl_permit!(perm)
     puts "PERMITTED #{current_user} #{request.path} #{Acl::PERM[{{perm}}]}"
   else
     puts "NOT PERMITTED #{current_user} #{request.path} #{Acl::PERM[{{perm}}]}"
+    flash["danger"] = "You are not permitted to access this resource."
+    # redirect_to "/"
   end
 end
