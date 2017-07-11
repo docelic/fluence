@@ -39,7 +39,9 @@ describe Acl::Group do
         Acl::Path.new("/public*") => Acl::Perm::Write,
         Acl::Path.new("/restricted*") => Acl::Perm::Read,
         Acl::Path.new("/users*") => Acl::Perm::Read,
-        Acl::Path.new("/users/guest") => Acl::Perm::Write},
+        Acl::Path.new("/users/guest") => Acl::Perm::Write,
+        Acl::Path.new("/users/protected/*") => Acl::Perm::None
+      },
       default: Acl::Perm::None
     )
     g.permitted?("/", Acl::Perm::Read).should be_false
@@ -48,11 +50,43 @@ describe Acl::Group do
     g.permitted?("/users/admin", Acl::Perm::Read).should be_true
     g.permitted?("/users/guest", Acl::Perm::Write).should be_true
     g.permitted?("/users/admin", Acl::Perm::Write).should be_false
+    g.permitted?("/users/protected/any", Acl::Perm::Read).should be_false
     g.permitted?("/public", Acl::Perm::Read).should be_true
     g.permitted?("/public", Acl::Perm::Write).should be_true
     g.permitted?("/public/some", Acl::Perm::Write).should be_true
     g.permitted?("/public/some", Acl::Perm::Write).should be_true
     g.permitted?("/publicXXX/some", Acl::Perm::Write).should be_true
+  end
+
+  it "advanced test permitted?" do
+    g = Acl::Group.new(
+      name: "guest",
+      permissions: {
+        Acl::Path.new("/write/*") => Acl::Perm::Write,
+        Acl::Path.new("/read/*") => Acl::Perm::Read,
+        Acl::Path.new("/none/*") => Acl::Perm::None,
+        Acl::Path.new("/read/none") => Acl::Perm::None,
+        Acl::Path.new("/write/none") => Acl::Perm::None,
+        Acl::Path.new("/none/readonly") => Acl::Perm::Read,
+        Acl::Path.new("/write/readonly") => Acl::Perm::Read,
+        Acl::Path.new("/read/writeonly") => Acl::Perm::Write,
+        Acl::Path.new("/none/writeonly") => Acl::Perm::Write,
+      },
+      default: Acl::Perm::Read
+    )
+    g.permitted?("/", Acl::Perm::Read).should be_true
+    g.permitted?("/", Acl::Perm::Write).should be_false
+    g.permitted?("/none/any", Acl::Perm::None).should be_true
+    g.permitted?("/none/any", Acl::Perm::Read).should be_false
+    g.permitted?("/read/any", Acl::Perm::Read).should be_true
+    g.permitted?("/read/any", Acl::Perm::Write).should be_false
+    g.permitted?("/write/any", Acl::Perm::Write).should be_true
+    g.permitted?("/read/none", Acl::Perm::Read).should be_false
+    g.permitted?("/write/none", Acl::Perm::Read).should be_false
+    g.permitted?("/none/readonly", Acl::Perm::Read).should be_true
+    g.permitted?("/write/readonly", Acl::Perm::Write).should be_false
+    g.permitted?("/none/writeonly", Acl::Perm::Write).should be_true
+    g.permitted?("/read/writeonly", Acl::Perm::Write).should be_true
   end
 
   it "test permissions access" do
