@@ -9,6 +9,9 @@ describe Acl do
       permissions: {
         "/tmp/protected" => Acl::Perm::None,
         "/tmp/write/*"   => Acl::Perm::Write,
+        "/match/*" => Acl::Perm::Write,
+        "/match/not-file" => Acl::Perm::None,
+        "/match/not-dir/*" => Acl::Perm::None,
       })
     g2 = Acl::Group.new(
       name: "admin",
@@ -28,6 +31,13 @@ describe Acl do
     # matching
     acls.permitted?(u1, "/tmp/write/test", Acl::Perm::Read).should be_true
     acls.permitted?(u1, "/tmp/write/test", Acl::Perm::Write).should be_true
+    acls.permitted?(u1, "/match/write-ok", Acl::Perm::Read).should be_true
+    acls.permitted?(u1, "/match/write-ok", Acl::Perm::Write).should be_true
+    # TODO: enable those tests
+    acls.permitted?(u1, "/match/not-file", Acl::Perm::Write).should be_false
+    acls.permitted?(u1, "/match/not-dir/any", Acl::Perm::Write).should be_false
+    acls.permitted?(u1, "/match/not-file", Acl::Perm::Read).should be_false
+    acls.permitted?(u1, "/match/not-dir/any", Acl::Perm::Read).should be_false
   end
 
   it "test the paths matching" do

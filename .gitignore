@@ -2,6 +2,10 @@
 /lib/
 /bin/
 /.shards/
+/.crystal/
+.env
+
 /wikicr
 /data/
 /meta/
+
