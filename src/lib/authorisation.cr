@@ -7,7 +7,7 @@ module Wikicr
   # File.touch "meta/acl"
   ACL = Acl::Groups.new("meta/acl").read!
 
-  # Initialize the ACL
+  # Initialize the ACLs
   if ACL["guest"]?.nil?
     ACL.add("guest")
     ACL["guest"]["/users/*"] = Acl::Perm::Write
