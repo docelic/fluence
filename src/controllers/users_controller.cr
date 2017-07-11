@@ -6,13 +6,14 @@ private def fetch_params
 end
 
 class UsersController < ApplicationController
-  # Login
+  # get /users/login
   def login
     acl_permit! :read
     locals = {title: "Login"}
     render "login.slang"
   end
 
+  # post /users/login
   def login_validates
     acl_permit! :write
     user = Wikicr::USERS.auth! params["username"].to_s, params["password"].to_s
@@ -27,13 +28,14 @@ class UsersController < ApplicationController
     end
   end
 
-  # Register
+  # get /users/register
   def register
     acl_permit! :read
     locals = {title: "Register"}
     render "register.slang"
   end
 
+  # post /users/register
   def register_validates
     acl_permit! :write
     # TODO: make a notification
