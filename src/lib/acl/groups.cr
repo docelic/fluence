@@ -54,14 +54,9 @@ class Acl::Groups
   # acls.permitted?(user, "/my/path", Perm::Read)
   # ```
   def permitted?(entity : Acl::Entity, path : String, access : Acl::Perm)
-    puts
-    puts "Groups.permitted? #{entity}, #{path}, #{access}"
-    entity.groups.map do |group|
-      puts "Group: #{group}"
-      is_permitted = @groups[group].permitted?(path, access)
-      pp path, access, @groups[group].permitted?(path, access), is_permitted
-      is_permitted
-    end.reduce(false) { |l, r| l | r }
+    entity.groups.any? do |group|
+      @groups[group].permitted?(path, access)
+    end
   end
 
   # def if_permitted(entity : Acl::Entity, path : String, access : Acl::Perm)
