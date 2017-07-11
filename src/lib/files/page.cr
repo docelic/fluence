@@ -83,7 +83,7 @@ struct Wikicr::Page
     dir = Dir.current
     Dir.cd Wikicr::OPTIONS.basedir
     puts `git add -- #{@url}`
-    puts `git commit -s --author \"#{user.name}\" -m \"#{message} #{@url}\" -- #{@url}`
+    puts `git commit -s --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@url}`
     Dir.cd dir
   end
 end
