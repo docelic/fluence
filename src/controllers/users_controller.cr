@@ -18,8 +18,10 @@ class UsersController < ApplicationController
     user = Wikicr::USERS.auth! params["username"].to_s, params["password"].to_s
     # TODO: make a notification
     if user.nil?
+      flash["danger"] = "User or password doesn't match."
       redirect_to "/users/login"
     else
+      flash["success"] = "You are connected!"
       session["username"] = user.name
       redirect_to "/pages"
     end
@@ -37,9 +39,10 @@ class UsersController < ApplicationController
     # TODO: make a notification
     begin
       user = Wikicr::USERS.register! params["username"].to_s, params["password"].to_s
+      flash["success"] = "You are registrated under the username #{user.name}. You can connect now."
       redirect_to "/users/login"
     rescue err
-      pp err
+      flash["danger"] = "Cannot register this account: #{err.message}."
       redirect_to "/users/register"
     end
   end
@@ -57,13 +60,19 @@ class UsersController < ApplicationController
     Wikicr::USERS.read!
     Wikicr::USERS.delete(data["username"]).save!
     Wikicr::USERS.read!
+    flash["success"] = "The user #{data["username"]} has been deleted."
     redirect_to "/admin/users"
   end
 
   def admin_register
     acl_permit! :write
     data = params
-    user = Wikicr::USERS.register! data["username"], data["password"], data["groups"].split(",").map(&.strip)
-    redirect_to "/admin/users"
+    begin
+      user = Wikicr::USERS.register! data["username"], data["password"], data["groups"].split(",").map(&.strip)
+      flash["success"] = "The user #{user.name} has been added."
+    rescue err
+      flash["danger"] = "Cannot register this account: #{err.message}."
+      redirect_to "/admin/users"
+    end
   end
 end
