@@ -18,8 +18,8 @@ module Acl
   }
 
   PERM_STR = {
-    "none" => Acl::Perm::None,
-    "read" => Acl::Perm::Read,
+    "none"  => Acl::Perm::None,
+    "read"  => Acl::Perm::Read,
     "write" => Acl::Perm::Write,
   }
 end
