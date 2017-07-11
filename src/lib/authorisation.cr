@@ -21,26 +21,3 @@ module Wikicr
     ACL.save!
   end
 end
-
-macro user_signed_in?
-  session["username"]
-end
-
-macro current_user
-  %name = user_signed_in?
-  if (%name.nil?)
-    Wikicr::USERS.default || raise "User not signed in"
-  else
-    Wikicr::USERS.find(%name)
-  end
-end
-
-macro acl_permit!(perm)
-  if Wikicr::ACL.permitted?(current_user, request.path, Acl::PERM[{{perm}}])
-    puts "PERMITTED #{current_user} #{request.path} #{Acl::PERM[{{perm}}]}"
-  else
-    puts "NOT PERMITTED #{current_user} #{request.path} #{Acl::PERM[{{perm}}]}"
-    flash["danger"] = "You are not permitted to access this resource."
-    # redirect_to "/"
-  end
-end
