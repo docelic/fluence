@@ -46,7 +46,6 @@ struct Wikicr::Page::Markdown
       text_end = link_end - 1
       text = str[text_begin..text_end]
       b << str[@cursor..(link_begin - 1)] unless link_begin == 0
-      # TODO:#1 /pages/ is configurable
       title, url = @index.find(text, @page)
       b << '[' << title << "](" << url << ')'
       @cursor = link_end + 2
