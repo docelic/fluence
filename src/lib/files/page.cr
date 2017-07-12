@@ -88,8 +88,8 @@ struct Wikicr::Page
     # TODO: security of jailed_file and self.name ?
     dir = Dir.current
     Dir.cd Wikicr::OPTIONS.basedir
-    puts `git add -- #{@url}`
-    puts `git commit -s --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@url}`
+    puts `git add -- #{@path}`
+    puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path}`
     Dir.cd dir
   end
 end

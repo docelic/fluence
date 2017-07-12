@@ -39,7 +39,7 @@ class PagesController < ApplicationController
       acl_permit! :write
       render "edit.slang"
     else
-      body_html = Markdown.to_html page.read(current_user)
+      body_html = Wikicr::Page::Markdown.to_html page.read(current_user), page, Wikicr::PAGES.load!
       Wikicr::ACL.load!
       groups_read = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
       groups_write = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
