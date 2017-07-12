@@ -25,7 +25,7 @@ struct Wikicr::Page
   end
 
   def self.sanitize_url(url : String)
-    url.gsub(/[^\w\/]/, "-")
+    url.gsub(/[^[:alnum:]\/]/, "-")
   end
 
   # translate a name ("/test/title" for example)
