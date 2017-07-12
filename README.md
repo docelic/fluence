@@ -30,8 +30,8 @@ Each time a file is changed, the repository data/ is commited.
   * [x] (core) Chroot the files to data/: avoid writing / reading files outside of data/
   * [x] (core) If page does not exists, form to create it: if a file does not exist, display the edit form
   * [x] (core) Delete pages: remove the content of a page should remove the file
-  * [ ] (core) Index of pages: each modification of a page should update and index with all thes pages (with first h1 and url)
-  * [ ] (core) Choose between sqlite3 and the filesystem for the index: sqlite = sql, fs = easier
+  * [x] (core) Index of pages: each modification of a page should update and index with all thes pages (with first h1 and url)
+  * [x] (core) Choose between sqlite3 and the filesystem for the index: sqlite = sql, fs = easier
   * [ ] (core) Move page (rename): box with "mv X Y" and git commit
   * [ ] (core) Lock system for acl/users/index: A thread safe method should be provided to avoid conflict when executing read+write or write operations
 
@@ -47,7 +47,7 @@ Each time a file is changed, the repository data/ is commited.
   * [x] (web)  Sitemap: add a list of all the files available
   * [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
   * [x] (web)  User login / registration: keep a file with login:group:bcryptpassords
-  * [ ] (web)  User ACL basic (read / write): the groups have rights on directories (globing)
+  * [x] (web)  User ACL basic (read / write): the groups have rights on directories (globing)
   * [x] (web)  Groups ACL on EVERY wiki url
   * [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
   * [ ] (web)  Template loader (files in public/): load css, js etc. from public/
