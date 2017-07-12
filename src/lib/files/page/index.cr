@@ -6,8 +6,7 @@ class Wikicr::Page::Index < Lockable
       path: String,  # path of the file /srv/wiki/data/xxx
       url: String,   # real url of the page /pages/xxx
       title: String, # Any title
-      slug: String,
-    )
+      slug: String    )
 
     def initialize(@path, @url, @title)
       @slug = Entry.title_to_slug title
@@ -35,11 +34,11 @@ class Wikicr::Page::Index < Lockable
   end
 
   # Find the closest `Index`' `Entry` to *text* based on the entries title
-  # and searching for the closer url as possible to the context
+  #  and searching for the closer url as possible to the context
   private def find_by_title(text : String, context : Page) : Entry?
     # exact_matched = @entries.select{|_, entry| entry.title == text }.values
     # return choose_closer_url(exact_matched, context) unless exact_matched.empty?
-    slug_matched = @entries.select{|_, entry| entry.slug == Index::Entry.title_to_slug(text) }.values
+    slug_matched = @entries.select { |_, entry| entry.slug == Index::Entry.title_to_slug(text) }.values
     return choose_closer_url(slug_matched, context) unless slug_matched.empty?
     nil
   end

@@ -25,12 +25,12 @@ struct Wikicr::Page::Markdown
         # Second [
         if str[link_begin + 1] == '['
           render_internal_link(b, str, link_begin)
-        # Not a second ], so pass to the next [
+          # Not a second ], so pass to the next [
         else
           b << '['
           @cursor += 1
         end
-      # No [ left
+        # No [ left
       else
         b << str[@cursor..-1]
         @cursor = str.size
