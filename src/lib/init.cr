@@ -2,9 +2,9 @@ require "./options"
 
 require "./lockable"
 require "./errors"
-require "./acl/*"
-require "./users/*"
-require "./files/*"
+require "./acl/**"
+require "./users/**"
+require "./files/**"
 
 module Wikicr
   Dir.mkdir_p "meta"
