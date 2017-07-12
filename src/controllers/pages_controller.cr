@@ -12,18 +12,13 @@ class PagesController < ApplicationController
     render "sitemap.slang"
   end
 
-  # get /pages
-  def index
-    redirect_to "/pages/home"
-  end
-
   # get /pages/search?q=
   def search
     # user_must_be_logged!
     query = params["q"]
     page = Wikicr::Page.new(query)
     # TODO: a real search
-    redirect_to query.empty? ? "/pages" : page.real_url
+    redirect_to query.empty? ? "/pages/home" : page.real_url
   end
 
   macro fetch_params
@@ -32,6 +27,7 @@ class PagesController < ApplicationController
   # get /pages/*path
   def show
     acl_permit! :read
+    flash["danger"] = params["flash.danger"] if params["flash.danger"]?
     page = Wikicr::Page.new url: params["path"], read_title: true
     if (params["edit"]?) || !page.exists?(current_user)
       body = page.read(current_user) rescue ""
@@ -55,7 +51,7 @@ class PagesController < ApplicationController
       page.delete current_user rescue nil
       flash["info"] = "The page #{page.url} has been deleted."
       Wikicr::PAGES.transaction! { |index| index.delete page }
-      redirect_to "/pages/"
+      redirect_to "/pages/home"
     else
       page.write params["body"], current_user
       flash["info"] = "The page #{page.url} has been updated."

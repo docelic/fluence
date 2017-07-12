@@ -25,7 +25,6 @@ Amber::Server.instance.config do |app|
     get "/", HomeController, :index
 
     get "/sitemap", PagesController, :sitemap
-    get "/pages", PagesController, :index
     get "/pages/search", PagesController, :search
     get "/pages/*path", PagesController, :show
     post "/pages/*path", PagesController, :update
