@@ -21,6 +21,7 @@ module Wikicr
     ACL["guest"]["/users/*"] = Acl::Perm::Write
     ACL["guest"]["/sitemap"] = Acl::Perm::Read
     ACL["guest"]["/pages*"] = Acl::Perm::Read
+    ACL["guest"]["/"] = Acl::Perm::Read
     ACL.add("user")
     ACL["user"]["/*"] = Acl::Perm::Read
     ACL["user"]["/users/login"] = Acl::Perm::None

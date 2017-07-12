@@ -1,6 +1,8 @@
 require "../errors"
 require "./file_tree"
 
+require "uri"
+
 # A `Page` is a file and an url part
 # Is is used to jail files into the *OPTIONS.basedir*
 struct Wikicr::Page
@@ -12,10 +14,16 @@ struct Wikicr::Page
   getter title : String
   getter real_url : String
 
-  def initialize(@url, read_title : Bool = false)
+  def initialize(url : String, real_url : Bool = false, read_title : Bool = false)
+    if real_url
+      @real_url = Page.sanitize_url url
+      @url = @real_url[URL_PREFIX.size..-1]
+    else
+      @url = Page.sanitize_url url
+      @real_url = File.expand_path @url, URL_PREFIX
+    end
     @path = Page.url_to_file @url
     @title = File.basename @url
-    @real_url = File.expand_path @url, URL_PREFIX
     @title = Page.read_title(@path) || @title if read_title && File.exists?(@path)
   end
 
@@ -25,7 +33,7 @@ struct Wikicr::Page
   end
 
   def self.sanitize_url(url : String)
-    url.gsub(/[^[:alnum:]\/]/, "-")
+    URI.unescape(url).gsub(/[^[:alnum:]\/]/, '-').gsub(/-+/, '-').downcase
   end
 
   # translate a name ("/test/title" for example)

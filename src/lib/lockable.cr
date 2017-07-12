@@ -8,16 +8,14 @@ abstract class Lockable
     @lock = Mutex.new
   end
 
-  def transaction!
+  def transaction!(read = false, write = true)
     @lock ||= Mutex.new
     @lock.as(Mutex).synchronize do
       begin
-        # puts "#{self.inspect} LOAD!"
-        self.load!
+        self.load! if read == true
         yield self
       ensure
-        # puts "#{self.inspect} SAVE!"
-        self.save!
+        self.save! if write == true
         return self
       end
     end

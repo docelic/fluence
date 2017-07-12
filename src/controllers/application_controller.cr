@@ -19,8 +19,8 @@ class ApplicationController < Amber::Controller::Base
       puts "PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
     else
       puts "NOT PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
-      flash["danger"] = "You are not permitted to access this resource."
-      # redirect_to "/"
+      #flash["danger"] = "You are not permitted to access this resource (#{request.path}, #{{{perm}}})."
+      redirect_to "/pages/home", 302, {"flash.danger" => "You are not permitted to access this resource (#{request.path}, #{{{perm}}})."}
     end
   end
 end

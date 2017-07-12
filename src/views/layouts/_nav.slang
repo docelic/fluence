@@ -15,7 +15,10 @@ nav
   .pull-right
     form#search-page action="/pages/search" method="get" role="form"
       .form-inline
-        input.form-control name="q" type="text" placeholder="Search query"
+        input.form-control name="q" placeholder="Search query" autocomplete="on" list="search-list"
+        datalist#search-list
+          - Wikicr::PAGES.entries.values.each do |entry|
+            option value=entry.url = entry.title
         button.btn.btn-md
           span.glyphicon.glyphicon-search
           | Search
