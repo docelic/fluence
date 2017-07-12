@@ -36,6 +36,10 @@ struct Wikicr::Page
     URI.unescape(url).gsub(/[^[:alnum:]\/]/, '-').gsub(/-+/, '-').downcase
   end
 
+  def read_title!
+    @title = Page.read_title(@path) || @title if File.exists?(@path)
+  end
+
   # translate a name ("/test/title" for example)
   # into a file path ("/srv/data/test/ttle.md)
   def self.url_to_file(url : String)

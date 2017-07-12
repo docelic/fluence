@@ -54,6 +54,7 @@ class PagesController < ApplicationController
       redirect_to "/pages/home"
     else
       page.write params["body"], current_user
+      page.read_title!
       flash["info"] = "The page #{page.url} has been updated."
       Wikicr::PAGES.transaction! { |index| index.add page }
       redirect_to page.real_url
