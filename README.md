@@ -95,3 +95,13 @@ Each time a file is changed, the repository data/ is commited.
 
 ### Show a page
 <img width=240 src="http://imgur.com/gsUr3zq.png" />
+
+### Custom Markdown
+A special markdown (wikimd) is used in the pages. It provides several intersting features:
+
+- internal links: `blabla [[my page]] blabla` will search through the index of pages to find a matching one and render a valid link to it.
+
+#### Notes about the wikimd
+- internal link algorithm have been benchmarked a bit
+  [benchmark link](https://gist.github.com/Nephos/ad292a3e2acc9201e6ea6342eb85dacb)
+  The algorithm has been improved since, but it gave me a first idea of what to do.
