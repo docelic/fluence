@@ -4,24 +4,71 @@ Wiki in crystal and markdown
 
 The pages of the wiki are written in markdown and commited on the git repository where it is started.
 
-## Installation
+## How to install
+
+### Dependancies
+
+Verify that you have crystal v0.23.0 or greater installed, as well as shards and git.
+
+### Get the application
+
+    git clone https://github.com/Nephos/wikicr.git
+    cd wikicr
+
+### Test the application
+
+    make test
+
+### Build the binary
 
     make
 
-## Usage
+### Run the server
 
     ./wikicr
 
-A repository (data/pages) is created and contains the wiki pages.
-Each time a file is changed, the repository data/ is commited.
+### Verify your files
 
-### Configuration
+A directory meta/ should be created into wikicr.
+It must contains several files and directories (data/, acl, index, ...).
+Those files are the ALL the data of the wiki.
 
-#### Environment variables
+## Security and ACLs
 
-- `WIKI_DATA`: (default "data/") set the directory where the data will be stored. It will be removed in the future for a configuation manager
+* Admin panel to manage the directories and pages
+* Rules on directories are terminated with a \*
+* If several rules conflict, take the more specific one
+  * Directories with the longer name prevailes
+  * Files rules prevailes over directory rules
 
-## Development
+## Administration and usage tutorial
+
+### Administrate users
+
+<img width=240 src="http://imgur.com/uOipDUl.png" />
+
+### Edit / Create a page
+<img width=240 src="http://imgur.com/5uSurNa.png" />
+
+### Show a page
+<img width=240 src="http://imgur.com/gsUr3zq.png" />
+
+### Custom Markdown
+A special markdown (wikimd) is used in the pages. It provides several intersting features:
+
+#### Internal links
+An internal link will search through the index of pages to find a matching one and render a valid link to it.
+
+```markdown
+blabla [[my page]] blabla
+```
+
+##### Notes about the wikimd
+- internal link algorithm have been benchmarked a bit
+[benchmark link](https://gist.github.com/Nephos/ad292a3e2acc9201e6ea6342eb85dacb)
+The algorithm has been improved since, but it gave me a first idea of what to do.
+
+## Development and Roadmap
 
 ### Operations
 
@@ -64,14 +111,6 @@ Each time a file is changed, the repository data/ is commited.
 
   * [x] Improve the controller/routes architecture (Amber)
 
-## Security and ACLs
-
-  * Admin panel to manage the directories and pages
-  * Rules on directories are terminated with a \*
-  * If several rules conflict, take the more specific one
-    * Directories with the longer name prevailes
-    * Files rules prevailes over directory rules
-
 ## Contributing
 
 1. Fork it ( https://github.com/Nephos/wikicr/fork )
@@ -83,25 +122,3 @@ Each time a file is changed, the repository data/ is commited.
 ## Contributors
 
 - [Nephos](https://github.com/Nephos) Arthur Poulet - creator, maintainer
-
-## Tutorial
-
-### Administrate users
-
-<img width=240 src="http://imgur.com/uOipDUl.png" />
-
-### Edit / Create a page
-<img width=240 src="http://imgur.com/5uSurNa.png" />
-
-### Show a page
-<img width=240 src="http://imgur.com/gsUr3zq.png" />
-
-### Custom Markdown
-A special markdown (wikimd) is used in the pages. It provides several intersting features:
-
-- internal links: `blabla [[my page]] blabla` will search through the index of pages to find a matching one and render a valid link to it.
-
-#### Notes about the wikimd
-- internal link algorithm have been benchmarked a bit
-  [benchmark link](https://gist.github.com/Nephos/ad292a3e2acc9201e6ea6342eb85dacb)
-  The algorithm has been improved since, but it gave me a first idea of what to do.
