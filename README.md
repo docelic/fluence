@@ -33,7 +33,7 @@ Each time a file is changed, the repository data/ is commited.
   * [x] (core) Index of pages: each modification of a page should update and index with all thes pages (with first h1 and url)
   * [x] (core) Choose between sqlite3 and the filesystem for the index: sqlite = sql, fs = easier
   * [ ] (core) Move page (rename): box with "mv X Y" and git commit
-  * [ ] (core) Lock system for acl/users/index: A thread safe method should be provided to avoid conflict when executing read+write or write operations
+  * [x] (core) Lock system for acl/users/index: A thread safe method should be provided to avoid conflict when executing read+write or write operations
 
 ### Git
 
@@ -57,7 +57,7 @@ Each time a file is changed, the repository data/ is commited.
 
   * [ ] (core) Extensions loader (.so files + extended markdown ?): extend the wiki features with hooks
   * [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
-  * [ ] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
+  * [x] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
   * [ ] (conf) Handle environemnt variables in a .env file
 
 ### Other
