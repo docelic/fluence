@@ -107,6 +107,7 @@ The algorithm has been improved since, but it gave me a first idea of what to do
   * [x] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
   * [ ] (conf) Handle environemnt variables in a .env file
   * [ ] (core) Index the internal links of a page to update them if a page is move or the title changed.
+  * [ ] (edit) Handle `[[tag|title]]`: same than internal links but with a fixed title
 
 ### Other
 
