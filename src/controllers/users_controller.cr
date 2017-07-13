@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     else
       flash["success"] = "You are connected!"
       session["username"] = user.name
-      redirect_to "/pages"
+      redirect_to "/pages/home"
     end
   end
 
