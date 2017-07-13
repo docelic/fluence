@@ -72,46 +72,46 @@ The algorithm has been improved since, but it gave me a first idea of what to do
 
 ### Operations
 
-  * [x] (core) View wiki pages
-  * [x] (core) Write new wiki page, edit existing ones
-  * [x] (core) Chroot the files to data/: avoid writing / reading files outside of data/
-  * [x] (core) If page does not exists, form to create it: if a file does not exist, display the edit form
-  * [x] (core) Delete pages: remove the content of a page should remove the file
-  * [x] (core) Index of pages: each modification of a page should update and index with all thes pages (with first h1 and url)
-  * [x] (core) Choose between sqlite3 and the filesystem for the index: sqlite = sql, fs = easier
-  * [ ] (core) Move page (rename): box with "mv X Y" and git commit
-  * [x] (core) Lock system for acl/users/index: A thread safe method should be provided to avoid conflict when executing read+write or write operations
+  - [x] (core) View wiki pages
+  - [x] (core) Write new wiki page, edit existing ones
+  - [x] (core) Chroot the files to data/: avoid writing / reading files outside of data/
+  - [x] (core) If page does not exists, form to create it: if a file does not exist, display the edit form
+  - [x] (core) Delete pages: remove the content of a page should remove the file
+  - [x] (core) Index of pages: each modification of a page should update and index with all thes pages (with first h1 and url)
+  - [x] (core) Choose between sqlite3 and the filesystem for the index: sqlite = sql, fs = easier
+  - [ ] (core) Move page (rename): box with "mv X Y" and git commit
+  - [x] (core) Lock system for acl/users/index: A thread safe method should be provided to avoid conflict when executing read+write or write operations
 
 ### Git
 
-  * [x] (git)  Commit when write on a file: every modification on data/ should be commited
-  * [ ] (git)  List of revisions on a file (using git): list the revision of a file
-  * [ ] (git)  Revert a revision (avoid vandalism): button to remove a revision (git revert)
+  - [x] (git)  Commit when write on a file: every modification on data/ should be commited
+  - [ ] (git)  List of revisions on a file (using git): list the revision of a file
+  - [ ] (git)  Revert a revision (avoid vandalism): button to remove a revision (git revert)
 
 ### Web
 
-  * [ ] (web)  Add content table: if titles are written, give a content table with them and links to anchors
-  * [x] (web)  Sitemap: add a list of all the files available
-  * [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
-  * [x] (web)  User login / registration: keep a file with login:group:bcryptpassords
-  * [x] (web)  User ACL basic (read / write): the groups have rights on directories (globing)
-  * [x] (web)  Groups ACL on EVERY wiki url
-  * [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
-  * [ ] (web)  Template loader (files in public/): load css, js etc. from public/
-  * [ ] (web)  File upload and lists: page that add a file in uploads/
+  - [ ] (web)  Add content table: if titles are written, give a content table with them and links to anchors
+  - [x] (web)  Sitemap: add a list of all the files available
+  - [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
+  - [x] (web)  User login / registration: keep a file with login:group:bcryptpassords
+  - [x] (web)  User ACL basic (read / write): the groups have rights on directories (globing)
+  - [x] (web)  Groups ACL on EVERY wiki url
+  - [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
+  - [ ] (web)  Template loader (files in public/): load css, js etc. from public/
+  - [ ] (web)  File upload and lists: page that add a file in uploads/
 
 ### Advanced usage
 
-  * [ ] (core) Extensions loader (.so files + extended markdown ?): extend the wiki features with hooks
-  * [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
-  * [x] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
-  * [ ] (conf) Handle environemnt variables in a .env file
-  * [ ] (core) Index the internal links of a page to update them if a page is move or the title changed.
-  * [ ] (edit) Handle `[[tag|title]]`: same than internal links but with a fixed title
+  - [ ] (core) Extensions loader (.so files + extended markdown ?): extend the wiki features with hooks
+  - [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
+  - [x] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
+  - [ ] (conf) Handle environemnt variables in a .env file
+  - [ ] (core) Index the internal links of a page to update them if a page is move or the title changed.
+  - [ ] (edit) Handle `[[tag|title]]`: same than internal links but with a fixed title
 
 ### Other
 
-  * [x] Improve the controller/routes architecture (Amber)
+  - [x] Improve the controller/routes architecture (Amber)
 
 ## Contributing
 
