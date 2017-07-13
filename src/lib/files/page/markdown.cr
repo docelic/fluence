@@ -12,7 +12,15 @@ struct Wikicr::Page::Markdown
   def build : String
     estimated_size = (@text.size + @text.count("[") * 8)
     String.build(estimated_size) do |output|
-      @text.split("\n").each { |line| handle_line(output, line); output << "\n" }
+      begin_text = true
+      @text.split("\n").each { |line|
+        unless begin_text
+          output << "\n"
+        else
+          begin_text = false
+        end
+        handle_line(output, line)
+      }
     end
   end
 
@@ -27,8 +35,8 @@ struct Wikicr::Page::Markdown
           render_internal_link(b, str, link_begin)
           # Not a second ], so pass to the next [
         else
-          b << '['
-          @cursor += 1
+          b << str[@cursor..link_begin + 1]
+          @cursor = link_begin + 2
         end
         # No [ left
       else
