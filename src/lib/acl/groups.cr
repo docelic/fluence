@@ -54,7 +54,7 @@ class Acl::Groups < Lockable
   # ```
   def permitted?(entity : Acl::Entity, path : String, access : Acl::Perm)
     entity.groups.any? do |group|
-      @groups[group].permitted?(path, access)
+      @groups[group]? ? @groups[group].permitted?(path, access) : false
     end
   end
 
