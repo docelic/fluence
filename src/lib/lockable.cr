@@ -2,15 +2,10 @@ abstract class Lockable
   abstract def load!
   abstract def save!
 
-  @lock : Mutex?
-
-  def initialize
-    @lock = Mutex.new
-  end
+  @lock : Mutex = Mutex.new
 
   def transaction!(read = false, write = true)
-    @lock ||= Mutex.new
-    @lock.as(Mutex).synchronize do
+    @lock.synchronize do
       begin
         self.load! if read == true
         yield self
