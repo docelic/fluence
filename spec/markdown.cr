@@ -1,0 +1,14 @@
+require "tempfile"
+
+describe Wikicr::Page::Markdown do
+  it "test internal links" do
+    page = Wikicr::Page.new("test")
+    index = Wikicr::Page::Index.new("")
+    Wikicr::Page::Markdown.to_markdown("[[test]]", page, index).
+      should eq("[test](/pages/test)")
+    Wikicr::Page::Markdown.to_markdown("[not](http://itisnot/not)", page, index).
+      should eq("[not](http://itisnot/not)")
+    Wikicr::Page::Markdown.to_markdown("[\\[page]]", page, index).
+      should eq("[\\[page]]")
+  end
+end
