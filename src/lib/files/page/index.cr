@@ -30,7 +30,7 @@ class Wikicr::Page::Index < Lockable
   def find(text : String, context : Page)
     found = find_by_title(text, context)
     return {found.title, found.url} unless found.nil?
-    {text, "/pages/#{text}"}
+    {text, "#{context.real_url_dirname}/#{text}"}
   end
 
   # Find the closest `Index`' `Entry` to *text* based on the entries title

@@ -66,6 +66,14 @@ struct Wikicr::Page
     File.dirname @path
   end
 
+  def url_dirname
+    File.dirname @url
+  end
+
+  def real_url_dirname
+    File.dirname @real_url
+  end
+
   # Reads the *file*.
   def read(user : User)
     self.jail user
