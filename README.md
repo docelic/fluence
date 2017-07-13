@@ -10,16 +10,16 @@ The pages of the wiki are written in markdown and commited on the git repository
 
 Verify that you have crystal v0.23.0 or greater installed, as well as shards and git.
 
-### Get the application
+### Get the application
 
     git clone https://github.com/Nephos/wikicr.git
     cd wikicr
 
-### Test the application
+### Test the application
 
     make test
 
-### Build the binary
+### Build the binary
 
     make
 
