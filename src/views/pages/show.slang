@@ -16,3 +16,7 @@
       - groups_write.each do |group|
         li
           | #{group}
+  - if (index_entry = Wikicr::PAGES[page]?) && (!index_entry.toc.empty?)
+    .col-xs-12
+      h2 Table of Contents
+      == add_toc index_entry.toc
