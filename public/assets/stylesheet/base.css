@@ -11,3 +11,8 @@ form#edit-page {
         resize: vertical;
     }
 }
+
+ul, ol {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 1.5em;
+}
