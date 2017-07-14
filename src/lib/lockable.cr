@@ -11,7 +11,7 @@ abstract class Lockable
         yield self
       ensure
         self.save! if write == true
-        return self
+        self
       end
     end
   end

@@ -6,10 +6,13 @@ class Wikicr::Page::Index < Lockable
       path: String,  # path of the file /srv/wiki/data/xxx
       url: String,   # real url of the page /pages/xxx
       title: String, # Any title
-      slug: String    )
+      slug: String,  # Exact matching title
+      toc: Page::Toc,
+    )
 
-    def initialize(@path, @url, @title)
+    def initialize(@path, @url, @title, toc : Bool = false)
       @slug = Entry.title_to_slug title
+      @toc = toc ? Page.toc(@path) : Page::Toc.new
     end
 
     def self.title_to_slug(title : String) : String
@@ -59,7 +62,7 @@ class Wikicr::Page::Index < Lockable
 
   # Add a new `Entry`.
   def add(page : Wikicr::Page)
-    entries[page.path] = Entry.new page.path, page.url, page.title
+    entries[page.path] = Entry.new page.path, page.url, page.title, toc: true
     self
   end
 
