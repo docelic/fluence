@@ -60,14 +60,24 @@ class Wikicr::Page::Index < Lockable
   end
 
   # Add a new `Entry`.
+  def [](page : Wikicr::Page) : Index::Entry
+    @entries[page.path]
+  end
+
+  # Add a new `Entry`.
+  def []?(page : Wikicr::Page) : Index::Entry?
+    @entries[page.path]?
+  end
+
+  # Add a new `Entry`.
   def add(page : Wikicr::Page)
-    entries[page.path] = Entry.new page.path, page.url, page.title, toc: true
+    @entries[page.path] = Entry.new page.path, page.url, page.title, toc: true
     self
   end
 
   # Remove an `Entry` from the `Index` based on its path.
   def delete(page : Wikicr::Page)
-    entries.delete page.path
+    @entries.delete page.path
     self
   end
 
