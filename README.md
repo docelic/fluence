@@ -90,24 +90,24 @@ The algorithm has been improved since, but it gave me a first idea of what to do
 
 ### Web
 
-  - [ ] (web)  Add content table: if titles are written, give a content table with them and links to anchors
+  - [x] (web)  Add content table: if titles are written, give a content table with them and links to anchors
   - [x] (web)  Sitemap: add a list of all the files available
-  - [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
   - [x] (web)  User login / registration: keep a file with login:group:bcryptpassords
   - [x] (web)  User ACL basic (read / write): the groups have rights on directories (globing)
   - [x] (web)  Groups ACL on EVERY wiki url
-  - [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
+  - [ ] (web)  Search a page: an input that search a page (content, title) with autocompletion
   - [ ] (web)  Template loader (files in public/): load css, js etc. from public/
   - [ ] (web)  File upload and lists: page that add a file in uploads/
+  - [ ] (web)  Tags for pages (index): extended markdown and index to keep a list of pages
 
 ### Advanced usage
 
-  - [ ] (core) Extensions loader (.so files + extended markdown ?): extend the wiki features with hooks
-  - [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
   - [x] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
-  - [ ] (conf) Handle environemnt variables in a .env file
-  - [ ] (core) Index the internal links of a page to update them if a page is move or the title changed.
   - [ ] (edit) Handle `[[tag|title]]`: same than internal links but with a fixed title
+  - [ ] (core) Index the internal links of a page to update them if a page is move or the title changed.
+  - [ ] (web)  Configuration page: title of the wiki, rights of the files, etc. should be configurable
+  - [ ] (conf) Handle environemnt variables in a .env file
+  - [ ] (core) Extensions loader (.so files + extended markdown ?): extend the wiki features with hooks
 
 ### Other
 
