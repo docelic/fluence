@@ -7,8 +7,7 @@ class Wikicr::Page::Index < Lockable
       url: String,   # real url of the page /pages/xxx
       title: String, # Any title
       slug: String,  # Exact matching title
-      toc: Page::Toc,
-    )
+      toc: Page::Toc    )
 
     def initialize(@path, @url, @title, toc : Bool = false)
       @slug = Entry.title_to_slug title

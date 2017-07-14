@@ -137,9 +137,9 @@ struct Wikicr::Page
   end
 
   def self.get_toc_line(line : String) : Page::TocLine?
-    if match = line.match /^(#+)( | )(.+)/
+    if match = line.match /^(\#{1,6})\s(.+)/
       title_num = match[1].size
-      title = match[3]
+      title = match[2]
       {title_num, title}
     end
   end
