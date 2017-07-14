@@ -6,6 +6,9 @@ require "uri"
 # A `Page` is a file and an url part
 # Is is used to jail files into the *OPTIONS.basedir*
 struct Wikicr::Page
+  alias TocLine = {Int32, String}
+  alias Toc = Array(TocLine)
+
   PAGES_SUB_DIRECTORY = "pages/"
   URL_PREFIX          = "/pages"
 
@@ -107,10 +110,38 @@ struct Wikicr::Page
     # TODO: lock before commit
     # TODO: security of jailed_file and self.name ?
     dir = Dir.current
-    Dir.cd Wikicr::OPTIONS.basedir
-    puts `git add -- #{@path}`
-    puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path}`
-    Dir.cd dir
+    begin
+      Dir.cd Wikicr::OPTIONS.basedir
+      puts `git add -- #{@path}`
+      puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path}`
+    ensure
+      Dir.cd dir
+    end
+  end
+
+  def toc
+    Page.toc @path
+  end
+
+  def self.toc(path : String) : Page::Toc
+    toc = Page::Toc.new
+    puts "Computes the toc"
+    File.open path, "r" do |f|
+      puts "BEGIN OF THE FILE"
+      while line = f.gets
+        toc_line = Page.get_toc_line(line)
+        toc << toc_line.as(Page::TocLine) unless toc_line.nil?
+      end
+    end
+    toc
+  end
+
+  def self.get_toc_line(line : String) : Page::TocLine?
+    if match = line.match /^(#+)( | )(.+)/
+      title_num = match[1].size
+      title = match[3]
+      {title_num, title}
+    end
   end
 end
 
