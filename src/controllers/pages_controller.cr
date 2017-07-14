@@ -43,7 +43,6 @@ class PagesController < ApplicationController
 
   # get /pages/search?q=
   def search
-    # user_must_be_logged!
     query = params["q"]
     page = Wikicr::Page.new(query)
     # TODO: a real search
@@ -58,13 +57,13 @@ class PagesController < ApplicationController
     acl_permit! :read
     flash["danger"] = params["flash.danger"] if params["flash.danger"]?
     page = Wikicr::Page.new url: params["path"], read_title: true
-    if (params["edit"]?) || !page.exists?(current_user)
-      body = page.read(current_user) rescue ""
-      flash["info"] = "The page #{page.url} does not exist yet."
+    if (params["edit"]?) || !page.exists?
+      body = page.read rescue ""
+      flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
       acl_permit! :write
       render "edit.slang"
     else
-      body_html = Wikicr::Page::Markdown.to_html page.read(current_user), page, Wikicr::PAGES.load!
+      body_html = Wikicr::Page::Markdown.to_html page.read, page, Wikicr::PAGES.load!
       Wikicr::ACL.load!
       groups_read = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
       groups_write = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
@@ -82,7 +81,7 @@ class PagesController < ApplicationController
       Wikicr::PAGES.transaction! { |index| index.delete page }
       redirect_to "/pages/home"
     else
-      page.write params["body"], current_user
+      page.write current_user, params["body"]
       page.read_title!
       flash["info"] = "The page #{page.url} has been updated."
       Wikicr::PAGES.transaction! { |index| index.add page }

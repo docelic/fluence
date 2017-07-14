@@ -52,10 +52,9 @@ struct Wikicr::Page
   end
 
   # verify if the *file* is in the current dir (avoid ../ etc.)
-  # it will raise a `Error403` if the file is not accessible to the user
-  def jail(user : User)
+  # it will raise a `Error403` if the file is out of the basedir
+  def jail
     # TODO: consider security of ".git/"
-    # TODO: read Acl for user
 
     # the @file is already expanded (File.expand_path) in the constructor
     if Wikicr::OPTIONS.basedir != @path[0..(Wikicr::OPTIONS.basedir.size - 1)]
@@ -78,35 +77,35 @@ struct Wikicr::Page
   end
 
   # Reads the *file*.
-  def read(user : User)
-    self.jail user
+  def read
+    self.jail
     File.read @path
   end
 
   # Writes into the *file*, and commit.
-  def write(body, user : User)
-    self.jail user
+  def write(user : Wikicr::User, body)
+    self.jail
     Dir.mkdir_p self.dirname
     is_new = File.exists? @path
     File.write @path, body
-    commit!(user, is_new ? "create" : "update")
+    commit! user, is_new ? "create" : "update"
   end
 
   # Deletes the *file*, and commit
-  def delete(user : User)
-    self.jail user
+  def delete(user : Wikicr::User)
+    self.jail
     File.delete @path
-    commit!(user, "delete")
+    commit! user, "delete"
   end
 
   # Checks if the *file* exists
-  def exists?(user : User)
-    self.jail user
+  def exists?
+    self.jail
     File.exists? @path
   end
 
   # Save the modifications on the *file* into the git repository
-  def commit!(user, message)
+  def commit!(user : Wikicr::User, message)
     # TODO: lock before commit
     # TODO: security of jailed_file and self.name ?
     dir = Dir.current
@@ -125,9 +124,7 @@ struct Wikicr::Page
 
   def self.toc(path : String) : Page::Toc
     toc = Page::Toc.new
-    puts "Computes the toc"
     File.open path, "r" do |f|
-      puts "BEGIN OF THE FILE"
       while line = f.gets
         toc_line = Page.get_toc_line(line)
         toc << toc_line.as(Page::TocLine) unless toc_line.nil?
