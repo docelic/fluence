@@ -6,7 +6,7 @@ The pages of the wiki are written in markdown and commited on the git repository
 
 ## How to install
 
-### Dependancies
+### Dependencies
 
 Verify that you have crystal v0.23.0 or greater installed, as well as shards and git.
 
@@ -25,13 +25,16 @@ Verify that you have crystal v0.23.0 or greater installed, as well as shards and
 
 ### Run the server
 
-    ./wikicr
+    ./wikicr --port 3000
 
 ### Verify your files
 
-A directory meta/ should be created into wikicr.
-It must contains several files and directories (data/, acl, index, ...).
-Those files are the ALL the data of the wiki.
+A directory `meta/` should be created into wikicr.
+It must contains several files and directories (acl, index, users, ...).
+You may want to save this directory because it contains meta-data about the pages.
+
+Another `data/` should be a git repository (initialized at the first start).
+Those files are the ALL the "displayed data" of the wiki.
 
 ## Security and ACLs
 
@@ -70,7 +73,25 @@ The algorithm has been improved since, but it gave me a first idea of what to do
 
 ## Development and Roadmap
 
+### You want to add or modify something ?
+
+Don't hesitate to open an issue, I'm always happy to discuss about my projects
+or include other developers than me.
+
+## Contributing
+
+1. Open an issue to see what you want to implement and how to do it.
+2. Fork it ( https://github.com/Nephos/wikicr/fork )
+3. Create your feature branch (git checkout -b my-new-feature)
+4. Commit your changes (git commit -am 'Add some feature')
+5. Push to the branch (git push origin my-new-feature)
+6. Create a new Pull Request
+
 ### Operations
+
+For now, all the important operations are already implemented.
+However, there is still a lot of improvements to write in order to improve the
+security and the usability of the wiki.
 
   - [x] (core) View wiki pages
   - [x] (core) Write new wiki page, edit existing ones
@@ -84,11 +105,26 @@ The algorithm has been improved since, but it gave me a first idea of what to do
 
 ### Git
 
+In a first time, I tried to used libgit2. However, it seems to be a bad idea
+because the lib was not documented (no tutorial or at least not up-to-date, API
+not very well documented, etc.) so I want to write a little git-* wrapper to
+handle some operations (add, commmit, revert, etc.).
+
+It is not something very likely to be done first (even if it's a lot of important
+features) because it is boring and requires to take care of the security issues.
+I must have to replace the "system" calls (in backquote) with `Proccess.new.run`.
+
   - [x] (git)  Commit when write on a file: every modification on data/ should be commited
   - [ ] (git)  List of revisions on a file (using git): list the revision of a file
   - [ ] (git)  Revert a revision (avoid vandalism): button to remove a revision (git revert)
 
 ### Web
+
+There is some important features in order to have a good interface and a fluent
+wiki experience. That's not the stuff I prefere because it requires some css/js
+(front-end stuff).
+
+There is also work arround string matching to write a valid research engine.
 
   - [x] (web)  Add content table: if titles are written, give a content table with them and links to anchors
   - [x] (web)  Sitemap: add a list of all the files available
@@ -102,6 +138,12 @@ The algorithm has been improved since, but it gave me a first idea of what to do
 
 ### Advanced usage
 
+The current implementation of Markdown in crystal is limited and
+may be fully rewritten with more standard features in some weeks or months.
+
+The rest is boring stuff (code factorization, make everything configuratble,
+  documentate the code, add a lot of specs, ...).
+
   - [x] (edit) Handle `[[tag]]`: markdown extended to search in the page index (url and title)
   - [ ] (edit) Handle `[[tag|title]]`: same than internal links but with a fixed title
   - [ ] (core) Index the internal links of a page to update them if a page is move or the title changed.
@@ -112,14 +154,6 @@ The algorithm has been improved since, but it gave me a first idea of what to do
 ### Other
 
   - [x] Improve the controller/routes architecture
-
-## Contributing
-
-1. Fork it ( https://github.com/Nephos/wikicr/fork )
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create a new Pull Request
 
 ## Contributors
 
