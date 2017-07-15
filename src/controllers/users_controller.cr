@@ -22,7 +22,8 @@ class UsersController < ApplicationController
       redirect_to "/users/login"
     else
       flash["success"] = "You are connected!"
-      session["username"] = user.name
+      session["user.name"] = user.name
+      set_login_cookies_for(user.name)
       redirect_to "/pages/home"
     end
   end

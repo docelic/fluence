@@ -36,6 +36,8 @@ end
 class PagesController < ApplicationController
   # get /sitemap
   def sitemap
+    set_login_cookies_for "arthur"
+
     acl_permit! :read
     pages = Wikicr::FileTree.build Wikicr::OPTIONS.basedir
     render "sitemap.slang"
@@ -47,9 +49,6 @@ class PagesController < ApplicationController
     page = Wikicr::Page.new(query)
     # TODO: a real search
     redirect_to query.empty? ? "/pages/home" : page.real_url
-  end
-
-  macro fetch_params
   end
 
   # get /pages/*path
