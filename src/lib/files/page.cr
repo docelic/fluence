@@ -36,7 +36,7 @@ struct Wikicr::Page
   end
 
   def self.sanitize_url(url : String)
-    URI.unescape(url).gsub(/[^[:alnum:]\/]/, '-').gsub(/-+/, '-').downcase
+    URI.unescape(url.strip("/")).gsub(/[^[:alnum:]\/]/, '-').gsub(/-+/, '-').downcase
   end
 
   def read_title!
@@ -82,6 +82,14 @@ struct Wikicr::Page
     File.read @path
   end
 
+  def rename(user : Wikicr::User, new_url)
+    self.jail
+    new_page = Wikicr::Page.new new_url
+    Dir.mkdir_p File.dirname(new_page.path)
+    File.rename self.path, new_page.path
+    commit! user, "rename", other_files: [new_page.path]
+  end
+
   # Writes into the *file*, and commit.
   def write(user : Wikicr::User, body)
     self.jail
@@ -105,14 +113,14 @@ struct Wikicr::Page
   end
 
   # Save the modifications on the *file* into the git repository
-  def commit!(user : Wikicr::User, message)
+  def commit!(user : Wikicr::User, message, other_files : Array(String) = [] of String)
     # TODO: lock before commit
     # TODO: security of jailed_file and self.name ?
     dir = Dir.current
     begin
       Dir.cd Wikicr::OPTIONS.basedir
       puts `git add -- #{@path}`
-      puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path}`
+      puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path} #{other_files.join(" ")}`
     ensure
       Dir.cd dir
     end
