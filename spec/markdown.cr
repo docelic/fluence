@@ -11,4 +11,11 @@ describe Wikicr::Page::Markdown do
     Wikicr::Page::Markdown.to_markdown("[\\[page]]", page, index).
       should eq("[\\[page]]")
   end
+
+  it "test special internal links cases" do
+    page = Wikicr::Page.new("test")
+    index = Wikicr::Page::Index.new("")
+    Wikicr::Page::Markdown.to_markdown("    [[test]]", page, index).
+      should eq("    [[test]]")
+  end
 end
