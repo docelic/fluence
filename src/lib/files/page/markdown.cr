@@ -26,6 +26,7 @@ struct Wikicr::Page::Markdown
 
   # Interprets and adds the line into the builder
   private def handle_line(b : String::Builder, str : String)
+    return handle_line_quote(b, str) if str.starts_with? "    "
     @cursor = 0
     while @cursor < str.size
       # First [
@@ -44,6 +45,10 @@ struct Wikicr::Page::Markdown
         @cursor = str.size
       end
     end
+  end
+
+  private def handle_line_quote(b, str)
+    b << str
   end
 
   # Render an internal link into the builder
