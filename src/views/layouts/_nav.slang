@@ -4,8 +4,8 @@ nav
   .pull-left
     a.btn.btn-md href="/" Home
     a.btn.btn-md href="/sitemap" Sitemap
-    - if session["username"]
-      = session["username"]
+    - if user_name?
+      = user_name?
     - else
       a.btn.btn-md href="/users/register" Register
       a.btn.btn-md href="/users/login" Login

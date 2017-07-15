@@ -1,14 +1,12 @@
 require "markdown"
 require "yaml"
+require "kemal"
+require "kemal-session"
+require "kemal-flash"
+require "kilt/slang"
 
 require "./version"
 require "./lib/init"
 
-require "amber"
 require "./controllers/application_controller"
-require "./mailers/**"
-require "./models/**"
-require "./views/**"
-require "../config/*"
-
-Amber::Server.instance.run
+require "../config/application"

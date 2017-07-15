@@ -9,24 +9,16 @@ crystal: 0.23.0
 license: MIT
 
 dependencies:
-  amber:
-    github: Amber-Crystal/amber 
-    version: ~> 0.1.4
-
-  quartz-mailer:
-    github: amber-crystal/quartz-mailer
+  kemal:
+    github: kemalcr/kemal
     branch: master
-  
-  granite_orm:
-    github: kemalyst/granite-orm
-    version: ~> 0.6.0
- 
-  pg:
-    github: will/crystal-pg
-
-#  mysql:
-#    github: crystal-lang/crystal-mysql
-#  pg:
-#    github: will/crystal-pg
-#  sqlite3:
-#    github: crystal-lang/crystal-sqlite3
+  slang:
+    github: jeromegn/slang
+    branch: master
+  kemal-session:
+    github: kemalcr/kemal-session
+    branch: master
+  kemal-flash:
+    github: neovintage/kemal-flash
+    branch: master
+    #version: 0.1.0

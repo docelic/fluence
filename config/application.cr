@@ -1,11 +1,9 @@
-AMBER_ENV = ARGV[0]? || ENV["AMBER_ENV"]? || "development"
+require "./routes"
 
-Amber::Server.instance.config do |app|
-  # Server options
-  app_path = __FILE__ # Do not change unless you understand what you are doing.
-  app.name = "Wikicr web application."
-  app.port = (ENV["PORT"] ||= "3000").to_i # Port you wish your app to run
-  app.env = (ENV["AMBER_ENV"] ||= "development").colorize(:yellow).to_s
-  app.log = ::Logger.new(STDOUT)
-  app.log.level = ::Logger::INFO
+Kemal::Session.config do |config|
+  config.cookie_name = "session_id"
+  config.secret = ENV["WIKI_SECRET"]? || SecureRandom.base64(64)
+  config.gc_interval = 2.minutes # 2 minutes
 end
+
+Kemal.run
