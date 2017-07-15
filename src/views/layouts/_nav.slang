@@ -5,9 +5,9 @@ nav class="navbar navbar-default"
     .pull-left
       - if user_signed_in?
         a.btn.btn-lg href="/" = current_user.name
-        a.btn.btn-lg href="/" Home
-        a.btn.btn-lg href="/sitemap" Sitemap
-      - else
+      a.btn.btn-lg href="/" Home
+      a.btn.btn-lg href="/sitemap" Sitemap
+      - if !user_signed_in?
         a.btn.btn-lg href="/users/register" Register
         a.btn.btn-lg href="/users/login" Login
       - if Wikicr::ACL.permitted?(current_user, "/admin/users", Acl::Perm::Read)
