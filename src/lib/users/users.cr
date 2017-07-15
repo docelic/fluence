@@ -86,8 +86,17 @@ class Wikicr::Users < Lockable
     user
   end
 
+  # find an user based on its name
+  def find?(name : String) : User?
+    user = @list[name]?
+  end
+
   def [](name : String) : User
     find(name)
+  end
+
+  def []?(name : String) : User?
+    find?(name)
   end
 
   def each
@@ -113,12 +122,12 @@ class Wikicr::Users < Lockable
   # Returns nil if it fails
   def auth?(name : String, password : String) : User?
     user = find(name)
-    user.password_encrypted == password ? user : nil
+    user && user.password_encrypted == password ? user : nil
   end
 
   def auth_token?(name : String, token : String) : User?
-    user = find(name)
-    user.token == token ? user : nil
+    user = find?(name)
+    user && user.token == token ? user : nil
   end
 
   # Operation read (erase the internal list).

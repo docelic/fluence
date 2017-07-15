@@ -36,8 +36,6 @@ end
 class PagesController < ApplicationController
   # get /sitemap
   def sitemap
-    set_login_cookies_for "arthur"
-
     acl_permit! :read
     pages = Wikicr::FileTree.build Wikicr::OPTIONS.basedir
     render "sitemap.slang"
@@ -45,7 +43,7 @@ class PagesController < ApplicationController
 
   # get /pages/search?q=
   def search
-    query = params["q"]
+    query = params.query["q"]
     page = Wikicr::Page.new(query)
     # TODO: a real search
     redirect_to query.empty? ? "/pages/home" : page.real_url
@@ -54,9 +52,9 @@ class PagesController < ApplicationController
   # get /pages/*path
   def show
     acl_permit! :read
-    flash["danger"] = params["flash.danger"] if params["flash.danger"]?
-    page = Wikicr::Page.new url: params["path"], read_title: true
-    if (params["edit"]?) || !page.exists?
+    flash["danger"] = params.query["flash.danger"] if params.query["flash.danger"]?
+    page = Wikicr::Page.new url: params.url["path"], read_title: true
+    if (params.query["edit"]?) || !page.exists?
       body = page.read rescue ""
       flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
       acl_permit! :write
@@ -73,14 +71,14 @@ class PagesController < ApplicationController
   # post /pages/*path
   def update
     acl_permit! :write
-    page = Wikicr::Page.new url: params["path"], read_title: true
-    if (params["body"]?.to_s.empty?)
+    page = Wikicr::Page.new url: params.url["path"], read_title: true
+    if (params.body["body"]?.to_s.empty?)
       page.delete current_user rescue nil
       flash["info"] = "The page #{page.url} has been deleted."
       Wikicr::PAGES.transaction! { |index| index.delete page }
       redirect_to "/pages/home"
     else
-      page.write current_user, params["body"]
+      page.write current_user, params.body["body"]
       page.read_title!
       flash["info"] = "The page #{page.url} has been updated."
       Wikicr::PAGES.transaction! { |index| index.add page }
