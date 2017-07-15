@@ -82,6 +82,7 @@ struct Wikicr::Page
     File.read @path
   end
 
+  # TODO: verify if the new_page already exists
   def rename(user : Wikicr::User, new_url)
     self.jail
     new_page = Wikicr::Page.new new_url
