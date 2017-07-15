@@ -1,10 +1,22 @@
 class Router
-  #macro get(route, controller, method)
-  #  ::get({{route}}) { |env| {{controller}}.new(env).{{method.id}}() }
-  #end
   {% for verb in {:get, :post, :delete, :patch, :put, :head} %}
     macro {{verb.id}}(route, controller, method)
-      ::{{verb.id}}(\{{route}}) { |env| \{{controller}}.new(env).\{{method.id}}() }
+      ::{{verb.id}}(\{{route}}) do |env|
+        context = \{{controller}}.new(env)
+        # puts "Before init"
+        # pp env.request.cookies
+        # pp env.response.cookies
+        context.cookies.fill_from_headers(env.request.headers)
+        # puts "After init"
+        # pp env.request.cookies
+        # pp env.response.cookies
+        output = context.\{{method.id}}()
+        # puts "After controller"
+        # pp env.request.cookies
+        # pp env.response.cookies
+        #context.cookies.add_response_headers(env.response.headers)
+        output
+      end
     end
   {% end %}
 end
