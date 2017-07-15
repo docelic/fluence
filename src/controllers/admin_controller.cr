@@ -9,7 +9,7 @@ class AdminController < ApplicationController
   # post /admin/users/create
   def user_create
     acl_permit! :write
-    data = params
+    data = params.body
     begin
       user = Wikicr::USERS.register! data["username"], data["password"], data["groups"].split(",").map(&.strip)
       flash["success"] = "The user #{user.name} has been added."
@@ -23,8 +23,8 @@ class AdminController < ApplicationController
   def user_delete
     acl_permit! :write
     data = params
-    Wikicr::USERS.transaction! { |users| users.delete data["username"] }
-    flash["success"] = "The user #{data["username"]} has been deleted."
+    Wikicr::USERS.transaction! { |users| users.delete data.body["username"] }
+    flash["success"] = "The user #{data.body["username"]} has been deleted."
     redirect_to "/admin/users"
   end
 
@@ -38,9 +38,9 @@ class AdminController < ApplicationController
   # post /admin/acls/create
   def acl_create
     acl_permit! :write
-    group = params["group"]
-    path = params["path"]
-    perm_str = params["perm"]
+    group = params.body["group"]
+    path = params.body["path"]
+    perm_str = params.body["perm"]
     perm = Acl::PERM_STR[perm_str]
     Wikicr::ACL.transaction! do |acls|
       acls.add Acl::Group.new group if acls[group]?.nil?
@@ -54,9 +54,9 @@ class AdminController < ApplicationController
   def acl_update
     acl_permit! :write
     begin
-      group = params["group"]
-      path = params["path"]
-      perm_str = params["change"]
+      group = params.body["group"]
+      path = params.body["path"]
+      perm_str = params.body["change"]
       perm = Acl::PERM_STR[perm_str]
       Wikicr::ACL.transaction! do |acls|
         acls[group][path] = perm
@@ -71,8 +71,8 @@ class AdminController < ApplicationController
   # post /admin/acls/delete
   def acl_delete
     acl_permit! :write
-    group = params["group"]
-    path = params["path"]
+    group = params.body["group"]
+    path = params.body["path"]
     Wikicr::ACL.transaction! do |acls|
       acls[group].delete path
     end

@@ -1,46 +1,34 @@
 version: 1.0
 shards:
-  amber:
-    github: Amber-Crystal/amber
-    version: 0.1.4
+  kemal:
+    github: kemalcr/kemal
+    commit: 1d056b203b8a4551cab37fc8c975151a228e3c66
 
-  db:
-    github: crystal-lang/crystal-db
-    version: 0.4.2
+  kemal-flash:
+    github: neovintage/kemal-flash
+    commit: c0eb4e91573322f05ddf602abbfe748c1d2fd184
 
-  granite_orm:
-    github: kemalyst/granite-orm
-    version: 0.6.2
+  kemal-session:
+    github: kemalcr/kemal-session
+    commit: 5cb3b5b207db92852651a7b7ec4f95d6478f8580
 
-  kemalyst-validators:
-    github: kemalyst/kemalyst-validators
-    version: 0.2.0
+  kemal-watcher:
+    github: faustinoaq/kemal-watcher
+    commit: 03377789108a27dd8aebd61b2fa9631742f582cd
 
   kilt:
     github: jeromegn/kilt
-    version: 0.3.3
-
-  pg:
-    github: will/crystal-pg
-    version: 0.13.3
-
-  quartz-mailer:
-    github: amber-crystal/quartz-mailer
-    commit: 9361ae75f178cb62585aa1b6047a2269f553d2d5
+    version: 0.4.0
 
   radix:
     github: luislavena/radix
-    commit: 211418416adba540b594af2260e1b5d0c8877c9e
-
-  redis:
-    github: stefanwille/crystal-redis
-    version: 1.8.0
+    version: 0.3.8
 
   slang:
     github: jeromegn/slang
     commit: b817c89c7e5ae39562710c0d6c7f42cee685e14f
 
-  smtp:
-    github: raydf/smtp.cr
-    commit: 36854c38435ce104914cb6f44e08c23d8defd143
+  watcher:
+    github: faustinoaq/watcher
+    version: 0.1.9
 

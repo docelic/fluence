@@ -1,7 +1,7 @@
 private def fetch_params
   {
-    username: (params["username"]?),
-    password: (params["password"]?),
+    username: (params.body["username"]?),
+    password: (params.body["password"]?),
   }
 end
 
@@ -15,14 +15,14 @@ class UsersController < ApplicationController
   # post /users/login
   def login_validates
     acl_permit! :write
-    user = Wikicr::USERS.auth! params["username"].to_s, params["password"].to_s
+    user = Wikicr::USERS.auth! params.body["username"].to_s, params.body["password"].to_s
     # TODO: make a notification
     if user.nil?
       flash["danger"] = "User or password doesn't match."
       redirect_to "/users/login"
     else
       flash["success"] = "You are connected!"
-      session["user.name"] = user.name
+      session.string("user.name", user.name)
       set_login_cookies_for(user.name)
       redirect_to "/pages/home"
     end
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     acl_permit! :write
     # TODO: make a notification
     begin
-      user = Wikicr::USERS.register! params["username"].to_s, params["password"].to_s
+      user = Wikicr::USERS.register! params.body["username"].to_s, params.body["password"].to_s
       flash["success"] = "You are registrated under the username #{user.name}. You can connect now."
       redirect_to "/users/login"
     rescue err
