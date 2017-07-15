@@ -71,16 +71,25 @@ class PagesController < ApplicationController
   # post /pages/*path
   def update
     acl_permit! :write
+    pp params.body
     page = Wikicr::Page.new url: params.url["path"], read_title: true
-    if (params.body["body"]?.to_s.empty?)
+    if params.body["rename"]?
+      if !params.body["new_path"]?.to_s.strip.empty?
+        page.rename current_user, params.body["new_path"]
+        flash["success"] = "The page #{page.url} has been moved to #{params.body["new_path"]}."
+        redirect_to "/pages/#{params.body["new_path"]}"
+      else
+        redirect_to page.real_url
+      end
+    elsif (params.body["body"]?.to_s.empty?)
       page.delete current_user rescue nil
-      flash["info"] = "The page #{page.url} has been deleted."
+      flash["success"] = "The page #{page.url} has been deleted."
       Wikicr::PAGES.transaction! { |index| index.delete page }
       redirect_to "/pages/home"
     else
       page.write current_user, params.body["body"]
       page.read_title!
-      flash["info"] = "The page #{page.url} has been updated."
+      flash["success"] = "The page #{page.url} has been updated."
       Wikicr::PAGES.transaction! { |index| index.add page }
       redirect_to page.real_url
     end

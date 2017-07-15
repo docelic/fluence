@@ -79,7 +79,7 @@ The algorithm has been improved since, but it gave me a first idea of what to do
   - [x] (core) Delete pages: remove the content of a page should remove the file
   - [x] (core) Index of pages: each modification of a page should update and index with all thes pages (with first h1 and url)
   - [x] (core) Choose between sqlite3 and the filesystem for the index: sqlite = sql, fs = easier
-  - [ ] (core) Move page (rename): box with "mv X Y" and git commit
+  - [x] (core) Move page (rename): box with "mv X Y" and git commit
   - [x] (core) Lock system for acl/users/index: A thread safe method should be provided to avoid conflict when executing read+write or write operations
 
 ### Git
@@ -111,7 +111,7 @@ The algorithm has been improved since, but it gave me a first idea of what to do
 
 ### Other
 
-  - [x] Improve the controller/routes architecture (Amber)
+  - [x] Improve the controller/routes architecture
 
 ## Contributing
 
