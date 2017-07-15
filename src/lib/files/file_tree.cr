@@ -1,4 +1,6 @@
 # A `FileTree` is a tree structure representing a file with a name and subfiles.
+# It is used to map the wiki for the "sitemap" feature.
+# TODO: it should be fully replaced by the index
 class Wikicr::FileTree
   getter name : String
   getter files : Array(FileTree)

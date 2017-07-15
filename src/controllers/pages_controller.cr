@@ -1,13 +1,16 @@
+# TODO: move that
 def add_page(page, stack = [] of String)
   String.build do |str|
     Slang.embed("src/views/pages/sitemap.directory.slang", "str")
   end
 end
 
+# TODO: move that
 def create_toc_line(line)
   "<li>#{line}</li>"
 end
 
+# TODO: move that
 def add_toc_level(b, index_entry, current_id = 0, last_head = 0)
   return if index_entry.size == current_id
   current_entry = index_entry[current_id]
@@ -76,6 +79,7 @@ class PagesController < ApplicationController
     if params.body["rename"]?
       if !params.body["new_path"]?.to_s.strip.empty?
         # TODO: verify if the user can write on new_path
+        # TODO: if new_path do not begin with /, relative rename to the current path
         page.rename current_user, params.body["new_path"]
         flash["success"] = "The page #{page.url} has been moved to #{params.body["new_path"]}."
         redirect_to "/pages/#{params.body["new_path"]}"

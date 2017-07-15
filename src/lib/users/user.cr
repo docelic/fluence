@@ -1,7 +1,10 @@
 require "crypto/bcrypt/password"
 require "../acl/entity"
 
-# An `User` is a couple name/password/groups.
+# An `User` is a couple name/password/groups/token.
+# The *name* and *groups* is public, the *password* and the *token* are private.
+# The password is used to recognize an user when login in with a form for example.
+# The token is used to recognize an user by a cookie for exemple.
 class Wikicr::User
   class Invalid < Exception
   end

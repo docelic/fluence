@@ -1,5 +1,7 @@
 require "yaml"
 
+# And Index is an object that associate a file with a lot of meta-data
+# like related url, the title, the table of content, ...
 class Wikicr::Page::Index < Lockable
   class Entry
     YAML.mapping(
