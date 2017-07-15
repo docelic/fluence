@@ -75,6 +75,7 @@ class PagesController < ApplicationController
     page = Wikicr::Page.new url: params.url["path"], read_title: true
     if params.body["rename"]?
       if !params.body["new_path"]?.to_s.strip.empty?
+        # TODO: verify if the user can write on new_path
         page.rename current_user, params.body["new_path"]
         flash["success"] = "The page #{page.url} has been moved to #{params.body["new_path"]}."
         redirect_to "/pages/#{params.body["new_path"]}"

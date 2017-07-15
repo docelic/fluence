@@ -5,7 +5,10 @@ module Wikicr::Git
 
   def init!
     Dir.mkdir_p Wikicr::OPTIONS.basedir
-    `git init #{Wikicr::OPTIONS.basedir}`
+    current = Dir.current
+    Dir.cd Wikicr::OPTIONS.basedir
+    `git init .`
+    Dir.cd current
   end
 end
 
