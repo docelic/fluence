@@ -19,7 +19,7 @@ module Wikicr
   # The list of the users is stored into *meta/users*. This file is updated when
   # an user is created/modified/deleted, but the data are stored into RAM for
   # reading.
-  USERS        = Wikicr::Users.new("meta/users", DEFAULT_USER).load!
+  USERS = Wikicr::Users.new("meta/users", DEFAULT_USER).load!
 
   # The list of the permissions (group => path+permission) is stored into the
   # file *meta/acl. Similar behaviour than `USERS`.
