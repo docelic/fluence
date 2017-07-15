@@ -81,8 +81,13 @@ class Wikicr::Users < Lockable
 
   # find an user based on its name
   def find(name : String) : User
-    raise NotExist.new "User #{name} is not in the list" if (!@list[name]?)
-    @list[name]
+    user = @list[name]?
+    raise NotExist.new "User #{name} is not in the list" unless user
+    user
+  end
+
+  def [](name : String) : User
+    find(name)
   end
 
   def each
@@ -111,12 +116,22 @@ class Wikicr::Users < Lockable
     user.password_encrypted == password ? user : nil
   end
 
+  def auth_token?(name : String, token : String) : User?
+    user = find(name)
+    user.token == token ? user : nil
+  end
+
   # Operation read (erase the internal list).
   #
   # see `#auth?`
   def auth!(name : String, password : String) : User?
     self.load!
     auth?(name, password)
+  end
+
+  def auth_token!(name : String, token : String) : User?
+    self.load!
+    auth_token?(name, token)
   end
 
   # Operation read and write (erase the internal list and the file)
