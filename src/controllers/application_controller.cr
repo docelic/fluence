@@ -2,10 +2,8 @@ class ApplicationController
   LAYOUT = "application.slang"
 
   getter env : HTTP::Server::Context
-  getter cookies : HTTP::Cookies
 
   def initialize(@env)
-    @cookies = HTTP::Cookies.new
   end
 
   delegate :session, to: @env
@@ -13,13 +11,14 @@ class ApplicationController
   delegate :response, to: @env
   delegate :params, to: @env
   delegate :flash, to: @env
+  delegate :cookies, to: @env.response
 
   def redirect_to(path, *args_to_hanle, **stuff_to_handle)
     @env.redirect path
   end
 
   def set_cookie(**cookie)
-    @cookies << HTTP::Cookie.new(**cookie)
+    cookies << HTTP::Cookie.new(**cookie)
   end
 
   def delete_cookie(name)
@@ -78,7 +77,6 @@ class ApplicationController
   end
 
   macro acl_permit!(perm)
-    cookies["page"] = request.path
     unless user_signed_in?
       if (name = cookies["user.name"]?) && (token = cookies["user.token"]?)
         if (user = Wikicr::USERS.auth_token?(name.value, token.value))
