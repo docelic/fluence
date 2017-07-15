@@ -19,8 +19,7 @@ html
     script src="/assets/javascript/base.js"
 
   body
-    div.masthead
-      == render_template "layouts/_nav.slang"
+    == render_template "layouts/_nav.slang"
     div.container
       div.row
       - flash.each do |key, value|
