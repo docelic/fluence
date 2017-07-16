@@ -9,9 +9,11 @@ class AdminController < ApplicationController
   # post /admin/users/create
   def user_create
     acl_permit! :write
-    data = params.body
+    username = params.body["username"]
+    password = params.body["password"]
+    groups = params.body["groups"].split(",").map(&.strip)
     begin
-      user = Wikicr::USERS.register! data["username"], data["password"], data["groups"].split(",").map(&.strip)
+      user = Wikicr::USERS.register! username, password, groups
       flash["success"] = "The user #{user.name} has been added."
     rescue err
       flash["danger"] = "Cannot register this account: #{err.message}."
@@ -22,9 +24,8 @@ class AdminController < ApplicationController
   # post /admin/users/delete
   def user_delete
     acl_permit! :write
-    data = params
-    Wikicr::USERS.transaction! { |users| users.delete data.body["username"] }
-    flash["success"] = "The user #{data.body["username"]} has been deleted."
+    Wikicr::USERS.transaction! { |users| users.delete params.body["username"] }
+    flash["success"] = "The user #{params.body["username"]} has been deleted."
     redirect_to "/admin/users"
   end
 
