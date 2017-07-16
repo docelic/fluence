@@ -1,4 +1,8 @@
+require "./markdown/*"
+
 struct Wikicr::Page::Markdown
+  include Markdown::Render
+
   property text : String
   property index : Page::Index
   property page : Page
@@ -30,10 +34,10 @@ struct Wikicr::Page::Markdown
 
   # Interprets and adds the line into the builder
   private def handle_line(b : String::Builder, str : String)
-    return handle_line_quote(b, str) if str.starts_with? "    "
-    return handle_line_code_tag(b, str) if str.starts_with? "```"
-    return handle_line_code(b, str) if @code_line == true
     @cursor = 0
+    return render_quote(b, str) if str.starts_with? "    "
+    return render_code_tag(b, str) if str.starts_with? "```"
+    return render_code(b, str) if @code_line == true
     while @cursor < str.size
       # First [
       if (link_begin = str.index('[', @cursor))
@@ -42,44 +46,12 @@ struct Wikicr::Page::Markdown
           render_internal_link(b, str, link_begin)
           # Not a second ], so pass to the next [
         else
-          b << str[@cursor..link_begin + 1]
-          @cursor = link_begin + 2
+          render_partial_line b, str, link_begin + 1
         end
         # No [ left
       else
-        b << str[@cursor..-1]
-        @cursor = str.size
+        render_full_line b, str
       end
-    end
-  end
-
-  private def handle_line_quote(b, str)
-    b << str
-  end
-
-  private def handle_line_code_tag(b, str)
-    b << str
-    @code_line = !@code_line
-  end
-
-  private def handle_line_code(b, str)
-    b << str
-  end
-
-  # Render an internal link into the builder
-  private def render_internal_link(b : String::Builder, str : String, link_begin : Int32)
-    text_begin = link_begin + 2
-    # Search for the end (the content cannot contain ']' because it must be an "alnum" char)
-    if (link_end = str.index(']', text_begin)) && str[link_end + 1] == ']'
-      text_end = link_end - 1
-      text = str[text_begin..text_end]
-      b << str[@cursor..(link_begin - 1)] unless link_begin == 0
-      title, url = @index.find(text, @page)
-      b << '[' << title << "](" << url << ')'
-      @cursor = link_end + 2
-    else
-      b << str[@cursor..-1]
-      @cursor = str.size
     end
   end
 
