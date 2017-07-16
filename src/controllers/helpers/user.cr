@@ -1,4 +1,4 @@
-module LibController
+module Wikicr::Helpers::User
   def set_login_cookies_for(username)
     Wikicr::USERS.transaction!(read: true) { |users| users[username].generate_new_token! }
     token = Wikicr::USERS[username].token.to_s

@@ -1,5 +1,5 @@
-require "./application_controller/*"
-require "./lib_controller"
+require "./application_controller/**"
+require "./helpers/**"
 
 class ApplicationController
   LAYOUT = "application.slang"
@@ -12,12 +12,13 @@ class ApplicationController
   include ApplicationController::Cookies
   include ApplicationController::Redirect
 
+  include Wikicr::Helpers::User
+  include Wikicr::Helpers::Page
+
   getter env : HTTP::Server::Context
 
   def initialize(@env)
   end
-
-  include LibController
 end
 
 require "./**"

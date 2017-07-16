@@ -1,11 +1,4 @@
 class UsersController < ApplicationController
-  private def fetch_params
-    {
-      username: (params.body["username"]?),
-      password: (params.body["password"]?),
-    }
-  end
-
   # get /users/login
   def login
     acl_permit! :read
