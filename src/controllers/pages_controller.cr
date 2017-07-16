@@ -67,17 +67,29 @@ class PagesController < ApplicationController
   end
 
   private def update_delete(page)
-    page.delete current_user rescue nil
-    flash["success"] = "The page #{page.url} has been deleted."
-    Wikicr::PAGES.transaction! { |index| index.delete page }
-    redirect_to "/pages/home"
+    begin
+      Wikicr::PAGES.transaction! { |index| index.delete page }
+      page.delete current_user
+      flash["success"] = "The page #{page.url} has been deleted."
+      redirect_to "/pages/home"
+    rescue err
+      # TODO: what if the page is not deleted but not indexed anymore ?
+      # Wikicr::PAGES.transaction! { |index| index.add page }
+      flash["danger"] = "Error: cannot remove #{page.url}, #{err.message}"
+      redirect_to page.real_url
+    end
   end
 
   private def update_edit(page)
-    page.write current_user, params.body["body"]
-    page.read_title!
-    flash["success"] = "The page #{page.url} has been updated."
-    Wikicr::PAGES.transaction! { |index| index.add page }
-    redirect_to page.real_url
+    begin
+      page.write current_user, params.body["body"]
+      page.read_title!
+      Wikicr::PAGES.transaction! { |index| index.add page }
+      flash["success"] = "The page #{page.url} has been updated."
+      redirect_to page.real_url
+    rescue err
+      flash["danger"] = "Error: cannot update #{page.url}, #{err.message}"
+      redirect_to page.real_url
+    end
   end
 end
