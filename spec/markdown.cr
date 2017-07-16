@@ -17,5 +17,7 @@ describe Wikicr::Page::Markdown do
     index = Wikicr::Page::Index.new("")
     Wikicr::Page::Markdown.to_markdown("    [[test]]", page, index).
       should eq("    [[test]]")
+    Wikicr::Page::Markdown.to_markdown("```\n[[test]]\n```\n[[test]]", page, index).
+      should eq("```\n[[test]]\n```\n[test](/pages/test)")
   end
 end
