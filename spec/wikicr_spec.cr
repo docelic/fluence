@@ -1,5 +1,5 @@
 require "./spec_helper"
 
-require "./acl"
-require "./group"
-require "./markdown"
+require "./acl_spec"
+require "./group_spec"
+require "./markdown_spec"
