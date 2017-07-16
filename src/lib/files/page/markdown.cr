@@ -3,13 +3,17 @@ struct Wikicr::Page::Markdown
   property index : Page::Index
   property page : Page
   @cursor : Int32
+  @code_line : Bool
 
   def initialize(@text, @page, @index)
     @cursor = 0
+    @code_line = false
   end
 
   # Build a new String which render a valid markdown from the wikimd
   def build : String
+    @cursor = 0
+    @code_line = false
     estimated_size = (@text.size + @text.count("[") * 8)
     String.build(estimated_size) do |output|
       begin_text = true
@@ -27,6 +31,8 @@ struct Wikicr::Page::Markdown
   # Interprets and adds the line into the builder
   private def handle_line(b : String::Builder, str : String)
     return handle_line_quote(b, str) if str.starts_with? "    "
+    return handle_line_code_tag(b, str) if str.starts_with? "```"
+    return handle_line_code(b, str) if @code_line == true
     @cursor = 0
     while @cursor < str.size
       # First [
@@ -48,6 +54,15 @@ struct Wikicr::Page::Markdown
   end
 
   private def handle_line_quote(b, str)
+    b << str
+  end
+
+  private def handle_line_code_tag(b, str)
+    b << str
+    @code_line = !@code_line
+  end
+
+  private def handle_line_code(b, str)
     b << str
   end
 
