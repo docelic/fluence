@@ -26,5 +26,7 @@ describe Wikicr::Page::Markdown do
     index = Wikicr::Page::Index.new("")
     Wikicr::Page::Markdown.to_markdown("[[test|title]]", page, index).
       should eq("[title](/pages/test)")
+    Wikicr::Page::Markdown.to_markdown("[[test-longer|title a bit longer]]", page, index).
+      should eq("[title a bit longer](/pages/test-longer)")
   end
 end
