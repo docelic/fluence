@@ -37,10 +37,12 @@ struct Wikicr::Page::Markdown
         # render before the link
         b << str[@cursor..(link_begin - 1)] unless link_begin == 0
         # if the internal link matches [[xxx|yyy]], keep yyy as title
-        match = text.match(/(?<page>.+)\|(?<title>.+)/)
-        title, url = if match
-                       _, u = @index.find(match["page"], @page)
-                       {match["title"], u}
+        title_begin = text.index '|', link_begin
+        title, url = if title_begin
+                       link = text[0...title_begin]
+                       title = text[(title_begin + 1)..-1]
+                       _, u = @index.find(link, @page)
+                       {title, u}
                      else
                        @index.find(text, @page)
                      end
