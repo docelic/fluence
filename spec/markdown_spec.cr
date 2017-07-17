@@ -20,4 +20,11 @@ describe Wikicr::Page::Markdown do
     Wikicr::Page::Markdown.to_markdown("```\n[[test]]\n```\n[[test]]", page, index).
       should eq("```\n[[test]]\n```\n[test](/pages/test)")
   end
+
+  it "test internal link with fixed title" do
+    page = Wikicr::Page.new("test")
+    index = Wikicr::Page::Index.new("")
+    Wikicr::Page::Markdown.to_markdown("[[test|title]]", page, index).
+      should eq("[title](/pages/test)")
+  end
 end

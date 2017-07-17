@@ -34,8 +34,17 @@ struct Wikicr::Page::Markdown
       if (link_end = str.index(']', text_begin)) && str[link_end + 1] == ']'
         text_end = link_end - 1
         text = str[text_begin..text_end]
+        # render before the link
         b << str[@cursor..(link_begin - 1)] unless link_begin == 0
-        title, url = @index.find(text, @page)
+        # if the internal link matches [[xxx|yyy]], keep yyy as title
+        match = text.match(/(?<page>.+)\|(?<title>.+)/)
+        title, url = if match
+                       _, u = @index.find(match["page"], @page)
+                       {match["title"], u}
+                     else
+                       @index.find(text, @page)
+                     end
+        # write the markdown link
         b << '[' << title << ']' << '(' << url << ')'
         @cursor = link_end + 2
       else
