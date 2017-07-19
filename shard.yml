@@ -22,3 +22,6 @@ dependencies:
     github: neovintage/kemal-flash
     branch: master
     #version: 0.1.0
+  markd:
+    github: icyleaf/markd
+    branch: master
