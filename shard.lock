@@ -12,13 +12,13 @@ shards:
     github: kemalcr/kemal-session
     commit: 5cb3b5b207db92852651a7b7ec4f95d6478f8580
 
-  kemal-watcher:
-    github: faustinoaq/kemal-watcher
-    commit: 03377789108a27dd8aebd61b2fa9631742f582cd
-
   kilt:
     github: jeromegn/kilt
     version: 0.4.0
+
+  markd:
+    github: icyleaf/markd
+    commit: 24d121970fc821e3f613ae74330f652baa5ebd40
 
   radix:
     github: luislavena/radix
@@ -27,8 +27,4 @@ shards:
   slang:
     github: jeromegn/slang
     commit: b817c89c7e5ae39562710c0d6c7f42cee685e14f
-
-  watcher:
-    github: faustinoaq/watcher
-    version: 0.1.9
 

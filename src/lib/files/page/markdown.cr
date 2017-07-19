@@ -1,4 +1,5 @@
 require "./markdown/*"
+require "markd"
 
 struct Wikicr::Page::Markdown
   include Markdown::Render
@@ -63,6 +64,6 @@ struct Wikicr::Page::Markdown
   # Page::Markdown.to_html("Test of [[internal-link]]", current_page, index_of_internal_links)
   # ```
   def self.to_html(input : String, page : Page, index : Page::Index) : String
-    ::Markdown.to_html to_markdown(input, page, index)
+    ::Markd.to_html to_markdown(input, page, index)
   end
 end
