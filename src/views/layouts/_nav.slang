@@ -4,25 +4,25 @@ nav class="navbar navbar-default"
   .col-xs-6
     .pull-left
       - if user_signed_in?
-        a.btn.btn-lg href="/" = current_user.name
-      a.btn.btn-lg href="/" Home
-      a.btn.btn-lg href="/sitemap" Sitemap
+        a.btn.btn-md href="/" = current_user.name
+      a.btn.btn-md href="/" Home
+      a.btn.btn-md href="/sitemap" Sitemap
       - if !user_signed_in?
-        a.btn.btn-lg href="/users/register" Register
-        a.btn.btn-lg href="/users/login" Login
+        a.btn.btn-md href="/users/register" Register
+        a.btn.btn-md href="/users/login" Login
       - if Wikicr::ACL.permitted?(current_user, "/admin/users", Acl::Perm::Read)
-        a.btn.btn-lg href="/admin/users" Users
+        a.btn.btn-md href="/admin/users" Users
       - if Wikicr::ACL.permitted?(current_user, "/admin/acls", Acl::Perm::Read)
-        a.btn.btn-lg href="/admin/acls" ACLs
+        a.btn.btn-md href="/admin/acls" ACLs
   .col-xs-6
     .pull-right
       form#search-page action="/pages/search" method="get" role="form"
-        .input-group.input-group-lg
-          input.form-control name="q" placeholder="Search query" autocomplete="on" list="search-list"
+        .input-group.input-group-md
+          input.input-md.form-control name="q" placeholder="Search query" autocomplete="on" list="search-list"
           datalist#search-list
             - Wikicr::PAGES.entries.values.each do |entry|
               option value=entry.url = entry.title
           span.input-group-btn
-            button.btn.btn-lg
+            button.btn.btn-md
               span.glyphicon.glyphicon-search
               | Search
