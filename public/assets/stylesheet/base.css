@@ -36,15 +36,15 @@ ul, ol {
   margin: 0px 0px 0px 0.5em;
 }
 
-ol {
+#page-table-of-content ol {
   counter-reset: item;
 }
 
-li {
+#page-table-of-content li {
   display: block;
 }
 
-li:before {
+#page-table-of-content li:before {
   content: counters(item, ".") ".";
   counter-increment: item;
   padding-right:10px;

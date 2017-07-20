@@ -36,5 +36,5 @@
                 span.label.label-default
                   | #{group}
                 | 
-
-  == body_html
+  #page-body-html
+    == body_html
