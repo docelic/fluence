@@ -9,16 +9,19 @@ struct Wikicr::Page::Markdown
   property page : Page
   @cursor : Int32
   @code_line : Bool
+  @title : Int32
 
   def initialize(@text, @page, @index)
     @cursor = 0
     @code_line = false
+    @title = 0
   end
 
   # Build a new String which render a valid markdown from the wikimd
   def build : String
     @cursor = 0
     @code_line = false
+    @title = 0
     estimated_size = (@text.size + @text.count("[") * 8)
     String.build(estimated_size) do |output|
       begin_text = true
