@@ -7,8 +7,8 @@ module Wikicr::Helpers::Page
   end
 
   # TODO: move that
-  def create_toc_line(line)
-    "<li>#{line}</li>"
+  def create_toc_line(line, current_id)
+    "<li><a href=\"#section-#{current_id + 1}\">#{line}</a></li>"
   end
 
   # TODO: move that
@@ -18,11 +18,11 @@ module Wikicr::Helpers::Page
     current_head = current_entry[0]
     current_head_value = current_entry[1]
     if current_head > last_head
-      b << "<ul>" << create_toc_line(current_head_value)
+      b << "<ul>" << create_toc_line(current_head_value, current_id)
     elsif current_head < last_head
-      b << "</ul>" << create_toc_line(current_head_value)
+      b << "</ul>" << create_toc_line(current_head_value, current_id)
     else
-      b << create_toc_line(current_head_value)
+      b << create_toc_line(current_head_value, current_id)
     end
     return add_toc_level(b, index_entry, current_id + 1, current_head)
   end
