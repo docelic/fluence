@@ -19,12 +19,14 @@ html
     script src="/assets/javascript/base.js"
 
   body
-    == render_template "layouts/_nav.slang"
-    div.container
-      div.row
-      - flash.each do |key, value|
-        div class="alert alert-#{ key }"
-          p = flash[key]
-      div.row
-        div.col-sm-12.main
-          == content
+    #navbar
+      == render_template "layouts/_nav.slang"
+    #main
+      .container
+        .row
+        - flash.each do |key, value|
+          div class="alert alert-#{ key }"
+            p = flash[key]
+        .row
+          #content.col-sm-12
+            == content

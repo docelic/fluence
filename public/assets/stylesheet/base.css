@@ -16,3 +16,8 @@ ul, ol {
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 1.5em;
 }
+
+#content {
+  box-shadow: 0 0 0.5em #999;
+  padding: 10px 0px;
+}
