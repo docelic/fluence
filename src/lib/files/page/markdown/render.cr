@@ -31,7 +31,7 @@ struct Wikicr::Page::Markdown
       head = "h#{title_size}"
       @title += 1
       title = str[title_size..-1].chomp
-      b << "<#{head} id=section-#{@title}>#{title}</#{head}>"
+      b << "<#{head} id=section-#{@title}>#{title}</#{head}>\n"
       move_cursor_after str
     end
 
