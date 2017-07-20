@@ -1,10 +1,11 @@
 #page-body.col-xs-12
-  - if (index_entry = Wikicr::PAGES[page]?) && (!index_entry.toc.empty?)
+  - if Wikicr::ACL.permitted? current_user, page.real_url, Acl::Perm::Write
     #page-body-meta.pull-right
-      #page-table-of-content
-        span.page-body-meta-title Table of Contents
-        == add_toc index_entry.toc
-      div  
+      - if (index_entry = Wikicr::PAGES[page]?) && (!index_entry.toc.empty?)
+        #page-table-of-content
+          span.page-body-meta-title Table of Contents
+          == add_toc index_entry.toc
+        div  
       #page-edit.col-xs-12
         a.btn.btn-xs.btn-block.btn-warning href="/pages/#{page.url}?edit"
           | Edit
