@@ -1,5 +1,6 @@
 require "../errors"
 require "./file_tree"
+require "./page/*"
 
 require "uri"
 
@@ -11,8 +12,7 @@ require "uri"
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
 struct Wikicr::Page
-  alias TocLine = {Int32, String}
-  alias Toc = Array(TocLine)
+  include Wikicr::Page::TableOfContent
 
   # Directory where the pages are stored
   PAGES_SUB_DIRECTORY = "pages/"
@@ -143,31 +143,6 @@ struct Wikicr::Page
       puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path} #{other_files.join(" ")}`
     ensure
       Dir.cd dir
-    end
-  end
-
-  # The table of content of the file
-  def toc : Page::Toc
-    Page.toc @path
-  end
-
-  def self.toc(path : String) : Page::Toc
-    toc = Page::Toc.new
-    File.open path, "r" do |f|
-      while line = f.gets
-        toc_line = Page.get_toc_line(line)
-        toc << toc_line.as(Page::TocLine) unless toc_line.nil?
-      end
-    end
-    toc
-  end
-
-  # Parse a markdown line, and return a TocLine if it is a title
-  def self.get_toc_line(line : String) : Page::TocLine?
-    if match = line.match /^(\#{1,6})\s(.+)/
-      title_num = match[1].size
-      title = match[2]
-      {title_num, title}
     end
   end
 end

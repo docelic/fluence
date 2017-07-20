@@ -36,20 +36,24 @@ struct Wikicr::Page::Markdown
   # Interprets and adds the line into the builder
   private def handle_line(b : String::Builder, str : String)
     @cursor = 0
+    return render_title(b, str) if str.starts_with? '#'
     return render_quote(b, str) if str.starts_with? "    "
     return render_code_tag(b, str) if str.starts_with? "```"
     return render_code(b, str) if @code_line == true
     while @cursor < str.size
-      # First [
-      if (link_begin = str.index('[', @cursor))
-        # Second [
-        if str[link_begin + 1] == '['
-          render_internal_link(b, str, link_begin)
-          # Not a second ], so pass to the next [
-        else
+      if (link_begin = str.index('[', @cursor)) # First [
+        if str[link_begin + 1] == '['           # Second [
+          render_internal_link b, str, link_begin
+        else # Not a second ], so pass to the next [
           render_partial_line b, str, link_begin + 1
         end
         # No [ left
+      elsif (special_tag_begin = str.index('{', @cursor)) # First {
+        if str[special_tag_begin + 1] == '{'              # Second {
+          render_special_tag b, str, special_tag_begin
+        else
+          render_partial_line b, str, special_tag_begin + 1
+        end
       else
         render_full_line b, str
       end
