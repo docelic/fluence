@@ -17,7 +17,7 @@ ul, ol {
     margin: 0px 0px 0px 1.5em;
 }
 
-#content {
+#page-body {
   box-shadow: 0 0 0.5em #999;
-  padding: 10px 0px;
+  padding: 10px 20px;
 }
