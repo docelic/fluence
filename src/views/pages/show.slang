@@ -1,6 +1,6 @@
-.col-xs-8
+#page-body.col-xs-8
   == body_html
-.col-xs-4.sidebar
+#page-sidebar.sidebar.col-xs-4
   - if Wikicr::ACL.permitted? current_user, page.real_url, Acl::Perm::Write
     .col-xs-12
       a.btn.btn-lg.btn-block.btn-warning href="/pages/#{page.url}?edit"
