@@ -46,14 +46,18 @@ Those files are the ALL the "displayed data" of the wiki.
 
 ## Administration and usage tutorial
 
-### Administrate users and acls
-<img width=240 src="https://i.imgur.com/tW4P8U6.png" />
-
 ### Edit / Create a page
-<img width=240 src="https://i.imgur.com/XGwF6Oq.png" />
+<img width=240 src="https://i.imgur.com/5bfJstb.png" />
 
 ### Show a page
-<img width=240 src="https://i.imgur.com/VYiGQXy.png" />
+<img width=240 src="https://i.imgur.com/gllJ8Nr.png" />
+
+### Remove a page
+Simply edit the page to remove and delete all the content.
+The page will be deleted completely.
+
+### Administrate users and acls
+<img width=240 src="https://i.imgur.com/o6IKgbN.png" />
 
 ### Custom Markdown
 A special markdown (wikimd) is used in the pages. It provides several interesting features:
