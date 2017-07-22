@@ -1,4 +1,4 @@
-require "./acl"
+require "./perm"
 require "./group"
 
 # Entity that have access to the Acl system.

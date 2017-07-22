@@ -1,6 +1,6 @@
 require "yaml"
 
-require "./acl"
+require "./perm"
 
 # The Group is identified by a *name* and has *permissions* on a set of paths.
 # It is used by `Groups`.

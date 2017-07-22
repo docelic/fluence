@@ -1,17 +1,18 @@
-require "./markdown/*"
 require "markd"
+require "./render"
+require "../page"
 
-struct Wikicr::Page::Markdown
+struct Wikicr::Markdown
   include Markdown::Render
 
   property text : String
   property index : Page::Index
-  property page : Page
+  property context : Page
   @cursor : Int32
   @code_line : Bool
   @title : Int32
 
-  def initialize(@text, @page, @index)
+  def initialize(@text, @context, @index)
     @cursor = 0
     @code_line = false
     @title = 0
@@ -63,14 +64,14 @@ struct Wikicr::Page::Markdown
     end
   end
 
-  def self.to_markdown(input : String, page : Page, index : Page::Index) : String
-    Markdown.new(input, page, index).build
+  def self.to_markdown(input : String, context : Page, index : Page::Index) : String
+    Markdown.new(input, context, index).build
   end
 
   # ```
   # Page::Markdown.to_html("Test of [[internal-link]]", current_page, index_of_internal_links)
   # ```
-  def self.to_html(input : String, page : Page, index : Page::Index) : String
-    ::Markd.to_html to_markdown(input, page, index)
+  def self.to_html(input : String, context : Page, index : Page::Index) : String
+    ::Markd.to_html to_markdown(input, context, index)
   end
 end

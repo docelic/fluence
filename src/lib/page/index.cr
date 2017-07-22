@@ -1,4 +1,5 @@
 require "yaml"
+
 require "./table_of_content"
 
 # And Index is an object that associate a file with a lot of meta-data
