@@ -1,5 +1,5 @@
 #page-body.col-xs-12
-  #page-body-meta.pull-right
+  #page-body-meta.pull-right.col-xs-12.col-sm-4
     - if (index_entry = Wikicr::PAGES[page]?) && (!index_entry.toc.empty?)
       #page-table-of-content
         span.page-body-meta-title Table of Contents
