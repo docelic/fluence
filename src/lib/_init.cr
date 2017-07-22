@@ -3,9 +3,8 @@ require "./git"
 
 require "./lockable"
 require "./errors"
-require "./acl/**"
-require "./users/**"
-require "./files/**"
+
+require "./**"
 
 module Wikicr
   # The dir *meta* contains users account (with encrypted password),

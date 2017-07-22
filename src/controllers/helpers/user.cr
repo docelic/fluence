@@ -1,30 +1,14 @@
 module Wikicr::Helpers::User
+  # The username+token are set into the cookies in order to allow future auto-login
   def set_login_cookies_for(username)
     Wikicr::USERS.transaction!(read: true) { |users| users[username].generate_new_token! }
     token = Wikicr::USERS[username].token.to_s
     set_cookie name: "user.name", value: username, expires: 14.days.from_now
     set_cookie name: "user.token", value: token, expires: 14.days.from_now
-    puts "Generated cookies: #{cookies["user.name"]}, #{cookies["user.token"]}"
   end
 
-  macro user_signed_in?
-    session.string?("user.name")
-  end
-
-  macro user_name?
-    session.string?("user.name")
-  end
-
-  macro current_user
-    %name = user_signed_in?
-    if (%name.nil?)
-      Wikicr::USERS.default || raise "User not signed in"
-    else
-      Wikicr::USERS.find(%name)
-    end
-  end
-
-  macro acl_permit!(perm)
+  # If a cookie is set but the user is not signed in, try to use it and renew the cookie
+  def uses_login_cookies
     unless user_signed_in?
       if (name = cookies["user.name"]?) && (token = cookies["user.token"]?)
         if (user = Wikicr::USERS.auth_token?(name.value, token.value))
@@ -37,12 +21,37 @@ module Wikicr::Helpers::User
         end
       end
     end
+  end
+
+  # Nil if not signed in, else it returns the user name
+  macro user_signed_in?
+    session.string?("user.name")
+  end
+
+  # Nil if not signed in, else it returns the user name
+  macro user_name?
+    session.string?("user.name")
+  end
+
+  # If the user is connected return an `Wikicr::User`, else the default user (guest)
+  macro current_user
+    %name = user_signed_in?
+    if (%name.nil?)
+      Wikicr::USERS.default || raise "User not signed in"
+    else
+      Wikicr::USERS.find(%name)
+    end
+  end
+
+  macro acl_permit!(perm)
+    uses_login_cookies
     if Wikicr::ACL.permitted?(current_user, request.path, Acl::PERM[{{perm}}])
       puts "PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
     else
       puts "NOT PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
-      #flash["danger"] = "You are not permitted to access this resource (#{request.path}, #{{{perm}}})."
-      redirect_to "/pages/home", 302, {"flash.danger" => "You are not permitted to access this resource (#{request.path}, #{{{perm}}})."}
+      flash["danger"] = "You are not permitted to access this resource (#{request.path}, #{{{perm}}})."
+      redirect_to "/pages/home"
+      return # Stop the action
     end
   end
 end

@@ -6,7 +6,7 @@ require "kemal-flash"
 require "kilt/slang"
 
 require "./version"
-require "./lib/init"
+require "./lib/_init"
 
 require "./controllers/application_controller"
 require "../config/application"

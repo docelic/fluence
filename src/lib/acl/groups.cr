@@ -1,6 +1,6 @@
 require "yaml"
 
-require "./acl"
+require "./perm"
 require "./group"
 require "./entity"
 

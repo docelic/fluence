@@ -1,4 +1,4 @@
-struct Wikicr::Page::Markdown
+struct Wikicr::Markdown
   module Render
     private def move_cursor_after(str : String)
       @cursor = str.size + 1
@@ -62,10 +62,10 @@ struct Wikicr::Page::Markdown
         title, url = if title_begin
                        link = text[0...title_begin]
                        title = text[(title_begin + 1)..-1]
-                       _, u = @index.find(link, @page)
+                       _, u = @index.find(link, @context)
                        {title, u}
                      else
-                       @index.find(text, @page)
+                       @index.find(text, @context)
                      end
         # write the markdown link
         b << '[' << title << ']' << '(' << url << ')'

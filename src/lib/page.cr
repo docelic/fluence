@@ -1,8 +1,7 @@
-require "../errors"
-require "./file_tree"
-require "./page/*"
-
 require "uri"
+
+require "./errors"
+require "./page/*"
 
 # A `Page` is the representation in the wiki of something that can be accessed
 # from an url /pages/*path.
