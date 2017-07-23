@@ -17,7 +17,6 @@ form#register-new-user method="post" action="/admin/users/create"
     div.input-group
       input.form-control.btn.btn-md.btn-success name="register" type="submit" value="register"
 
-
 h2 Manage existing users
 table.table.table-condensed
   thead

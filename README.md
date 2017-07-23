@@ -57,7 +57,7 @@ Simply edit the page to remove and delete all the content.
 The page will be deleted completely.
 
 ### Administrate users and acls
-<img width=240 src="https://i.imgur.com/o6IKgbN.png" />
+<img width=240 src="https://i.imgur.com/1zWiAV3.png" />
 
 ### Custom Markdown
 A special markdown (wikimd) is used in the pages. It provides several interesting features:
