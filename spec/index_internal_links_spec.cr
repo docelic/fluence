@@ -1,7 +1,7 @@
 describe Wikicr::Page::InternalLinks do
   it "test basic internal links listing" do
     index = Wikicr::Page::Index.new("")
-    page = Wikicr::Page.new(url: "/pages/home")
+    page = Wikicr::Page.new(url: "home")
     str = "I [[am-a-link]] and [[me-too]]\n"
     links = Wikicr::Page::InternalLinks.links_in_content(str, index, page)
 

@@ -33,11 +33,12 @@ struct Wikicr::Page
   getter title : String
 
   def initialize(url : String, real_url : Bool = false, read_title : Bool = false)
+    url = Page.sanitize(url)
     if real_url
-      @real_url = Page.sanitize url
-      @url = @real_url[URL_PREFIX.size..-1]
+      @real_url = url
+      @url = @real_url[URL_PREFIX.size..-1].strip("/")
     else
-      @url = Page.sanitize url
+      @url = url.strip("/")
       @real_url = File.expand_path @url, URL_PREFIX
     end
     @path = Page.url_to_file @url
