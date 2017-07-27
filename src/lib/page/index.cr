@@ -1,29 +1,11 @@
 require "yaml"
 
-require "./table_of_content"
+require "./index/entry"
 
 # And Index is an object that associate a file with a lot of meta-data
 # like related url, the title, the table of content, ...
 struct Wikicr::Page
   class Index < Lockable
-    class Entry
-      YAML.mapping(
-        path: String,  # path of the file /srv/wiki/data/xxx
-        url: String,   # real url of the page /pages/xxx
-        title: String, # Any title
-        slug: String,  # Exact matching title
-        toc: Page::Toc      )
-
-      def initialize(@path, @url, @title, toc : Bool = false)
-        @slug = Entry.title_to_slug title
-        @toc = toc ? Page::TableOfContent.toc(@path) : Page::TableOfContent::Toc.new
-      end
-
-      def self.title_to_slug(title : String) : String
-        title.downcase.gsub(/[^[:alnum:]]/, "-")
-      end
-    end
-
     YAML.mapping(
       file: String,
       entries: Hash(String, Entry) # path, entry
@@ -33,8 +15,9 @@ struct Wikicr::Page
       @entries = {} of String => Entry
     end
 
-    # Find a matching *text* into the Index
-    def find(text : String, context : Page)
+    # Find a matching *text* into the Index.
+    # If no matching content, return a default value.
+    def find(text : String, context : Page) : {String, String}
       found = find_by_title(text, context)
       return {found.title, found.url} unless found.nil?
       {text, "#{context.real_url_dirname}/#{text}"}

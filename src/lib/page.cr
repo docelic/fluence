@@ -12,6 +12,7 @@ require "./page/*"
 # must be stored.
 struct Wikicr::Page
   include Wikicr::Page::TableOfContent
+  include Wikicr::Page::InternalLinks
 
   # Directory where the pages are stored
   PAGES_SUB_DIRECTORY = "pages/"
@@ -33,10 +34,10 @@ struct Wikicr::Page
 
   def initialize(url : String, real_url : Bool = false, read_title : Bool = false)
     if real_url
-      @real_url = Page.sanitize_url url
+      @real_url = Page.sanitize url
       @url = @real_url[URL_PREFIX.size..-1]
     else
-      @url = Page.sanitize_url url
+      @url = Page.sanitize url
       @real_url = File.expand_path @url, URL_PREFIX
     end
     @path = Page.url_to_file @url
@@ -49,7 +50,7 @@ struct Wikicr::Page
     title && title.strip("# ").strip
   end
 
-  def self.sanitize_url(url : String)
+  def self.sanitize(url : String)
     URI.unescape(url).gsub(/[^[:alnum:]\/]/, '-').gsub(/-+/, '-').downcase
   end
 
@@ -61,7 +62,7 @@ struct Wikicr::Page
   # into a file path ("/srv/data/test/ttle.md)
   def self.url_to_file(url : String)
     page_dir = File.expand_path Wikicr::OPTIONS.basedir, PAGES_SUB_DIRECTORY
-    page_file = File.expand_path Page.sanitize_url(url), page_dir
+    page_file = File.expand_path Page.sanitize(url), page_dir
     page_file + ".md"
   end
 
