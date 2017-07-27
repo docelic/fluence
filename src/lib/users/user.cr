@@ -40,7 +40,7 @@ class Wikicr::User
 
   # Reads the password using `Crypto::Bcrypt`
   def password_encrypted
-    Crypto::Bcrypt::Password.new(@password)
+    Crypto::Bcrypt::Password.new @password
   end
 
   def generate_new_token!
@@ -55,6 +55,6 @@ class Wikicr::User
   # getter groups : Array(String)
 
   def has_group?(group : String) : Bool
-    @groups.includes?(group)
+    @groups.includes? group
   end
 end

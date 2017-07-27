@@ -61,7 +61,7 @@ class Wikicr::Users < Lockable
   # Remove an user from the list
   def delete(name : String)
     raise NotExist.new "User #{name} is not in the list" if (!@list[name]?)
-    @list.delete(name)
+    @list.delete name
     self
   end
 
@@ -92,11 +92,11 @@ class Wikicr::Users < Lockable
   end
 
   def [](name : String) : User
-    find(name)
+    find name
   end
 
   def []?(name : String) : User?
-    find?(name)
+    find? name
   end
 
   def each

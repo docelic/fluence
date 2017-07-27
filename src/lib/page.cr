@@ -36,14 +36,14 @@ struct Wikicr::Page
     url = Page.sanitize(url)
     if real_url
       @real_url = url
-      @url = @real_url[URL_PREFIX.size..-1].strip("/")
+      @url = @real_url[URL_PREFIX.size..-1].strip "/"
     else
-      @url = url.strip("/")
+      @url = url.strip "/"
       @real_url = File.expand_path @url, URL_PREFIX
     end
     @path = Page.url_to_file @url
     @title = File.basename @url
-    @title = Page.read_title(@path) || @title if read_title && File.exists?(@path)
+    @title = Page.read_title(@path) || @title if read_title && File.exists? @path
   end
 
   def self.read_title(path : String) : String?

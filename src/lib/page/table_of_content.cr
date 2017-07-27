@@ -12,7 +12,7 @@ struct Wikicr::Page
       toc = Toc.new
       File.open path, "r" do |f|
         while line = f.gets
-          toc_line = get_toc_line(line)
+          toc_line = get_toc_line line
           toc << toc_line.as(TocLine) unless toc_line.nil?
         end
       end
