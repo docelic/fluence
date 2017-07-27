@@ -81,7 +81,7 @@ struct Wikicr::Page
     end
 
     def self.read(file : String)
-      Index.from_yaml(File.read file)
+      Index.from_yaml File.read(file)
     end
 
     # Save the current state into the file
