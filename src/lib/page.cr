@@ -106,7 +106,7 @@ struct Wikicr::Page
     self.jail
     new_page = Wikicr::Page.new new_url
     new_page.jail
-    Dir.mkdir_p File.dirname(new_page.path)
+    Dir.mkdir_p File.dirname new_page.path
     File.rename self.path, new_page.path
     commit! user, "rename", other_files: [new_page.path]
   end

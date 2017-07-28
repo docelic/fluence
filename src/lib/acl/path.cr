@@ -7,17 +7,17 @@ class Acl::Path
   getter regex : Regex?
 
   def self.value_to_regex(value : String)
-    value_regex = value.gsub("*", ".*")
-    Regex.new("^#{value_regex}$")
+    value_regex = value.gsub "*", ".*"
+    Regex.new "^#{value_regex}$"
   end
 
   def initialize(@value : String)
-    @regex = Acl::Path.value_to_regex(@value)
+    @regex = Acl::Path.value_to_regex @value
   end
 
   def acl_match?(other_path : String) : Bool
-    @regex ||= Acl::Path.value_to_regex(@value)
-    !!@regex.as(Regex).match(other_path)
+    @regex ||= Acl::Path.value_to_regex @value
+    !!@regex.as(Regex).match other_path
   end
 
   def to_s
@@ -25,30 +25,17 @@ class Acl::Path
   end
 
   def size
-    if @value.includes? "*"
-      @value.size
-    else
-      @value.size + ".md".size
-    end
+    # +3 = ".md".size
+    @value.includes?("*") ? @value.size : @value.size + 3
   end
 
   def ==(rhs)
     self.to_s == rhs.to_s
   end
 
-  def <=(rhs : Path)
-    self.size <= rhs.size
+  {% for op in [">", "<", ">=", "<="] %}
+  def {{op.id}}(rhs : Path)
+    self.size {{op.id}} rhs.size
   end
-
-  def <(rhs : Path)
-    self.size < rhs.size
-  end
-
-  def >=(rhs : Path)
-    self.size >= rhs.size
-  end
-
-  def >(rhs : Path)
-    self.size > rhs.size
-  end
+  {% end %}
 end

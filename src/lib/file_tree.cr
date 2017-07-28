@@ -13,14 +13,14 @@ class Wikicr::FileTree
   # ```
   def self.build(to_scan : String, max_depth : Int = 32) : FileTree
     # Stop the recursion
-    return FileTree.new(to_scan) if max_depth < 1
+    return FileTree.new to_scan if max_depth < 1
 
     # Save the current directory before getting in
     dir_current = Dir.current
     Dir.cd to_scan
 
     # List the files, and filter them
-    all_files = Dir.entries(".")
+    all_files = Dir.entries "."
     all_files.select! { |file| !(file =~ /^\./) }
     all_files.sort!
 
@@ -34,7 +34,7 @@ class Wikicr::FileTree
       .map { |file| FileTree.new(file, FileTree.build(file, max_depth - 1).files).as(FileTree) }
 
     # Generate the file with the list of the files and the directories
-    structure = FileTree.new(to_scan, files + directories)
+    structure = FileTree.new to_scan, files + directories
 
     # Get out of the parent and return the current directory object
     Dir.cd dir_current
