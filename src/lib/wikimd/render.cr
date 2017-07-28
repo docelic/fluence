@@ -25,7 +25,6 @@ struct Wikicr::Markdown
     private def render_title(b, str)
       # if the char 160 (space) is in a title, it is obviously a mistake.
       str = str.gsub ' ', ' '
-
       title_size = str.index ' '
       raise "Parse Error" if title_size.nil?
       head = "h#{title_size}"

@@ -73,12 +73,12 @@ class Acl::Groups < Lockable
   end
 
   def delete(group : String)
-    @groups.delete(group)
+    @groups.delete group
     self
   end
 
   def delete(group : Acl::Group)
-    @groups.delete(group.name)
+    @groups.delete group.name
     self
   end
 
@@ -91,11 +91,11 @@ class Acl::Groups < Lockable
   end
 
   def []?(group : String) : Acl::Group?
-    (@groups[group]?)
+    @groups[group]?
   end
 
   def []?(group : Acl::Group) : Acl::Group?
-    (@groups[group.name]?)
+    @groups[group.name]?
   end
 
   def group_exists?(group : String) : Bool
@@ -103,7 +103,7 @@ class Acl::Groups < Lockable
   end
 
   def group_exists?(group : Acl::Groum) : Bool
-    group_exists?(group.name)
+    group_exists? group.name
   end
 
   # List the groups having at least the permission *acl_min* on a path
@@ -131,7 +131,7 @@ class Acl::Groups < Lockable
 
   def add_permissions_to(path : String, groups : Array(String), acl : Acl::Perm)
     groups.each do |group|
-      self.add(group) unless group_exists? group
+      self.add group unless group_exists? group
       old_acl = self[group][path]?
       self[group][path] = acl if old_acl.nil? || old_acl.to_i < acl.to_i
     end

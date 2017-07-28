@@ -40,10 +40,10 @@ struct Wikicr::Markdown
   # Interprets and adds the line into the builder
   private def handle_line(b : String::Builder, str : String)
     @cursor = 0
-    return render_title(b, str) if str.starts_with? '#'
-    return render_quote(b, str) if str.starts_with? "    "
-    return render_code_tag(b, str) if str.starts_with? "```"
-    return render_code(b, str) if @code_line == true
+    return render_title b, str if str.starts_with? '#'
+    return render_quote b, str if str.starts_with? "    "
+    return render_code_tag b, str if str.starts_with? "```"
+    return render_code b, str if @code_line == true
     while @cursor < str.size
       if (link_begin = str.index('[', @cursor)) # First [
         if str[link_begin + 1] == '['           # Second [

@@ -18,7 +18,7 @@ struct Wikicr::Page
     # Find a matching *text* into the Index.
     # If no matching content, return a default value.
     def find(text : String, context : Page) : {String, String}
-      found = find_by_title(text, context)
+      found = find_by_title text, context
       return {found.title, found.url} unless found.nil?
       {text, "#{context.real_url_dirname}/#{text}"}
     end
