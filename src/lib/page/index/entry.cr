@@ -22,7 +22,7 @@ struct Wikicr::Page
       end
 
       def self.title_to_slug(title : String) : String
-        title.downcase.gsub(/[^[:alnum:]]/, "-")
+        title.gsub(/[^[:alnum:]^\/]/, "-").gsub(/-+/, '-').downcase
       end
     end
   end
