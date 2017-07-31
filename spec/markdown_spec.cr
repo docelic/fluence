@@ -28,5 +28,7 @@ describe Wikicr::Markdown do
       should eq("[title](/pages/test)")
     Wikicr::Markdown.to_markdown("[[test-longer|title a bit longer]]", page, index).
       should eq("[title a bit longer](/pages/test-longer)")
+    Wikicr::Markdown.to_markdown("[[test-empty|]]", page, index).
+      should eq("[test-empty](/pages/test-empty)")
   end
 end
