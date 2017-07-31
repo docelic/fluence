@@ -20,7 +20,7 @@ struct Wikicr::Page
     def find(text : String, context : Page) : {String, String}
       found = find_by_title text, context
       return {found.title, found.url} unless found.nil?
-      {text, "#{context.real_url_dirname}/#{text}"}
+      {text, "#{context.real_url_dirname}/#{Entry.title_to_slug text}"}
     end
 
     # Find the closest `Index`' `Entry` to *text* based on the entries title
