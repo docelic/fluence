@@ -61,8 +61,12 @@ struct Wikicr::Markdown
         title, url = if title_begin
                        link = text[0...title_begin]
                        title = text[(title_begin + 1)..-1]
-                       _, u = @index.find(link, @context)
-                       {title, u}
+                       if title.empty?
+                         @index.find(link, @context)
+                       else
+                         _, u = @index.find(link, @context)
+                         {title, u}
+                       end
                      else
                        @index.find(text, @context)
                      end
