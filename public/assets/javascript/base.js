@@ -4,7 +4,7 @@ Fluence.mde_options = {
 	renderingConfig: { codeSyntaxHighlighting: true },
 	status: ["autosave", "lines", "words", "cursor"],
 	shortcuts: { drawTable: "Cmd-Alt-T", undo: "Cmd-Z", redo: "Cmd-Y" },
-	autosave: { enabled: true, delay: 2000, uniqueId: 1},
+	autosave: { enabled: false, delay: 2000, uniqueId: 1},
 	toolbar: [
 		"fullscreen",
 		"preview",
