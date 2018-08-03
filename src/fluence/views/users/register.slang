@@ -11,4 +11,4 @@ form#register method="post"
       label Password
       input.form-control name="password" type="password"
     div.input-group
-      input.form-control.btn.btn-md.btn-success name="register" type="submit" value="register"
+      input.form-control.btn.btn-md.btn-success name="register" type="submit" value="Register"

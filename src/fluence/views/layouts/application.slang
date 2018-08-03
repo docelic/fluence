@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title Fluence
+    title = title
     meta charset="utf-8"
     meta http-equiv="X-UA-Compatible" content="IE=edge"
     meta name="viewport" content="width=device-width, initial-scale=1"
@@ -12,6 +12,11 @@ html
     link rel="stylesheet" href="/assets/stylesheet/bootstrap.min.css"
     link rel="stylesheet" href="/assets/stylesheet/bootstrap-theme.min.css"
     script src="/assets/javascript/bootstrap.min.js"
+    script src="/assets/javascript/highlight.min.js"
+    link rel="stylesheet" href="/assets/stylesheet/highlight.min.css"
+    / InscrybMDE
+    link rel="stylesheet" href="/assets/stylesheet/inscrybmde.min.css"
+    script src="/assets/javascript/inscrybmde.min.js"
     / Custom
     link rel="stylesheet" href="/assets/stylesheet/base.css"
     script src="/assets/javascript/base.js"

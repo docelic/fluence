@@ -16,7 +16,7 @@
             .input-group.input-group-xs.col-xs-12
               input.input-sm.form-control name="new_path" type="text" placeholder="New url"
             .input-group.input-group-xs.col-xs-12
-              button.btn.btn-xs.btn-block.btn-success name="rename" type="submit" value="rename" form="rename-page" rename
+              button.btn.btn-xs.btn-block.btn-success name="rename" type="submit" value="rename" form="rename-page" Rename
       div  
       #page-permissions.col-xs-12
         span.page-body-meta-title Permissions
