@@ -69,7 +69,7 @@ struct Fluence::Page
       self
     end
 
-    # Replace the old Index using the state registrated into the *file*.
+    # Replace the old Index using the state registered into the *file*.
     def load!
       if File.exists?(@file) && (new_index = Index.read(@file) rescue nil)
         @entries = new_index.entries
