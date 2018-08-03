@@ -1,16 +1,16 @@
-# Fluence.cr
+# Fluence
 
 Elegant wiki powered by Crystal, with markdown as native format and a WYSIWYG editor.
 
-It works, but currently it uses on-disk files as backend. One of the first steps is to migrate it to an SQL database.
+It works, but currently it uses on-disk files as backend. One of the first next steps is to migrate it to an SQL database.
 
 ## Installation and Startup
 
 Download and compile:
 
 ```bash
-git clone https://github.com/crystallabs/fluence.cr
-cd fluence.cr
+git clone https://github.com/crystallabs/fluence
+cd fluence
 shards
 crystal spec # or just: crystal s
 make # or make release
