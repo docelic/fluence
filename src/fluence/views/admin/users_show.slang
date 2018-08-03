@@ -15,7 +15,7 @@ form#register-new-user method="post" action="/admin/users/create"
       label Groups
       input.form-control name="groups" type="text"
     div.input-group
-      input.form-control.btn.btn-md.btn-success name="register" type="submit" value="register"
+      input.form-control.btn.btn-md.btn-success name="register" type="submit" value="Register"
 
 h2 Manage existing users
 table.table.table-condensed
@@ -32,4 +32,4 @@ table.table.table-condensed
         td
           form method="post" action="/admin/users/delete"
             input type="hidden" name="username" value=user.name
-            input.form-control.btn.btn-md.btn-danger name="delete" type="submit" value="delete"
+            input.form-control.btn.btn-md.btn-danger name="delete" type="submit" value="Delete"
