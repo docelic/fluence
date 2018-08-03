@@ -36,5 +36,12 @@
                 span.label.label-default
                   | #{group}
                 | 
-  #page-body-html
-    == body_html
+  #page-body-html.col-xs-10.col-sm-8 display="inline-block"
+    form#edit-page method="post"
+      fieldset.col-xs-12
+        div.input-group.col-xs-12
+          textarea.form-control name="body" = body
+        div.input-group.col-xs-12
+          input.form-control.btn.btn-block.btn-md.btn-success name="save" type="submit" value="Save"
+
+script var editor = new InscrybMDE(Fluence.mde_options); editor.togglePreview();
