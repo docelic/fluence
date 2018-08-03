@@ -3,8 +3,6 @@
 nav class="navbar navbar-default"
   .col-xs-6
     .pull-left
-      - if user_signed_in?
-        a.btn.btn-md href="/" = current_user.name
       a.btn.btn-md href="/" Home
       a.btn.btn-md href="/sitemap" Sitemap
       - if !user_signed_in?
@@ -14,7 +12,7 @@ nav class="navbar navbar-default"
         a.btn.btn-md href="/admin/users" Users
       - if Fluence::ACL.permitted?(current_user, "/admin/acls", Acl::Perm::Read)
         a.btn.btn-md href="/admin/acls" ACLs
-  .col-xs-6
+  .col-xs-4
     .pull-right
       form#search-page action="/pages/search" method="get" role="form"
         .input-group.input-group-md
@@ -26,3 +24,8 @@ nav class="navbar navbar-default"
             button.btn.btn-md
               span.glyphicon.glyphicon-search
               | Search
+  .col-xs-2
+    .pull-right
+      - if user_signed_in?
+         span Logged in as
+           = current_user.name
