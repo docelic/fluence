@@ -46,3 +46,6 @@ clean:
 
 distclean:
 	rm -rf $(PROGRAM) .crystal .shards libs lib
+
+test:
+	crystal s

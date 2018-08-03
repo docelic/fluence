@@ -7,7 +7,7 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1"
 
     / jQuery
-    script src="/assets/javascript/jquery-3.2.1.min.js"
+    script src="/assets/javascript/jquery-3.3.1.min.js"
     / Bootstrap
     link rel="stylesheet" href="/assets/stylesheet/bootstrap.min.css"
     link rel="stylesheet" href="/assets/stylesheet/bootstrap-theme.min.css"
