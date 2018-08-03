@@ -10,7 +10,7 @@ Download and compile:
 git clone https://github.com/crystallabs/fluence.cr
 cd fluence.cr
 shards
-make test
+crystal spec # or just: crystal s
 make release
 ```
 
