@@ -22,20 +22,20 @@ class PagesController < ApplicationController
     flash["danger"] = params.query["flash.danger"] if params.query["flash.danger"]?
     pp params.url
     page = Fluence::Page.new url: params.url["path"], read_title: true
-    if (params.query["edit"]?) || !page.exists?
-      show_edit(page)
-    else
+#    if (params.query["edit"]?) || !page.exists?
+#      show_edit(page)
+#    else
       show_show(page)
-    end
+#    end
   end
 
-  private def show_edit(page)
-    body = page.read rescue ""
-    flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
-    acl_permit! :write
-    title = "#{title()} (edit) - #{title()}"
-    render "edit.slang"
-  end
+#  private def show_edit(page)
+#    body = page.read rescue ""
+#    flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
+#    acl_permit! :write
+#    title = "#{title()} (edit) - #{title()}"
+#    render "edit.slang"
+#  end
 
   private def show_show(page)
     body_html = Fluence::Markdown.to_html page.read, page, Fluence::PAGES.load!
