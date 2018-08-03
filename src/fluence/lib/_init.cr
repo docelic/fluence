@@ -1,5 +1,4 @@
 require "./options"
-require "./git"
 
 require "./lockable"
 require "./errors"
