@@ -3,8 +3,8 @@ version: '2'
 services:
   web:
     build: .
-    image: wikicr
-    command: './wikicr'
+    image: fluence
+    command: './bin/fluence'
     working_dir: /app/user
     environment:
     ports:
