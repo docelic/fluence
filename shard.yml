@@ -25,3 +25,8 @@ dependencies:
   markd:
     github: icyleaf/markd
     branch: master
+
+development_dependencies:
+  ameba:
+    github: veelenga/ameba
+    version: ~> 0.7.0

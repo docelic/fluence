@@ -54,7 +54,7 @@ class Fluence::User
 
   # getter groups : Array(String)
 
-  def has_group?(group : String) : Bool
+  def group?(group : String) : Bool
     @groups.includes? group
   end
 end

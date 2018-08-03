@@ -67,7 +67,7 @@ class Acl::Group
   # Tries to match the *path* with the permissions of this group.
   # If select every matching path and get the maximum permission among them.
   def matching?(path : String) : Acl::Perm?
-    founds = @permissions.select { |ppath, pgroup| ppath.acl_match?(path) }
+    founds = @permissions.select { |ppath, _| ppath.acl_match?(path) }
     return nil if founds.empty?
     found_min_size = founds.reduce { |left, right| left[0].size >= right[0].size ? left : right }
     found_min_size[1]
@@ -82,7 +82,7 @@ class Acl::Group
 
   # Tries to find the exact *path* with the permissions of this group.
   def []?(path : String) : Acl::Perm?
-    found = @permissions.find { |ppath, pgroup| ppath == path }
+    found = @permissions.find { |ppath, _| ppath == path }
     found && found[1]
   end
 

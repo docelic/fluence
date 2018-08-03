@@ -68,7 +68,6 @@ class PagesController < ApplicationController
   end
 
   private def update_delete(page)
-    begin
       Fluence::PAGES.transaction! { |index| index.delete page }
       page.delete current_user
       flash["success"] = "The page #{page.url} has been deleted."
@@ -78,11 +77,9 @@ class PagesController < ApplicationController
       # Fluence::PAGES.transaction! { |index| index.add page }
       flash["danger"] = "Error: cannot remove #{page.url}, #{err.message}"
       redirect_to page.real_url
-    end
   end
 
   private def update_edit(page)
-    begin
       page.write current_user, params.body["body"]
       page.read_title!
       Fluence::PAGES.transaction! { |index| index.add page }
@@ -91,6 +88,5 @@ class PagesController < ApplicationController
     rescue err
       flash["danger"] = "Error: cannot update #{page.url}, #{err.message}"
       redirect_to page.real_url
-    end
   end
 end
