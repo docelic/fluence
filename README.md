@@ -2,6 +2,8 @@
 
 Elegant wiki powered by Crystal, with markdown as native format and a WYSIWYG editor.
 
+It works, but currently it uses on-disk files as backend. One of the first steps is to migrate it to an SQL database.
+
 ## Installation and Startup
 
 Download and compile:
@@ -11,11 +13,13 @@ git clone https://github.com/crystallabs/fluence.cr
 cd fluence.cr
 shards
 crystal spec # or just: crystal s
-make release
+make # or make release
 ```
 
 The result of the compilation will be one executable file &mdash; bin/fluence.
 
-From there, run `bin/fluence -h` for configuration and startup instructions.
+Run it, and visit [http://localhost:3000/](http://localhost:3000/) in your browser.
 
-- [Nephos](https://github.com/Nephos) Arthur Poulet - Fluence was originally developed based on Arthur's [Wikicr](https://github.com/Nephos/wikicr)
+## Contributors
+
+- [Nephos](https://github.com/Nephos) Arthur Poulet - Fluence was originally developed based on Arthur's [Wikicr](https://github.com/Nephos/wikicr). Thanks!
