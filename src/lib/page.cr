@@ -10,9 +10,9 @@ require "./page/*"
 # Is is can also jails the path into the *OPTIONS.basedir* to be sure that
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
-struct Wikicr::Page
-  include Wikicr::Page::TableOfContent
-  include Wikicr::Page::InternalLinks
+struct Fluence::Page
+  include Fluence::Page::TableOfContent
+  include Fluence::Page::InternalLinks
 
   # Directory where the pages are stored
   PAGES_SUB_DIRECTORY = "pages/"
@@ -62,7 +62,7 @@ struct Wikicr::Page
   # translate a name ("/test/title" for example)
   # into a file path ("/srv/data/test/ttle.md)
   def self.url_to_file(url : String)
-    page_dir = File.expand_path Wikicr::OPTIONS.basedir, PAGES_SUB_DIRECTORY
+    page_dir = File.expand_path Fluence::OPTIONS.basedir, PAGES_SUB_DIRECTORY
     page_file = File.expand_path Page.sanitize(url), page_dir
     page_file + ".md"
   end
@@ -73,8 +73,8 @@ struct Wikicr::Page
     # TODO: consider security of ".git/"
 
     # the @file is already expanded (File.expand_path) in the constructor
-    if Wikicr::OPTIONS.basedir != @path[0..(Wikicr::OPTIONS.basedir.size - 1)]
-      raise Error403.new "Out of chroot (#{@path} on #{Wikicr::OPTIONS.basedir})"
+    if Fluence::OPTIONS.basedir != @path[0..(Fluence::OPTIONS.basedir.size - 1)]
+      raise Error403.new "Out of chroot (#{@path} on #{Fluence::OPTIONS.basedir})"
     end
     self
   end
@@ -102,9 +102,9 @@ struct Wikicr::Page
 
   # TODO: verify if the new_page already exists
   # Move the current page into another place and commit
-  def rename(user : Wikicr::User, new_url)
+  def rename(user : Fluence::User, new_url)
     self.jail
-    new_page = Wikicr::Page.new new_url
+    new_page = Fluence::Page.new new_url
     new_page.jail
     Dir.mkdir_p File.dirname new_page.path
     File.rename self.path, new_page.path
@@ -112,7 +112,7 @@ struct Wikicr::Page
   end
 
   # Writes into the *file*, and commit.
-  def write(user : Wikicr::User, body)
+  def write(user : Fluence::User, body)
     self.jail
     Dir.mkdir_p self.dirname
     is_new = File.exists? @path
@@ -121,7 +121,7 @@ struct Wikicr::Page
   end
 
   # Deletes the *file*, and commit
-  def delete(user : Wikicr::User)
+  def delete(user : Fluence::User)
     self.jail
     File.delete @path
     commit! user, "delete"
@@ -136,10 +136,10 @@ struct Wikicr::Page
   # Save the modifications on the *file* into the git repository
   # TODO: lock before commit
   # TODO: security of jailed_file and self.name ?
-  def commit!(user : Wikicr::User, message, other_files : Array(String) = [] of String)
+  def commit!(user : Fluence::User, message, other_files : Array(String) = [] of String)
     dir = Dir.current
     begin
-      Dir.cd Wikicr::OPTIONS.basedir
+      Dir.cd Fluence::OPTIONS.basedir
       puts `git add -- #{@path}`
       puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path} #{other_files.join(" ")}`
     ensure
@@ -150,4 +150,4 @@ end
 
 # require "./users"
 # require "./git"
-# Wikicr::Page.new("testX").write("OK", Wikicr::USERS.load!.find("arthur.poulet@mailoo.org"))
+# Fluence::Page.new("testX").write("OK", Fluence::USERS.load!.find("arthur.poulet@mailoo.org"))

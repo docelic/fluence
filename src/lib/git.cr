@@ -1,16 +1,16 @@
 require "./options"
 
-module Wikicr::Git
+module Fluence::Git
   extend self
 
   # Initialize the data repository (where the pages are stored).
   def init!
-    Dir.mkdir_p Wikicr::OPTIONS.basedir
+    Dir.mkdir_p Fluence::OPTIONS.basedir
     current = Dir.current
-    Dir.cd Wikicr::OPTIONS.basedir
+    Dir.cd Fluence::OPTIONS.basedir
     `git init .`
     Dir.cd current
   end
 end
 
-Wikicr::Git.init!
+Fluence::Git.init!

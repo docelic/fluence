@@ -10,9 +10,9 @@ nav class="navbar navbar-default"
       - if !user_signed_in?
         a.btn.btn-md href="/users/register" Register
         a.btn.btn-md href="/users/login" Login
-      - if Wikicr::ACL.permitted?(current_user, "/admin/users", Acl::Perm::Read)
+      - if Fluence::ACL.permitted?(current_user, "/admin/users", Acl::Perm::Read)
         a.btn.btn-md href="/admin/users" Users
-      - if Wikicr::ACL.permitted?(current_user, "/admin/acls", Acl::Perm::Read)
+      - if Fluence::ACL.permitted?(current_user, "/admin/acls", Acl::Perm::Read)
         a.btn.btn-md href="/admin/acls" ACLs
   .col-xs-6
     .pull-right
@@ -20,7 +20,7 @@ nav class="navbar navbar-default"
         .input-group.input-group-md
           input.input-md.form-control name="q" placeholder="Search query" autocomplete="on" list="search-list"
           datalist#search-list
-            - Wikicr::PAGES.entries.values.each do |entry|
+            - Fluence::PAGES.entries.values.each do |entry|
               option value=entry.url = entry.title
           span.input-group-btn
             button.btn.btn-md

@@ -4,7 +4,7 @@ require "./user"
 # An instance of `Users` must be linked with a file which can be read of updated
 #
 # TODO: mutex on add/remove/update
-class Wikicr::Users < Lockable
+class Fluence::Users < Lockable
   class AlreadyExist < Exception
   end
 
@@ -158,7 +158,7 @@ end
 
 # file = "/tmp/users"
 # File.touch(file)
-# include Wikicr
+# include Fluence
 # users = Users.new(file)
 # users.load!
 # pp users

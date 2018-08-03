@@ -21,8 +21,8 @@ describe Acl do
       default: Acl::Perm::Write)
     acls.add g1
     acls.add g2
-    u1 = Wikicr::User.new "u1", "", %w(user)
-    u2 = Wikicr::User.new "u2", "", %w(user admin)
+    u1 = Fluence::User.new "u1", "", %w(user)
+    u2 = Fluence::User.new "u2", "", %w(user admin)
 
     # simple
     acls.permitted?(u1, "/", Acl::Perm::Read).should be_true

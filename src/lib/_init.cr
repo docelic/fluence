@@ -6,19 +6,19 @@ require "./errors"
 
 require "./**"
 
-module Wikicr
+module Fluence
   # The dir *meta* contains users account (with encrypted password),
   # the index of the pages (with table of content, links, titles, ...)
   # and user permissions
   Dir.mkdir_p "meta"
 
   # Define a default user that should be used for anonymous clients
-  DEFAULT_USER = Wikicr::User.new "guest", "guest", %w(guest)
+  DEFAULT_USER = Fluence::User.new "guest", "guest", %w(guest)
 
   # The list of the users is stored into *meta/users*. This file is updated when
   # an user is created/modified/deleted, but the data are stored into RAM for
   # reading.
-  USERS = Wikicr::Users.new("meta/users", DEFAULT_USER).load!
+  USERS = Fluence::Users.new("meta/users", DEFAULT_USER).load!
 
   # The list of the permissions (group => path+permission) is stored into the
   # file *meta/acl. Similar behaviour than `USERS`.
@@ -44,5 +44,5 @@ module Wikicr
 
   # The list of the pages (index) with a lot of meta-data. Same behaviour than
   # `USERS` and `ACL`.
-  PAGES = Wikicr::Page::Index.new("meta/index").load!
+  PAGES = Fluence::Page::Index.new("meta/index").load!
 end

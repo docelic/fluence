@@ -5,7 +5,7 @@ require "../acl/entity"
 # The *name* and *groups* is public, the *password* and the *token* are private.
 # The password is used to recognize an user when login in with a form for example.
 # The token is used to recognize an user by a cookie for exemple.
-class Wikicr::User
+class Fluence::User
   class Invalid < Exception
   end
 
@@ -31,7 +31,7 @@ class Wikicr::User
   # Encrypts the passwod using `Crypto::Bcrypt`.
   #
   # ```
-  # Wikicr::User.new("admin", "password", %w(admin)).encrypt!.password # => "$2a$11$G2i2.Km1DRbJtqDBFRhKXuSn8IwNVt7AypAP328T1OYq0wBugkgCm"
+  # Fluence::User.new("admin", "password", %w(admin)).encrypt!.password # => "$2a$11$G2i2.Km1DRbJtqDBFRhKXuSn8IwNVt7AypAP328T1OYq0wBugkgCm"
   # ```
   def encrypt!
     @password = Crypto::Bcrypt::Password.create(@password).to_s

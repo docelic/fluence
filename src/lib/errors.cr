@@ -1,4 +1,4 @@
-module Wikicr
+module Fluence
   class Error < Exception; end
 
   class Error404 < Error; end

@@ -3,7 +3,7 @@ require "../internal_links"
 
 # And Index is an object that associate a file with a lot of meta-data
 # like related url, the title, the table of content, ...
-struct Wikicr::Page
+struct Fluence::Page
   class Index < Lockable
     class Entry
       YAML.mapping(

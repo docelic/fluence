@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   # post /users/login
   def login_validates
     acl_permit! :write
-    user = Wikicr::USERS.auth! params.body["username"].to_s, params.body["password"].to_s
+    user = Fluence::USERS.auth! params.body["username"].to_s, params.body["password"].to_s
     # TODO: make a notification
     if user.nil?
       flash["danger"] = "User or password doesn't match."
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     acl_permit! :write
     # TODO: make a notification
     begin
-      user = Wikicr::USERS.register! params.body["username"].to_s, params.body["password"].to_s
+      user = Fluence::USERS.register! params.body["username"].to_s, params.body["password"].to_s
       flash["success"] = "You are registrated under the username #{user.name}. You can connect now."
       redirect_to "/users/login"
     rescue err

@@ -1,4 +1,4 @@
-struct Wikicr::Markdown
+struct Fluence::Markdown
   module Render
     private def move_cursor_after(str : String)
       @cursor = str.size + 1
