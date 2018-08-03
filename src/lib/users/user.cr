@@ -44,7 +44,7 @@ class Wikicr::User
   end
 
   def generate_new_token!
-    @token = SecureRandom.base64 64
+    @token = Random::Secure.base64 64
   end
 
   #########################
