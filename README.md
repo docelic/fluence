@@ -20,6 +20,12 @@ The result of the compilation will be one executable file &mdash; bin/fluence.
 
 Run it, and visit [http://localhost:3000/](http://localhost:3000/) in your browser.
 
+## Example
+
+Here's how it currently looks:
+
+![Fluence Wiki Screenshot](https://raw.githubusercontent.com/crystallabs/fluence/master/docs/screenshot-20180803.png)
+
 ## Contributors
 
 - [Nephos](https://github.com/Nephos) Arthur Poulet - Fluence was originally developed based on Arthur's [Wikicr](https://github.com/Nephos/wikicr). Thanks!
