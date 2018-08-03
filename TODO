@@ -1,0 +1,8 @@
+- system for uploading and linking images. docs, media
+- move to using an SQL db
+- fix misalignments in header of the layout
+- more options - when person is editing, be able to set default for side-by-side, fullscreen, autosave interval etc.
+- I18n
+- Fix and/or improve internal links with [[page-name]]
+- Fix and improve changing the toolbar depending on view mode
+- Toggle Save visibility when in preview
