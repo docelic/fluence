@@ -2,7 +2,7 @@ require "markd"
 require "./render"
 require "../page"
 
-struct Wikicr::Markdown
+struct Fluence::Markdown
   include Markdown::Render
 
   property text : String

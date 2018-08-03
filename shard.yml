@@ -1,12 +1,12 @@
-name: wikicr
-version: 0.1.0
+name: fluence
+version: 0.2.0
 
 authors:
-  - Amber <contact@ambercr.io>
+  - Davor Ocelic <docelic@crystallabs.io>
 
-crystal: 0.23.0
+crystal: 0.25.1
 
-license: MIT
+license: GPL-3
 
 dependencies:
   kemal:

@@ -1,8 +1,12 @@
 version: 1.0
 shards:
+  exception_page:
+    github: crystal-loot/exception_page
+    version: 0.1.1
+
   kemal:
     github: kemalcr/kemal
-    commit: 1d056b203b8a4551cab37fc8c975151a228e3c66
+    commit: 09bb1fcd4073a374b3a61c99e48e05a866b23c08
 
   kemal-flash:
     github: neovintage/kemal-flash
@@ -10,7 +14,7 @@ shards:
 
   kemal-session:
     github: kemalcr/kemal-session
-    commit: 5cb3b5b207db92852651a7b7ec4f95d6478f8580
+    commit: bc720cca9c27e391b4b3fc32ae7cc23f4d3f3fdc
 
   kilt:
     github: jeromegn/kilt
@@ -18,7 +22,7 @@ shards:
 
   markd:
     github: icyleaf/markd
-    commit: 24d121970fc821e3f613ae74330f652baa5ebd40
+    commit: 3e1a3a0129d01de45d87ae8ade92de79e9d9129e
 
   radix:
     github: luislavena/radix
@@ -26,5 +30,5 @@ shards:
 
   slang:
     github: jeromegn/slang
-    commit: b817c89c7e5ae39562710c0d6c7f42cee685e14f
+    commit: f33c23be9d477a07627a124d0b79d6cdb7a9132e
 

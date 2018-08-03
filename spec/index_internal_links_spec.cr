@@ -1,9 +1,9 @@
-describe Wikicr::Page::InternalLinks do
+describe Fluence::Page::InternalLinks do
   it "test basic internal links listing" do
-    index = Wikicr::Page::Index.new("")
-    page = Wikicr::Page.new(url: "home")
+    index = Fluence::Page::Index.new("")
+    page = Fluence::Page.new(url: "home")
     str = "I [[am-a-link]] and [[me-too]]\n"
-    links = Wikicr::Page::InternalLinks.links_in_content(str, index, page)
+    links = Fluence::Page::InternalLinks.links_in_content(str, index, page)
 
     link1 = "am-a-link"
     link2 = "me-too"

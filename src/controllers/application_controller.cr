@@ -17,8 +17,8 @@ class ApplicationController
   include ApplicationController::Cookies
   include ApplicationController::Redirect
 
-  include Wikicr::Helpers::User
-  include Wikicr::Helpers::Page
+  include Fluence::Helpers::User
+  include Fluence::Helpers::Page
 
   getter env : HTTP::Server::Context
 

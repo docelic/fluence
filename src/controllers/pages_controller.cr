@@ -2,14 +2,14 @@ class PagesController < ApplicationController
   # get /sitemap
   def sitemap
     acl_permit! :read
-    pages = Wikicr::FileTree.build Wikicr::OPTIONS.basedir
+    pages = Fluence::FileTree.build Fluence::OPTIONS.basedir
     render "sitemap.slang"
   end
 
   # get /pages/search?q=
   def search
     query = params.query["q"]
-    page = Wikicr::Page.new(query)
+    page = Fluence::Page.new(query)
     # TODO: a real search
     redirect_to query.empty? ? "/pages/home" : page.real_url
   end
@@ -19,7 +19,7 @@ class PagesController < ApplicationController
     acl_permit! :read
     flash["danger"] = params.query["flash.danger"] if params.query["flash.danger"]?
     pp params.url
-    page = Wikicr::Page.new url: params.url["path"], read_title: true
+    page = Fluence::Page.new url: params.url["path"], read_title: true
     if (params.query["edit"]?) || !page.exists?
       show_edit(page)
     else
@@ -35,17 +35,17 @@ class PagesController < ApplicationController
   end
 
   private def show_show(page)
-    body_html = Wikicr::Markdown.to_html page.read, page, Wikicr::PAGES.load!
-    Wikicr::ACL.load!
-    groups_read = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
-    groups_write = Wikicr::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
+    body_html = Fluence::Markdown.to_html page.read, page, Fluence::PAGES.load!
+    Fluence::ACL.load!
+    groups_read = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
+    groups_write = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
     render "show.slang"
   end
 
   # post /pages/*path
   def update
     acl_permit! :write
-    page = Wikicr::Page.new url: params.url["path"], read_title: true
+    page = Fluence::Page.new url: params.url["path"], read_title: true
     if params.body["rename"]?
       update_rename(page)
     elsif (params.body["body"]?.to_s.empty?)
@@ -69,13 +69,13 @@ class PagesController < ApplicationController
 
   private def update_delete(page)
     begin
-      Wikicr::PAGES.transaction! { |index| index.delete page }
+      Fluence::PAGES.transaction! { |index| index.delete page }
       page.delete current_user
       flash["success"] = "The page #{page.url} has been deleted."
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?
-      # Wikicr::PAGES.transaction! { |index| index.add page }
+      # Fluence::PAGES.transaction! { |index| index.add page }
       flash["danger"] = "Error: cannot remove #{page.url}, #{err.message}"
       redirect_to page.real_url
     end
@@ -85,7 +85,7 @@ class PagesController < ApplicationController
     begin
       page.write current_user, params.body["body"]
       page.read_title!
-      Wikicr::PAGES.transaction! { |index| index.add page }
+      Fluence::PAGES.transaction! { |index| index.add page }
       flash["success"] = "The page #{page.url} has been updated."
       redirect_to page.real_url
     rescue err

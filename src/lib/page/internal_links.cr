@@ -1,19 +1,19 @@
-struct Wikicr::Page
+struct Fluence::Page
   module InternalLinks
     # {id, page-real-url}
     alias Link = {Int32, String}
     alias LinkList = Array(Link)
 
-    def internal_links(index_context : Wikicr::Page::Index)
+    def internal_links(index_context : Fluence::Page::Index)
       InternalLinks.links @path, index_context, self
     end
 
-    def self.links(path : String, index : Wikicr::Page::Index, page : Wikicr::Page)
+    def self.links(path : String, index : Fluence::Page::Index, page : Fluence::Page)
       content = File.read path
       links_in_content content, index, page
     end
 
-    def self.links_in_content(content : String, index : Wikicr::Page::Index, page : Wikicr::Page)
+    def self.links_in_content(content : String, index : Fluence::Page::Index, page : Fluence::Page)
       links = LinkList.new
       link_begin = -1
       while link_begin = content.index("[[", link_begin + 1)

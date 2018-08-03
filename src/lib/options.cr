@@ -1,4 +1,4 @@
-module Wikicr
+module Fluence
   class Options
     getter basedir : String
 
@@ -8,5 +8,5 @@ module Wikicr
     end
   end
 
-  OPTIONS = Wikicr::Options.new
+  OPTIONS = Fluence::Options.new
 end

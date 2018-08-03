@@ -1,4 +1,4 @@
-struct Wikicr::Page
+struct Fluence::Page
   module TableOfContent
     alias TocLine = {Int32, String}
     alias Toc = Array(TocLine)

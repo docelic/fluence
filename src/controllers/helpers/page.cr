@@ -1,4 +1,4 @@
-module Wikicr::Helpers::Page
+module Fluence::Helpers::Page
   # TODO: move that
   def add_page(page, stack = [] of String)
     String.build do |str|

@@ -4,7 +4,7 @@ require "./index/entry"
 
 # And Index is an object that associate a file with a lot of meta-data
 # like related url, the title, the table of content, ...
-struct Wikicr::Page
+struct Fluence::Page
   class Index < Lockable
     YAML.mapping(
       file: String,
@@ -48,23 +48,23 @@ struct Wikicr::Page
     end
 
     # Add a new `Entry`.
-    def [](page : Wikicr::Page) : Index::Entry
+    def [](page : Fluence::Page) : Index::Entry
       @entries[page.path]
     end
 
     # Add a new `Entry`.
-    def []?(page : Wikicr::Page) : Index::Entry?
+    def []?(page : Fluence::Page) : Index::Entry?
       @entries[page.path]?
     end
 
     # Add a new `Entry`.
-    def add(page : Wikicr::Page)
+    def add(page : Fluence::Page)
       @entries[page.path] = Entry.new page.path, page.url, page.title, toc: true
       self
     end
 
     # Remove an `Entry` from the `Index` based on its path.
-    def delete(page : Wikicr::Page)
+    def delete(page : Fluence::Page)
       @entries.delete page.path
       self
     end
