@@ -24,6 +24,10 @@ class ApplicationController
 
   def initialize(@env)
   end
+
+  def title
+    "Fluence Wiki"
+  end
 end
 
 require "./**"
