@@ -27,10 +27,10 @@ struct Fluence::Markdown
     String.build(estimated_size) do |output|
       begin_text = true
       @text.split("\n").each { |line|
-        unless begin_text
-          output << "\n"
-        else
+        if begin_text
           begin_text = false
+        else
+          output << "\n"
         end
         handle_line(output, line)
       }

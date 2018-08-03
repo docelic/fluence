@@ -1,5 +1,9 @@
 version: 1.0
 shards:
+  ameba:
+    github: veelenga/ameba
+    version: 0.7.0
+
   exception_page:
     github: crystal-loot/exception_page
     version: 0.1.1
