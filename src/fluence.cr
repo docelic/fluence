@@ -6,7 +6,7 @@ require "kemal-flash"
 require "kilt/slang"
 
 require "./fluence/version"
-require "./lib/_init"
+require "./fluence/lib/_init"
 
-require "./controllers/application_controller"
+require "./fluence/controllers/application_controller"
 require "../config/application"
