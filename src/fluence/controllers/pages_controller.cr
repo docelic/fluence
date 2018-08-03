@@ -3,6 +3,7 @@ class PagesController < ApplicationController
   def sitemap
     acl_permit! :read
     pages = Fluence::FileTree.build Fluence::OPTIONS.basedir
+    title = "Sitemap - #{title()}"
     render "sitemap.slang"
   end
 
@@ -11,6 +12,7 @@ class PagesController < ApplicationController
     query = params.query["q"]
     page = Fluence::Page.new(query)
     # TODO: a real search
+    title = "Search Results - #{title()}"
     redirect_to query.empty? ? "/pages/home" : page.real_url
   end
 
@@ -31,14 +33,17 @@ class PagesController < ApplicationController
     body = page.read rescue ""
     flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
     acl_permit! :write
+    title = "#{title()} (edit) - #{title()}"
     render "edit.slang"
   end
 
   private def show_show(page)
     body_html = Fluence::Markdown.to_html page.read, page, Fluence::PAGES.load!
+    body = page.read
     Fluence::ACL.load!
     groups_read = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
     groups_write = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
+    title = "#{page.title} - #{title()}"
     render "show.slang"
   end
 
