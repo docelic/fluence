@@ -29,17 +29,10 @@ class PagesController < ApplicationController
 #    end
   end
 
-#  private def show_edit(page)
-#    body = page.read rescue ""
-#    flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
-#    acl_permit! :write
-#    title = "#{title()} (edit) - #{title()}"
-#    render "edit.slang"
-#  end
-
   private def show_show(page)
-    body_html = Fluence::Markdown.to_html page.read, page, Fluence::PAGES.load!
-    body = page.read
+    body = page.read rescue acl_permit! :write
+    body_html = body ? Fluence::Markdown.to_html body, page, Fluence::PAGES.load! : ""
+    flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
     Fluence::ACL.load!
     groups_read = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
     groups_write = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
