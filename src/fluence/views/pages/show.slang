@@ -36,7 +36,7 @@
                 input.input-sm.form-control name="new_path_overwrite" type="checkbox" value="0" Overwrite
                 button.btn.btn-xs.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
               .input-group.input-group-xs.col-xs-12
-                button.btn.btn-xs.btn-block.btn-warning name="delete" type="submit" value="delete" form="manage-page" Delete
+                button.btn.btn-xs.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.url}`?')" Delete
       #page-permissions
         hr
         span.page-body-meta-title Page Permissions
