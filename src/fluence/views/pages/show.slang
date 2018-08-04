@@ -19,8 +19,7 @@
           | Toggle edit
       div
       #page-save
-        a.btn.btn-xs.btn-block.btn-success name="save" type="submit" form="edit-page" value="Save"
-          | Save
+        button.btn.btn-xs.btn-block.btn-success name="save" type="submit" value="save" form="edit-page" Save
       hr
       #page-rename
         form#rename-page method="post"
