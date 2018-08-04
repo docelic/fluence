@@ -62,6 +62,7 @@ class PagesController < ApplicationController
 			begin
 				page.rename current_user, params.body["new_path"], !!params.body["new_path_overwrite"]?
 				flash["success"] = "The page #{page.url} has been moved to #{params.body["new_path"]}."
+				remove_empty_directories page
 				redirect_to "/pages/#{params.body["new_path"]}"
 			rescue e : Fluence::Page::AlreadyExist
 				flash["danger"] = e.to_s
@@ -76,6 +77,7 @@ class PagesController < ApplicationController
       Fluence::PAGES.transaction! { |index| index.delete page }
       page.delete current_user
       flash["success"] = "The page #{page.url} has been deleted."
+			remove_empty_directories page
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?
@@ -94,4 +96,18 @@ class PagesController < ApplicationController
       flash["danger"] = "Error: cannot update #{page.url}, #{err.message}"
       redirect_to page.real_url
   end
+
+	private def remove_empty_directories(page : Fluence::Page)
+		page_dir_elements = File.dirname(page.path).split File::SEPARATOR
+		base_dir_elements = Fluence::OPTIONS.basedir.split File::SEPARATOR
+		while page_dir_elements.size != base_dir_elements.size
+			dir_path = page_dir_elements.join(File::SEPARATOR)
+			if Dir.empty? dir_path
+				Dir.rmdir dir_path
+				page_dir_elements.pop
+			else
+				break
+			end
+		end
+	end
 end
