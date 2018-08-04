@@ -6,14 +6,14 @@ nav class="navbar navbar-default"
       a.btn.btn-md href="/" Home
       a.btn.btn-md href="/sitemap" Sitemap
       - if !user_signed_in?
-        a.btn.btn-md href="/users/register" Register
-        a.btn.btn-md href="/users/login" Login
+        /a.btn.btn-md href="/users/register" Register
+        /a.btn.btn-md href="/users/login" Login
       - if Fluence::ACL.permitted?(current_user, "/admin/users", Acl::Perm::Read)
         a.btn.btn-md href="/admin/users" Users
       - if Fluence::ACL.permitted?(current_user, "/admin/acls", Acl::Perm::Read)
         a.btn.btn-md href="/admin/acls" ACLs
-  .col-xs-4
-    .pull-right
+  .col-xs-3
+    .center-block
       form#search-page action="/pages/search" method="get" role="form"
         .input-group.input-group-md
           input.input-md.form-control name="q" placeholder="Search query" autocomplete="on" list="search-list"
@@ -27,7 +27,11 @@ nav class="navbar navbar-default"
   .col-xs-2
     .pull-right
       - if user_signed_in?
-         span Logged in as
-           = current_user.name
+         a.btn.btn-md href="/users/logout" Logout
+         /span Logged in as
+         /  = current_user.name
       - else
-         span Not logged in
+         a.btn.btn-md href="/users/login" Login
+         a.btn.btn-md href="/users/register" Register
+         /span Not logged in
+

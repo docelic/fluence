@@ -23,6 +23,11 @@ module Fluence::Helpers::User
     end
   end
 
+  def delete_login_cookies
+    delete_cookie "user.name"
+    delete_cookie "user.token"
+  end
+
   # Nil if not signed in, else it returns the user name
   macro user_signed_in?
     session.string?("user.name")
