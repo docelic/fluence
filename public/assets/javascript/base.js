@@ -5,7 +5,9 @@ Fluence.mde_options = {
 	status: ["autosave", "lines", "words", "cursor"],
 	shortcuts: { drawTable: "Cmd-Alt-T", undo: "Cmd-Z", redo: "Cmd-Y" },
 	autosave: { enabled: false, delay: 2000, uniqueId: 1},
-	placeholder: "Please enter Edit mode to add content",
+	// Do not use placeholder because it only shows in Edit mode,
+	// and it is not needed there.
+	//placeholder: "Please enter Edit mode to add content",
 	toolbar: [
 		"fullscreen",
 		"preview",

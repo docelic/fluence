@@ -59,7 +59,7 @@ struct Fluence::Page
 
     # Add a new `Entry`.
     def add(page : Fluence::Page)
-      @entries[page.path] = Entry.new page.path, page.url, page.title, toc: true
+      @entries[page.path] = Entry.new page.path, page.url, page.title, toc: true, intlinks: { self, page }
       self
     end
 
