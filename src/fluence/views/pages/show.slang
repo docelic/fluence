@@ -24,18 +24,18 @@
       #page-rename
         form#rename-page method="post"
           fieldset
-            .input-group.input-group-xs
+            .input-group.input-group-xs.col-xs-12
               input.input-sm.form-control name="new_path" type="text" value="#{page.url}"
-            .input-group.input-group-xs
+            .input-group.input-group-xs.col-xs-12
               input.input-sm.form-control name="new_path_overwrite" type="checkbox" value="0" Overwrite
               button.btn.btn-xs.btn-block.btn-warning name="rename" type="submit" value="rename" form="rename-page" Rename
         form#delete-page
           fieldset
-            .input-group.input-group-xs
+            .input-group.input-group-xs.col-xs-12
               button.btn.btn-xs.btn-block.btn-warning name="delete" type="submit" form="delete-page" onclick="if(confirm('Really delete page `#{page.url}`?')) {$.ajax({ url: $(location).attr('href'), method: 'DELETE' })};" Delete
     #page-permissions
 			hr
-      span.page-body-meta-title Permissions
+      span.page-body-meta-title Page Permissions
       p
         dl
           dt.text-center
@@ -53,4 +53,4 @@
                 | #{group}
               | 
 
-script var editor = new InscrybMDE(Fluence.mde_options); editor.togglePreview();
+script var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write})); editor.togglePreview();

@@ -29,3 +29,5 @@ nav class="navbar navbar-default"
       - if user_signed_in?
          span Logged in as
            = current_user.name
+      - else
+         span Not logged in

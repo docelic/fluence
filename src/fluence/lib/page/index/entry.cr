@@ -15,7 +15,7 @@ struct Fluence::Page
         intlinks: Page::InternalLinks::LinkList,
       )
 
-      def initialize(@path, @url, @title, toc : Bool = false, intlinks : Tuple(Fluence::Page::Index, Fluence::Page)? = nil) 
+      def initialize(@path, @url, @title, toc : Bool = false, intlinks : Tuple(Fluence::Page::Index, Fluence::Page)? = nil)
         @slug = Entry.title_to_slug title
         @toc = toc ? Page::TableOfContent.toc(@path) : Page::TableOfContent::Toc.new
         @intlinks = intlinks ? Page::InternalLinks.links(@path, *intlinks) : Page::InternalLinks::LinkList.new
