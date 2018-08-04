@@ -27,6 +27,10 @@
             .input-group.input-group-xs
               input.input-sm.form-control name="new_path_overwrite" type="checkbox" value="0" Overwrite
               button.btn.btn-xs.btn-block.btn-success name="rename" type="submit" value="rename" form="rename-page" Rename
+        form#delete-page
+          fieldset
+            .input-group.input-group-xs
+              button.btn.btn-xs.btn-block.btn-success name="delete" type="submit" form="delete-page" onclick="if(confirm('Really delete page?')) {$.ajax({ url: $(location).attr('href'), type: 'DELETE' })};" Delete
       div  
       #page-permissions
         span.page-body-meta-title Permissions

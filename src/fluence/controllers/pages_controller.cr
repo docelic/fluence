@@ -32,7 +32,7 @@ class PagesController < ApplicationController
   private def show_show(page)
     body = page.read rescue acl_permit! :write
     body_html = body ? Fluence::Markdown.to_html body, page, Fluence::PAGES.load! : ""
-    flash["info"] = "The page #{page.url} does not exist yet." if !page.exists?
+    flash["info"] = "The page #{page.url} does not exist yet. You could create it by entering Edit mode and saving new content." if !page.exists?
     Fluence::ACL.load!
     groups_read = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
     groups_write = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
@@ -72,6 +72,13 @@ class PagesController < ApplicationController
     else
       redirect_to page.real_url
     end
+  end
+
+  # delete /pages/*path
+  def delete
+    acl_permit! :write
+    page = Fluence::Page.new url: params.url["path"], read_title: true
+    update_delete(page)
   end
 
   private def update_delete(page)
