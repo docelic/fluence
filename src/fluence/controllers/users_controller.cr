@@ -21,6 +21,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # get /users/logout
   def logout
     acl_permit! :read
     session.destroy

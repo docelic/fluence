@@ -27,11 +27,10 @@ nav class="navbar navbar-default"
   .col-xs-2
     .pull-right
       - if user_signed_in?
+         span Logged in as
+           = current_user.name
          a.btn.btn-md href="/users/logout" Logout
-         /span Logged in as
-         /  = current_user.name
       - else
          a.btn.btn-md href="/users/login" Login
+         | or
          a.btn.btn-md href="/users/register" Register
-         /span Not logged in
-
