@@ -23,7 +23,7 @@
         form#rename-page method="post"
           fieldset
             .input-group.input-group-xs
-              input.input-sm.form-control name="new_path" type="text" placeholder="New url"
+              input.input-sm.form-control name="new_path" type="text" value="#{page.url}"
             .input-group.input-group-xs
               button.btn.btn-xs.btn-block.btn-success name="rename" type="submit" value="rename" form="rename-page" Rename
       div  
