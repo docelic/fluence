@@ -37,6 +37,7 @@ Router.get "/users/login", UsersController, :login
 Router.post "/users/login", UsersController, :login_validates
 Router.get "/users/register", UsersController, :register
 Router.post "/users/register", UsersController, :register_validates
+Router.get "/users/logout", UsersController, :logout
 Router.get "/admin/users", AdminController, :users_show
 Router.post "/admin/users/create", AdminController, :user_create
 Router.post "/admin/users/delete", AdminController, :user_delete

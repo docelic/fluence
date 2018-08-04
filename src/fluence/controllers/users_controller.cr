@@ -21,6 +21,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def logout
+    acl_permit! :read
+    session.destroy
+    delete_login_cookies
+    redirect_to "/users/login"
+  end
+
   # get /users/register
   def register
     acl_permit! :read
