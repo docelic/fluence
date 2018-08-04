@@ -1,3 +1,15 @@
+require "markdown"
+require "yaml"
+require "kemal"
+require "kemal-session"
+require "kemal-flash"
+require "kilt/slang"
+
+require "../fluence/version"
+require "../fluence/lib/_init"
+
+require "../fluence/controllers/application_controller"
+
 require "./routes"
 
 Kemal::Session.config do |config|
@@ -5,5 +17,3 @@ Kemal::Session.config do |config|
   config.secret = ENV["WIKI_SECRET"]? || Random::Secure.base64(64)
   config.gc_interval = 2.minutes # 2 minutes
 end
-
-Kemal.run
