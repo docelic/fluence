@@ -25,9 +25,6 @@ dependencies:
   markd:
     github: icyleaf/markd
     branch: master
-  jennifer:
-    github: imdrasil/jennifer.cr
-    version: "~> 0.6.0"
 
 development_dependencies:
   ameba:
