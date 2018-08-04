@@ -14,6 +14,9 @@ struct Fluence::Page
   include Fluence::Page::TableOfContent
   include Fluence::Page::InternalLinks
 
+	class AlreadyExist < Exception
+	end
+
   # Directory where the pages are stored
   PAGES_SUB_DIRECTORY = "pages/"
 
@@ -102,13 +105,20 @@ struct Fluence::Page
 
   # TODO: verify if the new_page already exists
   # Move the current page into another place and commit
-  def rename(user : Fluence::User, new_url)
+  def rename(user : Fluence::User, new_url, overwrite = false)
     self.jail
     new_page = Fluence::Page.new new_url
     new_page.jail
     Dir.mkdir_p File.dirname new_page.path
-    File.rename self.path, new_page.path
-    commit! user, "rename", other_files: [new_page.path]
+		if new_page.path == path
+			raise AlreadyExist.new "Old and new name are the same, renaming not possible."
+		end
+		if File.exists?(new_page.path) && !overwrite
+			raise AlreadyExist.new "Destination exists and overwriting was not requested."
+		else
+			File.rename self.path, new_page.path
+			commit! user, "rename", other_files: [new_page.path]
+		end
   end
 
   # Writes into the *file*, and commit.
