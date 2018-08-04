@@ -2,6 +2,7 @@ require "./options"
 
 require "./lockable"
 require "./errors"
+require "./git"
 
 require "./**"
 
