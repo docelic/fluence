@@ -48,8 +48,9 @@ class PagesController < ApplicationController
     page = Fluence::Page.new url: params.url["path"], read_title: true
     if params.body["rename"]?
       update_rename(page)
-    elsif (params.body["body"]?.to_s.empty?)
-      update_delete(page)
+    # We do not want empty body to mean page deletion.
+    #elsif (params.body["body"]?.to_s.empty?)
+    #  update_delete(page)
     else
       update_edit(page)
     end
