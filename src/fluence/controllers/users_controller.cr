@@ -14,7 +14,7 @@ class UsersController < ApplicationController
       flash["danger"] = "User or password doesn't match."
       redirect_to "/users/login"
     else
-      flash["success"] = "You are connected!"
+      flash["success"] = "You are now logged in as user '#{user.name}'."
       session.string("user.name", user.name)
       set_login_cookies_for(user.name)
       redirect_to "/pages/home"
