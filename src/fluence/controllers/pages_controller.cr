@@ -37,6 +37,8 @@ class PagesController < ApplicationController
     groups_read = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
     groups_write = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
     title = "#{page.title} - #{title()}"
+    # For menu on the left
+    pages = Fluence::FileTree.build Fluence::OPTIONS.basedir
     render "show.slang"
   end
 

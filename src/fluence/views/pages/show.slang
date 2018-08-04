@@ -1,6 +1,6 @@
 #page-body
   #page-body-menu.col-xs-2
-    | TODO: Menu and pages will display here.
+    == add_page pages
   #page-body-html.col-xs-8
     form#edit-page method="post"
       fieldset
