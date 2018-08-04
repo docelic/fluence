@@ -16,7 +16,7 @@
       div  
     - if Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write
       #page-edit
-        a.btn.btn-xs.btn-block.btn-warning href="/pages/#{page.url}?edit"
+        a.btn.btn-xs.btn-block.btn-warning href="#" onclick="editor.togglePreview()"
           | Edit
       div  
       #page-rename
@@ -30,7 +30,7 @@
         form#delete-page
           fieldset
             .input-group.input-group-xs
-              button.btn.btn-xs.btn-block.btn-success name="delete" type="submit" form="delete-page" onclick="if(confirm('Really delete page?')) {$.ajax({ url: $(location).attr('href'), type: 'DELETE' })};" Delete
+              button.btn.btn-xs.btn-block.btn-success name="delete" type="submit" form="delete-page" onclick="if(confirm('Really delete page `#{page.url}`?')) {$.ajax({ url: $(location).attr('href'), method: 'DELETE' })};" Delete
       div  
       #page-permissions
         span.page-body-meta-title Permissions
