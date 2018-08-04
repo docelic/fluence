@@ -57,4 +57,7 @@
                   | #{group}
                 | 
 
-script var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write})); editor.togglePreview();
+script
+  = "var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write}));"
+  - if File.exists? page.path
+    = "editor.togglePreview();"

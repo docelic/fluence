@@ -36,7 +36,7 @@ class PagesController < ApplicationController
 
 		if !page.exists?
 			flash["info"] = "The page #{page.url} does not exist yet."
-			flash["info"] += " You could create it by entering Edit mode and saving new content." if
+			flash["info"] += " You could create it by typing in and saving new content." if
 				Fluence::ACL.permitted?(current_user, request.path, Acl::Perm::Write)
 		end
 
