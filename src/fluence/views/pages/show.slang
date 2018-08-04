@@ -28,17 +28,15 @@
         hr
         span.page-body-meta-title Page Management
         p
-          form#rename-page method="post"
+          form#manage-page method="post"
             fieldset
               .input-group.input-group-xs.col-xs-12
                 input.input-sm.form-control name="new_path" type="text" value="#{page.url}"
               .input-group.input-group-xs.col-xs-12
                 input.input-sm.form-control name="new_path_overwrite" type="checkbox" value="0" Overwrite
-                button.btn.btn-xs.btn-block.btn-warning name="rename" type="submit" value="rename" form="rename-page" Rename
-          form#delete-page
-            fieldset
+                button.btn.btn-xs.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
               .input-group.input-group-xs.col-xs-12
-                button.btn.btn-xs.btn-block.btn-danger name="delete" type="submit" form="delete-page" onclick="event.preventDefault();if(confirm('Really delete page `#{page.url}`?')) {$.ajax({ url: $(location).attr('href'), method: 'DELETE' })};" Delete
+                button.btn.btn-xs.btn-block.btn-warning name="delete" type="submit" value="delete" form="manage-page" Delete
       #page-permissions
         hr
         span.page-body-meta-title Page Permissions

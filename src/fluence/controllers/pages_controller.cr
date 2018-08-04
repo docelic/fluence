@@ -48,6 +48,8 @@ class PagesController < ApplicationController
     page = Fluence::Page.new url: params.url["path"], read_title: true
     if params.body["rename"]?
       update_rename(page)
+    elsif params.body["delete"]?
+      update_delete(page)
     # We do not want empty body to mean page deletion.
     #elsif (params.body["body"]?.to_s.empty?)
     #  update_delete(page)
@@ -72,13 +74,6 @@ class PagesController < ApplicationController
     else
       redirect_to page.real_url
     end
-  end
-
-  # delete /pages/*path
-  def delete
-    acl_permit! :write
-    page = Fluence::Page.new url: params.url["path"]
-    update_delete(page)
   end
 
   private def update_delete(page)
