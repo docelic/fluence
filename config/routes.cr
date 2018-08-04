@@ -23,9 +23,18 @@ end
 
 Router.get "/", HomeController, :index
 Router.get "/sitemap", PagesController, :sitemap
+
+# /pages/
 Router.get "/pages/search", PagesController, :search
 Router.get "/pages/*path", PagesController, :show
 Router.post "/pages/*path", PagesController, :update
+Router.delete "/pages/*path", PagesController, :delete
+# /p/ shorthand
+Router.get "/p/search", PagesController, :search
+Router.get "/p/*path", PagesController, :show
+Router.post "/p/*path", PagesController, :update
+Router.delete "/p/*path", PagesController, :delete
+
 Router.get "/users/login", UsersController, :login
 Router.post "/users/login", UsersController, :login_validates
 Router.get "/users/register", UsersController, :register
