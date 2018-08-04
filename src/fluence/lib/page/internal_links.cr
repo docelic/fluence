@@ -1,4 +1,4 @@
-struct Fluence::Page
+struct Fluence::Page < Fluence::Accessible
   module InternalLinks
     # {id, page-real-url}
     alias Link = {Int32, String}

@@ -4,7 +4,7 @@ require "./index/entry"
 
 # And Index is an object that associate a file with a lot of meta-data
 # like related url, the title, the table of content, ...
-struct Fluence::Page
+struct Fluence::Page < Fluence::Accessible
   class Index < Lockable
     YAML.mapping(
       file: String,

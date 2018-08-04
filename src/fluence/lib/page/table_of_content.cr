@@ -1,4 +1,4 @@
-struct Fluence::Page
+struct Fluence::Page < Fluence::Accessible
   module TableOfContent
     alias TocLine = {Int32, String}
     alias Toc = Array(TocLine)
