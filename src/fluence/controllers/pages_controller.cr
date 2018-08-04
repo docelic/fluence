@@ -60,15 +60,15 @@ class PagesController < ApplicationController
     if !params.body["new_path"]?.to_s.strip.empty?
       # TODO: verify if the user can write on new_path
       # TODO: if new_path do not begin with /, relative rename to the current path
-			begin
-				page.rename current_user, params.body["new_path"], !!params.body["new_path_overwrite"]?
-				flash["success"] = "The page #{page.url} has been moved to #{params.body["new_path"]}."
-				remove_empty_directories page
-				redirect_to "/pages/#{params.body["new_path"]}"
-			rescue e : Fluence::Page::AlreadyExist
-				flash["danger"] = e.to_s
-				redirect_to page.real_url
-			end
+      begin
+        page.rename current_user, params.body["new_path"], !!params.body["new_path_overwrite"]?
+        flash["success"] = "The page #{page.url} has been moved to #{params.body["new_path"]}."
+        remove_empty_directories page
+        redirect_to "/pages/#{params.body["new_path"]}"
+      rescue e : Fluence::Page::AlreadyExist
+        flash["danger"] = e.to_s
+        redirect_to page.real_url
+      end
     else
       redirect_to page.real_url
     end
@@ -77,7 +77,7 @@ class PagesController < ApplicationController
   # delete /pages/*path
   def delete
     acl_permit! :write
-    page = Fluence::Page.new url: params.url["path"], read_title: true
+    page = Fluence::Page.new url: params.url["path"]
     update_delete(page)
   end
 
@@ -85,7 +85,7 @@ class PagesController < ApplicationController
       Fluence::PAGES.transaction! { |index| index.delete page }
       page.delete current_user
       flash["success"] = "The page #{page.url} has been deleted."
-			remove_empty_directories page
+      remove_empty_directories page
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?
@@ -105,17 +105,17 @@ class PagesController < ApplicationController
       redirect_to page.real_url
   end
 
-	private def remove_empty_directories(page : Fluence::Page)
-		page_dir_elements = File.dirname(page.path).split File::SEPARATOR
-		base_dir_elements = Fluence::OPTIONS.basedir.split File::SEPARATOR
-		while page_dir_elements.size != base_dir_elements.size
-			dir_path = page_dir_elements.join(File::SEPARATOR)
-			if Dir.empty? dir_path
-				Dir.rmdir dir_path
-				page_dir_elements.pop
-			else
-				break
-			end
-		end
-	end
+  private def remove_empty_directories(page : Fluence::Page)
+    page_dir_elements = File.dirname(page.path).split File::SEPARATOR
+    base_dir_elements = Fluence::OPTIONS.basedir.split File::SEPARATOR
+    while page_dir_elements.size != base_dir_elements.size
+      dir_path = page_dir_elements.join(File::SEPARATOR)
+      if Dir.empty? dir_path
+        Dir.rmdir dir_path
+        page_dir_elements.pop
+      else
+        break
+      end
+    end
+  end
 end

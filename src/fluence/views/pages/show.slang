@@ -38,7 +38,7 @@
           form#delete-page
             fieldset
               .input-group.input-group-xs.col-xs-12
-                button.btn.btn-xs.btn-block.btn-danger name="delete" type="submit" form="delete-page" onclick="if(confirm('Really delete page `#{page.url}`?')) {$.ajax({ url: $(location).attr('href'), method: 'DELETE' })};" Delete
+                button.btn.btn-xs.btn-block.btn-danger name="delete" type="submit" form="delete-page" onclick="event.preventDefault();if(confirm('Really delete page `#{page.url}`?')) {$.ajax({ url: $(location).attr('href'), method: 'DELETE' })};" Delete
       #page-permissions
         hr
         span.page-body-meta-title Page Permissions

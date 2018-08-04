@@ -103,7 +103,6 @@ struct Fluence::Page
     File.read @path
   end
 
-  # TODO: verify if the new_page already exists
   # Move the current page into another place and commit
   def rename(user : Fluence::User, new_url, overwrite = false)
     self.jail
