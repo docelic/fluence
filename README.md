@@ -24,7 +24,7 @@ Run it, and visit [http://localhost:3000/](http://localhost:3000/) in your brows
 
 Here's how it currently looks:
 
-![Fluence Wiki Screenshot](https://raw.githubusercontent.com/crystallabs/fluence/master/docs/screenshot-20180803.png)
+![Fluence Wiki Screenshot](https://raw.githubusercontent.com/crystallabs/fluence/master/docs/screenshot.png)
 
 ## Contributors
 
