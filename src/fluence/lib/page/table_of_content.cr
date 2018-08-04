@@ -1,3 +1,4 @@
+require "../accessible"
 struct Fluence::Page < Fluence::Accessible
   module TableOfContent
     alias TocLine = {Int32, String}

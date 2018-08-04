@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   # get /sitemap
   def sitemap
     acl_permit! :read
-    pages = Fluence::FileTree.build Fluence::OPTIONS.basedir
+    pages = Fluence::FileTree.build Fluence::Page.subdirectory
     title = "Sitemap - #{title()}"
     render "sitemap.slang"
   end
@@ -44,7 +44,7 @@ class PagesController < ApplicationController
     groups_write = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
     title = "#{page.title} - #{title()}"
     # For menu on the left
-    pages = Fluence::FileTree.build Fluence::OPTIONS.basedir
+    pages = Fluence::FileTree.build Fluence::Page.subdirectory
     render "show.slang"
   end
 
@@ -108,7 +108,7 @@ class PagesController < ApplicationController
 
   private def remove_empty_directories(page : Fluence::Page)
     page_dir_elements = File.dirname(page.path).split File::SEPARATOR
-    base_dir_elements = Fluence::OPTIONS.basedir.split File::SEPARATOR
+    base_dir_elements = Fluence::Page.subdirectory.split File::SEPARATOR
     while page_dir_elements.size != base_dir_elements.size
       dir_path = page_dir_elements.join(File::SEPARATOR)
       if Dir.empty? dir_path

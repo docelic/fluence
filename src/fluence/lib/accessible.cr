@@ -62,8 +62,8 @@ abstract struct Fluence::Accessible
     # TODO: consider security of ".git/"
 
     # the @file is already expanded (File.expand_path) in the constructor
-    if Fluence::OPTIONS.basedir != @path[0..(Fluence::OPTIONS.basedir.size - 1)]
-      raise Error403.new "Out of chroot (#{@path} on #{Fluence::OPTIONS.basedir})"
+    if self.class.subdirectory != @path[0..(self.class.subdirectory.size - 1)]
+      raise Error403.new "Out of chroot (#{@path} on #{self.class.subdirectory})"
     end
     self
   end
