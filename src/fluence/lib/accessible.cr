@@ -51,7 +51,7 @@ abstract struct Fluence::Accessible
   # translate a name ("/test/title" for example)
   # into a file path ("/srv/data/test/ttle.md)
   def self.url_to_file(url : String)
-    page_dir = File.expand_path Fluence::OPTIONS.basedir, subdirectory
+    page_dir = File.expand_path subdirectory
     page_file = File.expand_path Page.sanitize(url), page_dir
     page_file + ".md"
   end

@@ -16,7 +16,7 @@ struct Fluence::Page < Fluence::Accessible
 
   # Directory where the pages are stored
   def self.subdirectory
-    "pages/"
+    File.join(Fluence::OPTIONS.basedir, "pages") + File::SEPARATOR
   end
 
   # Beginning of the URL
