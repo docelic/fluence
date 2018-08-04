@@ -2,7 +2,7 @@
 # It is used to map the wiki for the "sitemap" feature.
 # TODO: it should be fully replaced by the index
 class Fluence::FileTree
-  getter name : String
+  property name : String
   getter files : Array(FileTree)
 
   # Build a FileTree that represents the real structure of the "to_scan"
@@ -33,8 +33,16 @@ class Fluence::FileTree
       .select { |file| File.directory? file }
       .map { |file| FileTree.new(file, FileTree.build(file, max_depth - 1).files).as(FileTree) }
 
+		directories.each do |d|
+			if f = files.find { |f2| f2.name == "#{d.name}.md" }
+				d.name += ".md"
+				files.delete f
+			end
+		end
+		files += directories
+
     # Generate the file with the list of the files and the directories
-    structure = FileTree.new to_scan, files + directories
+    structure = FileTree.new to_scan, files
 
     # Get out of the parent and return the current directory object
     Dir.cd dir_current
