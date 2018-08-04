@@ -2,7 +2,7 @@
 
 Elegant wiki powered by Crystal, with markdown as native format and a WYSIWYG editor.
 
-It works, but currently it uses on-disk files as backend. One of the first next steps is to migrate it to an SQL database.
+It currently uses a file-based storage (wiki pages are created as files and directories on disk). Please submit your opinion on this in the issue [Storage backend - files or database?](https://github.com/crystallabs/fluence/issues/1).
 
 ## Installation and Startup
 
