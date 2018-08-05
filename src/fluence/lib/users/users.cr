@@ -121,7 +121,7 @@ class Fluence::Users < Lockable
   #
   # Returns nil if it fails
   def auth?(name : String, password : String) : User?
-    user = find(name)
+    user = find?(name)
     user && user.password_encrypted == password ? user : nil
   end
 
