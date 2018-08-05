@@ -12,7 +12,16 @@ struct Fluence::Page < Fluence::Accessible
     def self.toc(path : String) : Toc
       toc = Toc.new
       File.open path, "r" do |f|
+
+				code_block = false
+
         while line = f.gets
+					if line =~ /^```/
+						code_block = !code_block
+					end
+
+					next if code_block
+
           toc_line = get_toc_line line
           toc << toc_line.as(TocLine) unless toc_line.nil?
         end
