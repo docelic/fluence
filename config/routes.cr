@@ -24,11 +24,15 @@ end
 Router.get "/", HomeController, :index
 
 Router.get "/sitemap", PagesController, :sitemap
+Router.get "/mediamap", MediaController, :sitemap
 
 Router.get "/pages/search", PagesController, :search
 
 Router.get "/pages/*path", PagesController, :show
 Router.post "/pages/*path", PagesController, :update
+
+Router.get "/media/*path", MediaController, :show
+Router.post "/media/*path", MediaController, :update
 
 Router.get "/users/login", UsersController, :login
 Router.post "/users/login", UsersController, :login_validates

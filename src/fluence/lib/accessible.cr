@@ -104,6 +104,7 @@ abstract struct Fluence::Accessible
 			File.rename self.path, new_page.path
 			commit! user, "rename", other_files: [new_page.path]
 		end
+		new_page.url
   end
 
   # Writes into the *file*, and commit.

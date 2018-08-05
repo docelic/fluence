@@ -11,6 +11,8 @@ module Fluence
   # the index of the pages (with table of content, links, titles, ...)
   # and user permissions
   Dir.mkdir_p "meta"
+	Dir.mkdir_p Fluence::Page.subdirectory
+	Dir.mkdir_p Fluence::Media.subdirectory
 
   # Define a default user that should be used for anonymous clients
   DEFAULT_USER = Fluence::User.new "guest", "guest", %w(guest)

@@ -4,7 +4,7 @@ module Fluence
 
     def initialize
       @basedir = File.expand_path ENV.fetch("WIKI_DATA", "data"), Dir.current
-      Dir.mkdir_p @basedir rescue nil
+      Dir.mkdir_p @basedir
     end
   end
 
