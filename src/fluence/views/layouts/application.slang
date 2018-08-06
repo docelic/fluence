@@ -16,6 +16,8 @@ html lang="en"
     script src="/assets/javascript/inscrybmde.min.js"
     link rel="stylesheet" href="/assets/stylesheet/base.css"
     script src="/assets/javascript/base.js"
+    link rel="stylesheet" href="/assets/stylesheet/fine-uploader-new.min.css"
+    script src="/assets/javascript/fine-uploader.min.js"
 
   body
     #navbar
