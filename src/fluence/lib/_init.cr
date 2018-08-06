@@ -47,5 +47,5 @@ module Fluence
 
   # The list of the pages (index) with a lot of meta-data. Same behaviour than
   # `USERS` and `ACL`.
-  PAGES = Fluence::Page::Index.new("meta/index").load!
+  INDEX = Fluence::Page::Index.new("meta/index").load!
 end

@@ -60,13 +60,14 @@ script type="text/template" id="qq-template"
           textarea.form-control name="body" = body
 
   #page-body-meta.col-xs-2
+    - if page.exists?
       #page-toc
         span.page-body-meta-title Table of Contents
         p
-          - if (index_entry = Fluence::PAGES[page]?) && (!index_entry.toc.empty?)
+          - if (index_entry = Fluence::INDEX[page]?) && (!index_entry.toc.empty?)
               == add_toc index_entry.toc
-      #page-intlinks
         hr
+      #page-intlinks
         span.page-body-meta-title Internal Links
         p
           ol
@@ -74,21 +75,21 @@ script type="text/template" id="qq-template"
               - pg = Fluence::Page.new linkspec[1]
               li
                 a href="#{pg.real_url}" = pg.title || pg.url
+        hr
     - if Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write
       #page-content
-        hr
         span.page-body-meta-title Page Content
         p
           a.btn.btn-xs.btn-block.btn-success href="#" onclick="editor.togglePreview()" Toggle edit
           button.btn.btn-xs.btn-block.btn-success name="save" type="submit" value="save" form="edit-page" Save
-      #page-media
         hr
+      #page-media
         span.page-body-meta-title Page Media
         p
           div id="uploader"
           script var uploader = new qq.FineUploader({ element: document.getElementById("uploader"), request: { endpoint: '/media/upload' }, debug: false, deleteFile: { enabled: true, endpoint: '/media/upload' }, thumbnails: { placeholders: { waitingPath: '/assets/stylesheet/waiting-generic.png', notAvailablePath: '/assets/stylesheet/not_available-generic.png' } }, autoUpload: false}); qq(document.getElementById("trigger-upload")).attach("click", function() { uploader.uploadStoredFiles(); });
-      #page-management
         hr
+      #page-management
         span.page-body-meta-title Page Management
         p
           form#manage-page method="post"
@@ -100,8 +101,8 @@ script type="text/template" id="qq-template"
                 button.btn.btn-xs.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
               .input-group.input-group-xs.col-xs-12
                 button.btn.btn-xs.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.url}`?')" Delete
-      #page-permissions
         hr
+      #page-permissions
         span.page-body-meta-title Page Permissions
         p
           dl

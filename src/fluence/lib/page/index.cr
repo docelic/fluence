@@ -1,18 +1,16 @@
 require "yaml"
 
-require "./index/entry"
-
 struct Fluence::Page < Fluence::Accessible
 	# An Index is an index of all wiki pages and their metadata.
   class Index < Lockable
     YAML.mapping(
       file: String,
-      entries: Hash(String, Entry) # path, entry
+      entries: Hash(String, Page) # path, entry
     )
 
 		# Initializes index. `@file` is path to YAML-formatted file with index data.
     def initialize(@file : String)
-      @entries = {} of String => Entry
+      @entries = {} of String => Page
     end
 
     # Loads index contents from file, replacing any existing index content.
@@ -21,7 +19,7 @@ struct Fluence::Page < Fluence::Accessible
         @entries = new_index.entries
         # @file = index.file
       else
-        @entries = {} of String => Entry
+        @entries = {} of String => Page
       end
       self
     end
@@ -37,24 +35,30 @@ struct Fluence::Page < Fluence::Accessible
       self
     end
 
-    def [](page : Fluence::Page) : Index::Entry
+    def [](page : Fluence::Page) : Fluence::Page
       @entries[page.path]
     end
 
-    def []?(page : Fluence::Page) : Index::Entry?
+    def []?(page : Fluence::Page) : Fluence::Page?
       @entries[page.path]?
     end
 
 		#####
 
-    # Add a new `Entry` into the index. This is a memory-only operation
+    # Add a new `Page` into the index. This is a memory-only operation
 		# and does not sync new contents to disk.
     def add(page : Fluence::Page)
-      @entries[page.path] = Entry.new page, toc: true, index: self
+      @entries[page.path] = Page.new page.url
       self
     end
 
-    # Remove an `Entry` from the `Index` based on its path.
+		def add!(page)
+			add page
+			save!
+			self
+		end
+
+    # Remove an `Page` from the `Index` based on its path.
     def delete(page : Fluence::Page)
       @entries.delete page.path
       self
@@ -67,21 +71,21 @@ struct Fluence::Page < Fluence::Accessible
     def find(text : String, context : Page) : {String, String}
       found = find_by_title text, context
       return {found.title, found.url} unless found.nil?
-      {text, "#{context.real_url_dirname}/#{Entry.title_to_slug text}"}
+      {text, "#{context.real_url_dirname}/#{Page.title_to_slug text}"}
     end
 
-    # Find the closest `Index`' `Entry` to *text* based on the entries title
+    # Find the closest `Index`' `Page` to *text* based on the entries title
     # and searching for the closer url as possible to the context
-    private def find_by_title(text : String, context : Page) : Entry?
+    private def find_by_title(text : String, context : Page) : Page?
       # exact_matched = @entries.select{|_, entry| entry.title == text }.values
       # return choose_closer_url(exact_matched, context) unless exact_matched.empty?
-      slug_matched = @entries.select { |_, entry| entry.slug == Index::Entry.title_to_slug(text) }.values
+      slug_matched = @entries.select { |_, entry| entry.slug == Fluence::Page.title_to_slug(text) }.values
       return choose_closer_url(slug_matched, context) unless slug_matched.empty?
       nil
     end
 
     # Find the url which is the closest as possible than the context url (start with the maxmimum common chars).
-    private def choose_closer_url(entries : Array(Entry), context : Page) : Entry
+    private def choose_closer_url(entries : Array(Page), context : Page) : Page
       raise "Cannot handle empty array" if entries.empty?
       entries.reduce { |lhs, rhs| Index.url_closeness(context.url, lhs.url) >= Index.url_closeness(context.url, rhs.url) ? lhs : rhs }
     end

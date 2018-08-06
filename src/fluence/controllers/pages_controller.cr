@@ -31,7 +31,7 @@ class PagesController < ApplicationController
 
   private def show_show(page)
     body = page.read rescue ""
-    body_html = body ? Fluence::Markdown.to_html body, page, Fluence::PAGES.load! : ""
+    body_html = body ? Fluence::Markdown.to_html body, page, Fluence::INDEX.load! : ""
     Fluence::ACL.load!
 
 		if !page.exists?
@@ -83,14 +83,14 @@ class PagesController < ApplicationController
   end
 
   private def update_delete(page)
-      Fluence::PAGES.transaction! { |index| index.delete page }
+      Fluence::INDEX.transaction! { |index| index.delete page }
       page.delete current_user
       flash["success"] = "The page #{page.url} has been deleted."
       remove_empty_directories page
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?
-      # Fluence::PAGES.transaction! { |index| index.add page }
+      # Fluence::INDEX.transaction! { |index| index.add page }
       flash["danger"] = "Error: cannot remove #{page.url}, #{err.message}"
       redirect_to page.real_url
   end
@@ -98,7 +98,7 @@ class PagesController < ApplicationController
   private def update_edit(page)
       page.write current_user, params.body["body"]
       page.read_title!
-      Fluence::PAGES.transaction! { |index| index.add page }
+      Fluence::INDEX.transaction! { |index| index.add! page }
       flash["success"] = "The page #{page.url} has been updated."
       redirect_to page.real_url
     rescue err

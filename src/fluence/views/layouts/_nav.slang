@@ -18,7 +18,7 @@ nav class="navbar navbar-default"
         .input-group.input-group-md
           input.input-md.form-control name="q" placeholder="Search query" autocomplete="on" list="search-list"
           datalist#search-list
-            - Fluence::PAGES.entries.values.each do |entry|
+            - Fluence::INDEX.entries.values.each do |entry|
               option value=entry.url = entry.title
           span.input-group-btn
             button.btn.btn-md
