@@ -17,6 +17,15 @@
         p
           - if (index_entry = Fluence::PAGES[page]?) && (!index_entry.toc.empty?)
               == add_toc index_entry.toc
+      #page-intlinks
+        hr
+        span.page-body-meta-title Internal Links
+        p
+          ol
+            - page.internal_links.each do |linkspec|
+              - pg = Fluence::Page.new linkspec[1]
+              li
+                a href="#{pg.real_url}" = pg.title || pg.url
     - if Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write
       #page-content
         hr

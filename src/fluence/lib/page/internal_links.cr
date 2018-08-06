@@ -4,12 +4,12 @@ struct Fluence::Page < Fluence::Accessible
     alias Link = {Int32, String}
     alias LinkList = Array(Link)
 
-    def internal_links(index_context : Fluence::Page::Index)
+    def internal_links(index_context : Fluence::Page::Index = Fluence::PAGES)
       InternalLinks.links @path, index_context, self
     end
 
     def self.links(path : String, index : Fluence::Page::Index, page : Fluence::Page)
-      content = File.read path
+      content = File.exists?(path) ? File.read path : ""
       links_in_content content, index, page
     end
 
