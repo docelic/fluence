@@ -5,7 +5,7 @@ script type="text/template" id="qq-template"
             div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone=""
                 span class="qq-upload-drop-area-text-selector"
             div class="buttons"
-                div class="qq-upload-button-selector qq-upload-button"
+                div class="qq-upload-button-selector btn btn-primary"
                     div Select files
                 button type="button" id="trigger-upload" class="btn btn-primary"
                     i class="icon-upload icon-white"
