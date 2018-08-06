@@ -30,10 +30,14 @@ struct Fluence::Page < Fluence::Accessible
   end
 
   def self.sanitize(url : String)
-    Index::Entry.title_to_slug URI.unescape(url)
+    title_to_slug URI.unescape(url)
   end
 
   def read_title!
     @title = Page.read_title(@path) || @title if File.exists?(@path)
   end
+
+	def self.title_to_slug(title : String) : String
+		title.gsub(/[^[:alnum:]^\/]/, "-").gsub(/-+/, '-').downcase
+	end
 end

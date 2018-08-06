@@ -86,7 +86,7 @@ script type="text/template" id="qq-template"
         span.page-body-meta-title Page Media
         p
           div id="uploader"
-          script var uploader = new qq.FineUploader({ element: document.getElementById("uploader"), request: { endpoint: '/media/upload' }, debug: true, deleteFile: { enabled: true, endpoint: '/media/upload' }, thumbnails: { placeholders: { waitingPath: '/assets/stylesheet/waiting-generic.png', notAvailablePath: '/assets/stylesheet/not_available-generic.png' } }, autoUpload: false}); qq(document.getElementById("trigger-upload")).attach("click", function() { uploader.uploadStoredFiles(); });
+          script var uploader = new qq.FineUploader({ element: document.getElementById("uploader"), request: { endpoint: '/media/upload' }, debug: false, deleteFile: { enabled: true, endpoint: '/media/upload' }, thumbnails: { placeholders: { waitingPath: '/assets/stylesheet/waiting-generic.png', notAvailablePath: '/assets/stylesheet/not_available-generic.png' } }, autoUpload: false}); qq(document.getElementById("trigger-upload")).attach("click", function() { uploader.uploadStoredFiles(); });
       #page-management
         hr
         span.page-body-meta-title Page Management

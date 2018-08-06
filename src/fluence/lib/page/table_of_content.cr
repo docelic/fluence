@@ -9,6 +9,9 @@ struct Fluence::Page < Fluence::Accessible
       TableOfContent.toc @path
     end
 
+    def self.toc(page : Fluence::Page) : Toc
+			toc page.path
+		end
     def self.toc(path : String) : Toc
       toc = Toc.new
       File.open path, "r" do |f|

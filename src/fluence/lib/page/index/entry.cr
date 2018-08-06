@@ -12,13 +12,24 @@ struct Fluence::Page < Fluence::Accessible
         title: String, # Any title
         slug: String,  # Exact matching title
         toc: Page::TableOfContent::Toc,
-        intlinks: Page::InternalLinks::LinkList,
+        internal_links: Page::InternalLinks::LinkList,
       )
 
-      def initialize(@path, @url, @title, toc : Bool = false, intlinks : Tuple(Fluence::Page::Index, Fluence::Page)? = nil)
-        @slug = Entry.title_to_slug title
-        @toc = toc ? Page::TableOfContent.toc(@path) : Page::TableOfContent::Toc.new
-        @intlinks = intlinks ? Page::InternalLinks.links(@path, *intlinks) : Page::InternalLinks::LinkList.new
+      def initialize(page : Fluence::Page, toc : Bool = false, index : Fluence::Page::Index? = nil)
+				@path = page.path
+				@url = page.url
+				@title = page.title
+        @toc = toc ? Page::TableOfContent.toc(page) : Page::TableOfContent::Toc.new
+
+				# We don't want to keep the whole content in memory, even though we
+				# could since media is not part of page content, only links to it are.
+				# TODO See if keeping everything in memory makes sense and/or to conditionally keep it.
+				#@page = page
+
+        #@internal_links = index ? Page::InternalLinks.links(indexI#) : Page::InternalLinks::LinkList.new
+        @internal_links = Page::InternalLinks::LinkList.new
+
+        @slug = Entry.title_to_slug @title
       end
 
       def self.title_to_slug(title : String) : String
