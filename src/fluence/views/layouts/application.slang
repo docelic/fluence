@@ -23,11 +23,11 @@ html lang="en"
     #navbar
       == render_template "layouts/_nav.slang"
     #main
-      .container.col-xs-12
+      .container-fluid
         .row
         - flash.each do |key, value|
           div class="alert alert-#{ key }"
             p = flash[key]
         .row
-          #content
+          #content class="container-fluid"
             == content

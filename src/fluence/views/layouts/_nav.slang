@@ -1,7 +1,7 @@
 / - active = context.request.path == "/" ? "active" : ""
 / a class="nav-item #{active}" href="/" Home
-nav class="navbar navbar-default"
-  .col-xs-6
+nav class="navbar navbar-light bg-light"
+  .col-sm-6
     .pull-left
       a.btn.btn-md href="/" Home
       a.btn.btn-md href="/sitemap" Sitemap
@@ -12,7 +12,7 @@ nav class="navbar navbar-default"
         a.btn.btn-md href="/admin/users" Users
       - if Fluence::ACL.permitted?(current_user, "/admin/acls", Acl::Perm::Read)
         a.btn.btn-md href="/admin/acls" ACLs
-  .col-xs-3
+  .col-sm-3
     .center-block
       form#search-page action="/pages/search" method="get" role="form"
         .input-group.input-group-md
@@ -24,7 +24,7 @@ nav class="navbar navbar-default"
             button.btn.btn-md
               span.glyphicon.glyphicon-search
               | Search
-  .col-xs-2
+  .col-sm-2
     .pull-right
       - if user_signed_in?
          span Logged in as
