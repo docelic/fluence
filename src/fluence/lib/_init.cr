@@ -41,6 +41,7 @@ module Fluence
     ACL["user"]["/users/login"] = Acl::Perm::None
     ACL["user"]["/users/register"] = Acl::Perm::None
     ACL["user"]["/pages*"] = Acl::Perm::Write
+    ACL["user"]["/media*"] = Acl::Perm::Write
     ACL.save!
   end
 

@@ -33,6 +33,7 @@ Router.post "/pages/*path", PagesController, :update
 
 Router.get "/media/*path", MediaController, :show
 Router.post "/media/*path", MediaController, :update
+Router.post "/media/upload", MediaController, :upload
 
 Router.get "/users/login", UsersController, :login
 Router.post "/users/login", UsersController, :login_validates

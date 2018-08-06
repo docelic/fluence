@@ -56,6 +56,24 @@ class MediaController < ApplicationController
     end
   end
 
+	# post /media/upload
+	def upload
+		acl_permit! :write
+    @env.params.files.each do |file|
+			filename = file.filename
+
+			if !filename.is_a?(String)
+				"No filename included in upload"
+			else
+				#file_path = ::File.join [Kemal.config.public_folder, "uploads/", filename]
+				#File.open(file_path, "w") do |f|
+				#IO.copy(file.tmpfile, f)
+			end
+		end
+		@env.response.content_type = "application/json"
+		{success: true}.to_json
+	end
+
 	# NOTE: Renaming a media can both rename and reattach to different page
   private def update_rename(media)
 		page = Fluence::Page.new(media.real_url, true)

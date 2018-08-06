@@ -1,5 +1,6 @@
 require "markdown"
 require "yaml"
+require "json"
 require "kemal"
 require "kemal-session"
 require "kemal-flash"
