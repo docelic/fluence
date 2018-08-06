@@ -47,7 +47,7 @@ abstract struct Fluence::Accessible
     @title = File.basename @url
     @title = Page.read_title(@path) || @title if read_title && File.exists? @path
 		@slug = ""
-		@toc =  Page::TableOfContent::Toc.new
+		@toc = Page::TableOfContent::Toc.new
 		@internal_links = Page::InternalLinks::LinkList.new
   end
 

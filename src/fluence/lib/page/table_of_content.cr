@@ -29,7 +29,7 @@ struct Fluence::Page < Fluence::Accessible
           toc << toc_line.as(TocLine) unless toc_line.nil?
         end
       end
-      pp toc
+      #pp toc
       toc
     end
 
