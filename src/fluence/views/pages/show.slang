@@ -68,7 +68,7 @@ script type="text/template" id="qq-template"
           #page-toc
             span.page-body-meta-title Table of Contents
             p
-              - if (index_entry = Fluence::PAGES[page]?) && (!index_entry.toc.empty?)
+              - if (index_entry = Fluence::INDEX[page]?) && (!index_entry.toc.empty?)
                   == add_toc index_entry.toc
         div class="row"
           #page-intlinks
