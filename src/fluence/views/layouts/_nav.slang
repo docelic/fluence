@@ -24,7 +24,7 @@ nav class="navbar navbar-light bg-light"
             button.btn.btn-md
               span.glyphicon.glyphicon-search
               | Search
-  .col-sm-2
+  .col-sm-3
     .pull-right
       - if user_signed_in?
          span Logged in as
