@@ -34,6 +34,7 @@ ul, ol {
   margin: 0px 0px 0px 1.5em;
 }
 
+
 #page-body {
   box-shadow: 0 0 0.5em #999;
   padding: 10px 20px;
@@ -71,3 +72,13 @@ ul, ol {
   margin-left:-20px;
 }
 */
+
+ul, ol {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 7px;
+}
+
+
+.indent-item { 
+  margin-left: -20px; 
+}

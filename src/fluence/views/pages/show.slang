@@ -46,7 +46,7 @@ script type="text/template" id="qq-template"
                     button type="button" class="qq-cancel-button-selector" Cancel
                     button type="button" class="qq-ok-button-selector" Ok
 #page-body
-  div class="container-fluid"
+  div class="container-fluid pt-3"
     div class="row"
       div class="col-sm-3"
         span.page-body-meta-title Wiki Pages
@@ -86,8 +86,9 @@ script type="text/template" id="qq-template"
               hr
               span.page-body-meta-title Page Content
                 p
-                  a.btn.btn-sm.btn-block.btn-success href="#" onclick="editor.togglePreview()" Toggle edit
-                  button.btn.btn-sm.btn-block.btn-success name="save" type="submit" value="save" form="edit-page" Save
+                  .col-sm-12
+                    a.btn.btn-sm.btn-block.btn-success href="#" onclick="editor.togglePreview()" Toggle edit
+                    button.btn.btn-sm.btn-block.btn-success name="save" type="submit" value="save" form="edit-page" Save
           div class="row"
             #page-management
               hr
@@ -99,8 +100,9 @@ script type="text/template" id="qq-template"
                       div class="input-group-prepend"
                         span class="input-group-text" id="inputGroupPrepend" Name:
                       input.input-sm.form-control name="new_path" type="text" value="#{page.url}"
-                    .input-group.input-group-sm.col-sm-12
-                      input.input-sm.form-control name="new_path_overwrite" type="checkbox" value="0" Overwrite
+                    .input-group.input-group-sm.col-sm-12 class="pt-1"
+                      input.input-sm.form-control class="col-sm-2" name="new_path_overwrite" type="checkbox" value="0" id="overwriteCheck"
+                      label.form-check-label class="col-sm-10" for="overwriteCheck" Overwrite
                       button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
                     .input-group.input-group-sm.col-sm-12
                       button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.url}`?')" Delete
