@@ -59,7 +59,7 @@ class MediaController < ApplicationController
 	# post /media/upload
 	def upload
 		acl_permit! :write
-    @env.params.files.each do |file|
+		HTTP::FormData.parse(@env.request) do |file|
 			filename = file.filename
 
 			if !filename.is_a?(String)
