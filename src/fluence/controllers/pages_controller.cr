@@ -97,10 +97,11 @@ class PagesController < ApplicationController
   end
 
   private def update_edit(page)
+			is_new = page.is_new?
       page.write current_user, params.body["body"]
       page.read_title!
       Fluence::INDEX.transaction! { |index| index.add! page }
-      flash["success"] = "The page #{page.url} has been updated."
+      flash["success"] = %Q(The page #{page.url} has been #{is_new ? "created" : "updated"}.)
       redirect_to page.real_url
     rescue err
       flash["danger"] = "Error: cannot update #{page.url}, #{err.message}"

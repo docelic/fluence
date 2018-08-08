@@ -137,7 +137,7 @@ abstract struct Fluence::Accessible
   def write(user : Fluence::User, body)
     self.jail
     Dir.mkdir_p self.dirname
-    is_new = File.exists? @path
+    is_new = is_new?
     File.write @path, body
     commit! user, is_new ? "create" : "update"
   end
@@ -154,6 +154,10 @@ abstract struct Fluence::Accessible
     self.jail
     File.exists? @path
   end
+
+	def is_new?
+		!exists?
+	end
 
   # Save the modifications on the *file* into the git repository
   # TODO: lock before commit
