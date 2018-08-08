@@ -8,25 +8,9 @@ shards:
     github: crystal-loot/exception_page
     version: 0.1.1
 
-  i18n:
-    github: TechMagister/i18n.cr
-    version: 0.2.0
-
-  ifrit:
-    github: imdrasil/ifrit
-    version: 0.1.2
-
-  inflector:
-    github: phoffer/inflector.cr
-    version: 0.1.8
-
-  jennifer:
-    github: imdrasil/jennifer.cr
-    version: 0.6.0
-
   kemal:
     github: kemalcr/kemal
-    commit: 09bb1fcd4073a374b3a61c99e48e05a866b23c08
+    commit: 64fbe406d5cdeeaf8fe8be19ece5b1777e4b82b8
 
   kemal-flash:
     github: neovintage/kemal-flash
@@ -47,10 +31,6 @@ shards:
   radix:
     github: luislavena/radix
     version: 0.3.8
-
-  sam:
-    github: imdrasil/sam.cr
-    version: 0.2.4
 
   slang:
     github: jeromegn/slang
