@@ -9,7 +9,7 @@ nav.navbar.navbar-expand-lg.bg-light
     #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.mr-auto
         li.nav-item class="active"
-          a.nav-link href="#" Home
+          a.nav-link href="/pages/home" Home
             span.sr-only (current)
         li.nav-item
           a.nav-link href="/sitemap" Sitemap

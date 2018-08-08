@@ -94,11 +94,11 @@ script type="text/template" id="qq-template"
               .input-group
                 .input-group-prepend
                   span class="input-group-text" id="label-page-name" Page name
-                input type="text" class="form-control" id="input-page-name" aria-describedby="label-page-name" value="#{page.url}"
+                input type="text" class="form-control" id="input-page-name" name="input-page-name" aria-describedby="label-page-name" value="#{page.url}"
               .row.mt-2
                 .col
                   .form-group.form-check
-                   input type="checkbox" class="form-check-input" id="input-page-overwrite"
+                   input type="checkbox" class="form-check-input" id="input-page-overwrite" name="input-page-overwrite"
                    label class="form-check-label" for="input-page-overwrite" Overwrite
                 .col
                   button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename

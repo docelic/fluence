@@ -65,14 +65,14 @@ class PagesController < ApplicationController
   end
 
   private def update_rename(page)
-    if !params.body["new_path"]?.to_s.strip.empty?
-      # TODO: verify if the user can write on new_path
-      # TODO: if new_path do not begin with /, relative rename to the current path
+    if !params.body["input-page-name"]?.to_s.strip.empty?
+      # TODO: verify if the user can write on input-page-name
+      # TODO: if input-page-name do not begin with /, relative rename to the current path
       begin
-        new_name = page.rename current_user, params.body["new_path"], !!params.body["new_path_overwrite"]?
+        new_name = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
         flash["success"] = "The page #{page.url} has been moved to #{new_name}."
         remove_empty_directories page
-        redirect_to "/pages/#{params.body["new_path"]}"
+        redirect_to "/pages/#{params.body["input-page-name"]}"
       rescue e : Fluence::Page::AlreadyExist
         flash["danger"] = e.to_s
         redirect_to page.real_url
