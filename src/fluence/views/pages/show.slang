@@ -45,7 +45,7 @@ script type="text/template" id="qq-template"
                 div class="qq-dialog-buttons"
                     button type="button" class="qq-cancel-button-selector" Cancel
                     button type="button" class="qq-ok-button-selector" Ok
-.container-fluid.mt-3
+.container-fluid
   .row
     .col
       span Wiki Pages

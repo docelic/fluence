@@ -69,10 +69,11 @@ class PagesController < ApplicationController
       # TODO: verify if the user can write on input-page-name
       # TODO: if input-page-name do not begin with /, relative rename to the current path
       begin
-        new_name = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
-        flash["success"] = "The page #{page.url} has been renamed to #{new_name}."
-        remove_empty_directories page
-        redirect_to "/pages/#{params.body["input-page-name"]}"
+        new_page = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
+        flash["success"] = "The page #{page.url} has been renamed to #{new_page.url}."
+				Fluence::INDEX.transaction! { |index| index.rename page, new_page.path }
+        Fluence::Page.remove_empty_directories page.path
+        redirect_to new_page.real_url
       rescue e : Fluence::Page::AlreadyExist
         flash["danger"] = e.to_s
         redirect_to page.real_url
@@ -86,7 +87,7 @@ class PagesController < ApplicationController
       Fluence::INDEX.transaction! { |index| index.delete page }
       page.delete current_user
       flash["success"] = "The page #{page.url} has been deleted."
-      remove_empty_directories page
+      Fluence::Page.remove_empty_directories page.path
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?
@@ -104,19 +105,5 @@ class PagesController < ApplicationController
     rescue err
       flash["danger"] = "Error: cannot update #{page.url}, #{err.message}"
       redirect_to page.real_url
-  end
-
-  private def remove_empty_directories(page : Fluence::Page)
-    page_dir_elements = File.dirname(page.path).split File::SEPARATOR
-    base_dir_elements = Fluence::Page.subdirectory.split File::SEPARATOR
-    while page_dir_elements.size != base_dir_elements.size
-      dir_path = page_dir_elements.join(File::SEPARATOR)
-      if Dir.empty? dir_path
-        Dir.rmdir dir_path
-        page_dir_elements.pop
-      else
-        break
-      end
-    end
   end
 end

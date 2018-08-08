@@ -51,12 +51,17 @@ abstract struct Fluence::Accessible
 		@internal_links = Page::InternalLinks::LinkList.new
   end
 
-  # translate a name ("/test/title" for example)
+  # translates a name ("/test/title" for example)
   # into a file path ("/srv/data/test/ttle.md)
   def self.url_to_file(url : String)
+    url_to_directory(url) + ".md"
+  end
+
+  # translate a name ("/test/title" for example)
+  # into a directory path ("/srv/data/test/ttle)
+  def self.url_to_directory(url : String)
     page_dir = File.expand_path subdirectory
-    page_file = File.expand_path Page.sanitize(url), page_dir
-    page_file + ".md"
+    File.expand_path Page.sanitize(url), page_dir
   end
 
   # verify if the *file* is in the current dir (avoid ../ etc.)
@@ -92,7 +97,8 @@ abstract struct Fluence::Accessible
     File.read @path
   end
 
-  # Move the current page into another place and commit
+  # Renames the page without modifying the current Page object.
+	# Returns the new Page object where only path, url, and real_url fields may be correct and/or initialized.
   def rename(user : Fluence::User, new_url, overwrite = false)
     self.jail
     new_page = Fluence::Page.new new_url
@@ -105,10 +111,27 @@ abstract struct Fluence::Accessible
 			raise AlreadyExist.new "Destination exists and overwriting was not requested."
 		else
 			File.rename self.path, new_page.path
-			commit! user, "rename", other_files: [new_page.path]
+			files = [new_page.path]
+			dir = Page.url_to_directory self.url
+			if dir && File.exists?(dir)
+				new_dir = Page.url_to_directory(new_page.url)
+				File.rename dir, new_dir
+				files << dir
+				files << new_dir
+			end
+			commit! user, "rename", other_files: files
 		end
-		new_page.url
+		new_page
   end
+
+	# Renames the page, updates self, and returns self
+	def rename!(user : Fluence::User, new_url, overwrite = false)
+		new_page = rename user, new_url, overwrite
+		self.path = new_page.path
+		self.url = new_page.url
+		self.real_url = new_page.real_url
+		self
+	end
 
   # Writes into the *file*, and commit.
   def write(user : Fluence::User, body)
@@ -139,8 +162,9 @@ abstract struct Fluence::Accessible
     dir = Dir.current
     begin
       Dir.cd Fluence::OPTIONS.basedir
-      puts `git add -- #{@path}`
-      puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{@path} #{other_files.join(" ")}`
+			all_files = @path + " " + other_files.join(" ")
+      puts `git add -- #{all_files}`
+      puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{all_files}`
     ensure
       Dir.cd dir
     end

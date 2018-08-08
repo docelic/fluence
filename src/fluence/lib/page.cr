@@ -67,4 +67,18 @@ struct Fluence::Page < Fluence::Accessible
 	def self.title_to_slug(title : String) : String
 		title.gsub(/[^[:alnum:]^\/]/, "-").gsub(/-+/, '-').downcase
 	end
+
+  def self.remove_empty_directories(path)
+    page_dir_elements = File.dirname(path).split File::SEPARATOR
+    base_dir_elements = Fluence::Page.subdirectory.split File::SEPARATOR
+    while page_dir_elements.size != base_dir_elements.size
+      dir_path = page_dir_elements.join(File::SEPARATOR)
+      if Dir.empty? dir_path
+        Dir.rmdir dir_path
+        page_dir_elements.pop
+      else
+        break
+      end
+    end
+  end
 end

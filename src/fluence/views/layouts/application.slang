@@ -24,7 +24,7 @@ html lang="en"
     #navbar
       == render_template "layouts/_nav.slang"
 
-    #main
+    #main.mt-3
       - if !flash.empty?
         #main-flash
           .row
@@ -33,5 +33,6 @@ html lang="en"
                 = flash[key]
                 button type="button" class="close" data-dismiss="alert" aria-label="Close"
                   span aria-hidden="true" == "&times;"
+              .w-100
       #main-content
         == content

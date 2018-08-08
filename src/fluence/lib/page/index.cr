@@ -58,9 +58,15 @@ struct Fluence::Page < Fluence::Accessible
 			self
 		end
 
-    # Remove an `Page` from the `Index` based on its path.
+    # Removes `Page` from `Index`.
     def delete(page : Fluence::Page)
       @entries.delete page.path
+      self
+    end
+
+    # Renames `Page` in index.
+    def rename(page : Fluence::Page, new_path)
+      @entries[new_path] = @entries.delete(page.path).not_nil!
       self
     end
 
