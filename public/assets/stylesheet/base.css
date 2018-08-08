@@ -1,3 +1,13 @@
+.list-indent {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 7px;
+}
+
+
+.indent-item { 
+  margin-left: -20px; 
+}
+
 /*#trigger-upload {
 		color: white;
 		background-color: #00ABC7;
@@ -73,12 +83,3 @@ ul, ol {
 }
 */
 
-ul, ol {
-  padding: 0px 0px 0px 0px;
-  margin: 0px 0px 0px 7px;
-}
-
-
-.indent-item { 
-  margin-left: -20px; 
-}

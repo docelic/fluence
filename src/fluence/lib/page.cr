@@ -14,6 +14,33 @@ struct Fluence::Page < Fluence::Accessible
   include Fluence::Page::TableOfContent
   include Fluence::Page::InternalLinks
 
+	YAML.mapping(
+		path: String,  # path of the file /srv/wiki/data/xxx
+		url: String,   # url of the page /pages/xxx
+		real_url: String,   # real url of the page /pages/xxx
+		title: String, # Any title
+		slug: String,  # Exact matching title
+		toc: Page::TableOfContent::Toc,
+		internal_links: Page::InternalLinks::LinkList,
+	)
+
+	def initialize(url : String, real_url : Bool = false, read_title : Bool = false)
+    url = Page.sanitize(url)
+    if real_url
+      @real_url = url
+      @url = @real_url[url_prefix.size..-1].strip "/"
+    else
+      @url = url.strip "/"
+      @real_url = File.expand_path @url, url_prefix
+    end
+    @path = Page.url_to_file @url
+    @title = File.basename @url
+    @title = Page.read_title(@path) || @title if read_title && File.exists? @path
+    @slug = ""
+    @toc = Page::TableOfContent::Toc.new
+    @internal_links = Page::InternalLinks::LinkList.new
+	end
+
   # Directory where the pages are stored
   def self.subdirectory
     File.join(Fluence::OPTIONS.basedir, "pages") + File::SEPARATOR
@@ -30,10 +57,14 @@ struct Fluence::Page < Fluence::Accessible
   end
 
   def self.sanitize(url : String)
-    Index::Entry.title_to_slug URI.unescape(url)
+    title_to_slug URI.unescape(url)
   end
 
   def read_title!
     @title = Page.read_title(@path) || @title if File.exists?(@path)
   end
+
+	def self.title_to_slug(title : String) : String
+		title.gsub(/[^[:alnum:]^\/]/, "-").gsub(/-+/, '-').downcase
+	end
 end

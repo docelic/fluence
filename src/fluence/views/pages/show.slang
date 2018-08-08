@@ -45,86 +45,80 @@ script type="text/template" id="qq-template"
                 div class="qq-dialog-buttons"
                     button type="button" class="qq-cancel-button-selector" Cancel
                     button type="button" class="qq-ok-button-selector" Ok
-#page-body
-  div class="container-fluid pt-3"
-    div class="row"
-      div class="col-sm-3"
-        span.page-body-meta-title Wiki Pages
-        p
+.container-fluid.mt-3
+  .row
+    .col
+      span Wiki Pages
+      .ml-2
          == add_page pages
 
-      div class="col-sm-7 row"
-        form#edit-page method="post"
-          fieldset
-            textarea.form-control name="body" = body
-        #page-media class="col-sm-11"
-          span.page-body-meta-title Page Media
-          p
-              div id="uploader"
-              script var uploader = new qq.FineUploader({ element: document.getElementById("uploader"), request: { endpoint: '/media/upload' }, debug: true, deleteFile: { enabled: true, endpoint: '/media/upload' }, thumbnails: { placeholders: { waitingPath: '/assets/stylesheet/waiting-generic.png', notAvailablePath: '/assets/stylesheet/not_available-generic.png' } }, autoUpload: false}); qq(document.getElementById("trigger-upload")).attach("click", function() { uploader.uploadStoredFiles(); });
+    .col-sm-8
+      .row
+        .col-12
+          form#edit-page method="post"
+            fieldset
+              textarea.form-control name="body" = body
+        .col-12
+          span Page Media
+            div id="uploader"
+            script var uploader = new qq.FineUploader({ element: document.getElementById("uploader"), request: { endpoint: '/media/upload' }, debug: true, deleteFile: { enabled: true, endpoint: '/media/upload' }, thumbnails: { placeholders: { waitingPath: '/assets/stylesheet/waiting-generic.png', notAvailablePath: '/assets/stylesheet/not_available-generic.png' } }, autoUpload: false}); qq(document.getElementById("trigger-upload")).attach("click", function() { uploader.uploadStoredFiles(); });
 
-      div class="col-sm-2"
-        div class="row"
-          #page-toc
-            span.page-body-meta-title Table of Contents
-            p
-              - if (index_entry = Fluence::PAGES[page]?) && (!index_entry.toc.empty?)
-                  == add_toc index_entry.toc
-        div class="row"
-          #page-intlinks
-            hr
-            span.page-body-meta-title Internal Links
-            p
-              ol
-                - page.internal_links.each do |linkspec|
-                  - pg = Fluence::Page.new linkspec[1]
-                  li
-                    a href="#{pg.real_url}" = pg.title || pg.url
+    .col
+      .row.no-gutters
+        #page-toc.col-12
+          span Table of Contents
+          - if (index_entry = Fluence::INDEX[page]?) && (!index_entry.toc.empty?)
+            == add_toc index_entry.toc
+          hr
+        #page-intlinks.col-12
+          span Internal Links
+          ol
+            - page.internal_links.each do |linkspec|
+              - pg = Fluence::Page.new linkspec[1]
+              li
+                a href="#{pg.real_url}" = pg.title || pg.url
+          hr
         - if Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write
-          div class="row"
-            #page-content
-              hr
-              span.page-body-meta-title Page Content
-                p
-                  .col-sm-12
-                    a.btn.btn-sm.btn-block.btn-success href="#" onclick="editor.togglePreview()" Toggle edit
-                    button.btn.btn-sm.btn-block.btn-success name="save" type="submit" value="save" form="edit-page" Save
-          div class="row"
-            #page-management
-              hr
-              span.page-body-meta-title Page Management
-              p
-                form#manage-page method="post"
-                  fieldset
-                    .input-group.input-group-sm.col-sm-12
-                      div class="input-group-prepend"
-                        span class="input-group-text" id="inputGroupPrepend" Name:
-                      input.input-sm.form-control name="new_path" type="text" value="#{page.url}"
-                    .input-group.input-group-sm.col-sm-12 class="pt-1"
-                      input.input-sm.form-control class="col-sm-2" name="new_path_overwrite" type="checkbox" value="0" id="overwriteCheck"
-                      label.form-check-label class="col-sm-10" for="overwriteCheck" Overwrite
-                      button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
-                    .input-group.input-group-sm.col-sm-12
-                      button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.url}`?')" Delete
-          div class="row"
-            #page-permissions
-              span.page-body-meta-title Page Permissions
-              p
-                dl
-                  dt.text-center
-                    | Read
-                  dd.text-center
-                    - groups_read.each do |group|
-                      span.label.label-default
-                        e #{group}
-                      | 
-                  dt.text-center
-                    | Write
-                  dd.text-center
-                    - groups_write.each do |group|
-                      span.label.label-default
-                        | #{group}
-                      | 
+          #page-content.col-12
+            span Page Content
+            .row
+              .col
+                a.btn.btn-sm.btn-block.btn-success href="#" onclick="editor.togglePreview()" Toggle edit
+              .col
+                button.btn.btn-sm.btn-block.btn-success name="save" type="submit" value="save" form="edit-page" Save
+            hr
+        #page-management.col-12
+          span Page Management
+            form#manage-page method="post"
+              .input-group
+                .input-group-prepend
+                  span class="input-group-text" id="label-page-name" Page name
+                input type="text" class="form-control" id="input-page-name" name="input-page-name" aria-describedby="label-page-name" value="#{page.url}"
+              .row.mt-2
+                .col
+                  .form-group.form-check
+                   input type="checkbox" class="form-check-input" id="input-page-overwrite" name="input-page-overwrite"
+                   label class="form-check-label" for="input-page-overwrite" Overwrite
+                .col
+                  button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
+              .row
+                .col
+                .col
+                  button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.url}`?')" Delete
+          hr
+ 
+        #page-permissions.col-12
+          span Page Permissions
+          .row
+            .col-auto
+              | Read:
+            .col
+              = groups_read.join ", "
+            .w-100
+            .col-auto
+              | Write:
+            .col
+              = groups_write.join ", "
 script
   = "var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write}));"
   - if File.exists? page.path
