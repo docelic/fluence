@@ -1,36 +1,37 @@
 / - active = context.request.path == "/" ? "active" : ""
 / a class="nav-item #{active}" href="/" Home
-nav class="navbar navbar-light bg-light"
-  .col-sm-6
-    .pull-left
-      a.btn.btn-md href="/" Home
-      a.btn.btn-md href="/sitemap" Sitemap
-      - if !user_signed_in?
-        /a.btn.btn-md href="/users/register" Register
-        /a.btn.btn-md href="/users/login" Login
+nav.navbar.navbar-expand
+  a.navbar-brand href="#" Fluence
+  button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+    span.navbar-toggler-icon
+
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li.nav-item class="active"
+        a.nav-link href="#" Home
+          span.sr-only (current)
+      li.nav-item
+        a.nav-link href="/sitemap" Sitemap
       - if Fluence::ACL.permitted?(current_user, "/admin/users", Acl::Perm::Read)
-        a.btn.btn-md href="/admin/users" Users
+        li.nav-item
+          a.nav-link href="/admin/users" Users
       - if Fluence::ACL.permitted?(current_user, "/admin/acls", Acl::Perm::Read)
-        a.btn.btn-md href="/admin/acls" ACLs
-  .col-sm-3
-    .center-block
-      form#search-page action="/pages/search" method="get" role="form"
-        .input-group.input-group-md
-          input.input-md.form-control name="q" placeholder="Search query" autocomplete="on" list="search-list"
-          datalist#search-list
-            - Fluence::INDEX.entries.values.each do |entry|
-              option value=entry.url = entry.title
-          span.input-group-btn
-            button.btn.btn-md
-              span.glyphicon.glyphicon-search
-              | Search
-  .col-sm-3
-    .pull-right
+        li.nav-item
+          a.nav-link href="/admin/acls" ACLs
       - if user_signed_in?
-         span Logged in as
-           = current_user.name
-         a.btn.btn-md href="/users/logout" Logout
+        li.navbar-text
+          span | Logged in as
+            = current_user.name
+        li.nav-item
+          a.nav-link href="/users/logout" (Logout)
       - else
-         a.btn.btn-md href="/users/login" Login
-         | or
-         a.btn.btn-md href="/users/register" Register
+        li.nav-item
+          a.nav-link href="/users/login" | Login
+          li.navbar-text or
+          a.nav-link href="/users/register" Register
+    form#search-page.form-inline.my-2.my-lg-0 action="/pages/search" method="get"
+      input.form-control.mr-sm-2 name="q" type="search" placeholder="Search" aria-label="Search" autocomplete="on"
+      /      datalist#search-list
+      /        - Fluence::INDEX.entries.values.each do |entry|
+      /          option value=entry.url = entry.title
+      button.btn.btn-outline-success.my-2.my-sm-0 type="submit" Search
