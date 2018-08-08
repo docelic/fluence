@@ -24,7 +24,7 @@ html lang="en"
     #navbar
       == render_template "layouts/_nav.slang"
 
-    #main.mt-3
+    #main.mt-3.mb-3
       - if !flash.empty?
         #main-flash
           .row

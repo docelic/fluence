@@ -3,6 +3,7 @@ class PagesController < ApplicationController
   def sitemap
     acl_permit! :read
     pages = Fluence::FileTree.build Fluence::Page.subdirectory
+		media = Fluence::FileTree.build Fluence::Media.subdirectory
     title = "Sitemap - #{title()}"
     render "sitemap.slang"
   end
