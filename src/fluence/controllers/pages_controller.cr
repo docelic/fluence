@@ -70,7 +70,7 @@ class PagesController < ApplicationController
       # TODO: if input-page-name do not begin with /, relative rename to the current path
       begin
         new_name = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
-        flash["success"] = "The page #{page.url} has been moved to #{new_name}."
+        flash["success"] = "The page #{page.url} has been renamed to #{new_name}."
         remove_empty_directories page
         redirect_to "/pages/#{params.body["input-page-name"]}"
       rescue e : Fluence::Page::AlreadyExist

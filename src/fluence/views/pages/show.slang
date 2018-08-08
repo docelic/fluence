@@ -49,7 +49,7 @@ script type="text/template" id="qq-template"
   .row
     .col
       span Wiki Pages
-      .ml-2
+      #pages-hierarchy
          == add_page pages
 
     .col-sm-8

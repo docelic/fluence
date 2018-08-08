@@ -1,4 +1,4 @@
-ul.list-indent
+ul.list-unstyled
   - page.files.sort! {|a,b| a.name <=> b.name}.each do |file|
     li
       - file_name = file.name.chomp(".md").strip("/")

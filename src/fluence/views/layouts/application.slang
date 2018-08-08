@@ -23,12 +23,15 @@ html lang="en"
   body
     #navbar
       == render_template "layouts/_nav.slang"
+
     #main
       - if !flash.empty?
         #main-flash
           .row
             - flash.each do |key, value|
-              .col class="alert alert-#{key}" role="alert"
+              .col class="alert alert-#{key} alert-dismissible fade show" role="alert"
                 = flash[key]
+                button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                  span aria-hidden="true" == "&times;"
       #main-content
         == content
