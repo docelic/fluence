@@ -24,11 +24,11 @@ html lang="en"
     #navbar
       == render_template "layouts/_nav.slang"
     #main
-      .container-fluid
-        .row
-        - flash.each do |key, value|
-          div class="alert alert-#{ key }" role="alert"
-            = flash[key]
-        .row
-          #content.container-fluid
-            == content
+      - if !flash.empty?
+        #main-flash
+          .row
+            - flash.each do |key, value|
+              .col class="alert alert-#{key}" role="alert"
+                = flash[key]
+      #main-content
+        == content
