@@ -1,5 +1,6 @@
 require "uri"
 
+require "./accessible"
 require "./errors"
 require "./page/*"
 
