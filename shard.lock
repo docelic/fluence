@@ -36,3 +36,7 @@ shards:
     github: jeromegn/slang
     commit: f33c23be9d477a07627a124d0b79d6cdb7a9132e
 
+  watchbird:
+    github: Sauilitired/watchbird
+    commit: ffac2957534899f8ec5fe29db9d48953e34d416a
+

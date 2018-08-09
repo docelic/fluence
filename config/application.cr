@@ -5,6 +5,7 @@ require "kemal"
 require "kemal-session"
 require "kemal-flash"
 require "kilt/slang"
+require "watchbird/dsl"
 
 require "../fluence/version"
 require "../fluence/lib/_init"
