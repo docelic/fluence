@@ -31,7 +31,7 @@ class AdminController < ApplicationController
 
   # get /admin/acls
   def acls_show
-    acl_permit! :read
+    acl_permit! :write
     acls = Fluence::ACL.load!
     render "acls_show.slang"
   end
