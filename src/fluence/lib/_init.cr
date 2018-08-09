@@ -11,19 +11,20 @@ module Fluence
   # the index of the pages (with table of content, links, titles, ...)
   # and user permissions
   Dir.mkdir_p "meta"
+
 	Dir.mkdir_p Fluence::Page.subdirectory
 	Dir.mkdir_p Fluence::Media.subdirectory
 
   # Define a default user that should be used for anonymous clients
   DEFAULT_USER = Fluence::User.new "guest", "guest", %w(guest)
 
-  # The list of the users is stored into *meta/users*. This file is updated when
-  # an user is created/modified/deleted, but the data are stored into RAM for
-  # reading.
+  # The list of users is stored in *meta/users*. This file is updated when
+  # a user is created/modified/deleted, but data is stored in RAM for
+  # efficiency.
   USERS = Fluence::Users.new("meta/users", DEFAULT_USER).load!
 
-  # The list of the permissions (group => path+permission) is stored into the
-  # file *meta/acl. Similar behaviour than `USERS`.
+  # The list of permissions (group => path+permission) is stored in
+  # file *meta/acl*. Similar behavior like `USERS`.
   ACL = Acl::Groups.new("meta/acl").load!
 
   # If there is no "guest", we assume that the ACL have not been initialized yet
@@ -46,7 +47,11 @@ module Fluence
     ACL.save!
   end
 
-  # The list of the pages (index) with a lot of meta-data. Same behaviour than
+  # The list of pages (index) with a lot of meta-data. Same behavior like
   # `USERS` and `ACL`.
-  INDEX = Fluence::Page::Index.new("meta/index").load!
+	INDEX = if File.exists? "meta/index"
+		Fluence::Page::Index.new("meta/index").load!
+	else
+		Fluence::Page::Index.build("data/pages")
+	end
 end

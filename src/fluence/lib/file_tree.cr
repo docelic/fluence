@@ -1,15 +1,22 @@
-# A `FileTree` is a tree structure representing a file with a name and subfiles.
+# `FileTree` is structure representing a file with a name and subfiles.
 # It is used to map the wiki for the "sitemap" feature.
+# Also, it is used to populate Index when the index does not exist yet,
+# or when index rebuild is requested.
 # TODO: it should be fully replaced by the index
 class Fluence::FileTree
   property name : String
   getter files : Array(FileTree)
 
-  # Build a FileTree that represents the real structure of the "to_scan"
-  # It is recursive and may be very time consuming, so there is a limit of  depth
+  # Builds a FileTree that represents the real structure of the "to_scan"
+  # It is recursive and may be very time consuming, so there is a depth limit.
   #
   # ```
   # FileTree.build("./data/")
+  #
+	# or:
+  #
+  # FileTree.build("./data/pages/")
+  # FileTree.build("./data/media/")
   # ```
   def self.build(to_scan : String, max_depth : Int = 32) : FileTree
     # Stop the recursion
@@ -41,11 +48,12 @@ class Fluence::FileTree
 		end
 		files += directories
 
-    # Generate the file with the list of the files and the directories
+    # Generate list of files and directories
     structure = FileTree.new to_scan, files
 
-    # Get out of the parent and return the current directory object
+    # Get out of the parent and return to current directory
     Dir.cd dir_current
+
     structure
   end
 
