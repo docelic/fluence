@@ -13,9 +13,9 @@ struct Fluence::Page < Fluence::Accessible
       @entries = {} of String => Page
     end
 
-		def self.build(to_scan : String, max_depth : Int = 1000) : Index
-			idx = Index.new "meta/index"
-			files = file_list(to_scan, max_depth).each do |f|
+		def self.build(subdir : String, max_depth : Int = 1000) : Index
+			idx = Index.new "meta/#{subdir}"
+			files = file_list("data/#{subdir}", max_depth).each do |f|
 				page = Fluence::Page.new f
 				idx.add page
 			end

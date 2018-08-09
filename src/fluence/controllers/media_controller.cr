@@ -96,14 +96,14 @@ class MediaController < ApplicationController
 
   private def update_delete(media)
 			page = Fluence::Page.new(media.real_url, true)
-#      Fluence::INDEX.transaction! { |index| index.delete media }
+#      Fluence::PAGES.transaction! { |index| index.delete media }
       media.delete current_user
       flash["success"] = "The media #{media.url} has been deleted."
       remove_empty_directories media
       redirect_to page.real_url
     rescue err
 #      # TODO: what if the media is not deleted but not indexed anymore ?
-#      # Fluence::INDEX.transaction! { |index| index.add media }
+#      # Fluence::PAGES.transaction! { |index| index.add media }
       flash["danger"] = "Error: cannot remove #{media.url}, #{err.message}"
       redirect_to page.real_url if page
   end
@@ -112,7 +112,7 @@ class MediaController < ApplicationController
 			page = Fluence::Page.new(media.real_url, true)
       media.write current_user, params.body["body"]
 #      media.read_title!
-#      Fluence::INDEX.transaction! { |index| index.add media }
+#      Fluence::PAGES.transaction! { |index| index.add media }
       flash["success"] = "The media #{media.url} has been updated."
       redirect_to page.real_url
     rescue err

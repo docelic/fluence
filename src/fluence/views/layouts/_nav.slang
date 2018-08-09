@@ -33,6 +33,6 @@ nav.navbar.navbar-expand-lg.bg-light
       form#search-page.form-inline.my-2.my-md-0 action="/pages/search" method="get"
         input.form-control.mr-sm-2 name="q" type="search" placeholder="Search" aria-label="Search" autocomplete="on"
         /      datalist#search-list
-        /        - Fluence::INDEX.entries.values.each do |entry|
+        /        - Fluence::PAGES.entries.values.each do |entry|
         /          option value=entry.url = entry.title
         button.btn.btn-outline-success.my-2.my-sm-0 type="submit" Search

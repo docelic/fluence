@@ -4,7 +4,7 @@ struct Fluence::Page < Fluence::Accessible
     alias Link = {Int32, String}
     alias LinkList = Array(Link)
 
-    def internal_links(index_context : Fluence::Page::Index = Fluence::INDEX)
+    def internal_links(index_context : Fluence::Page::Index = Fluence::PAGES)
       InternalLinks.links @path, index_context, self
     end
 

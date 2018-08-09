@@ -47,11 +47,19 @@ module Fluence
     ACL.save!
   end
 
-  # The list of pages (index) with a lot of meta-data. Same behavior like
+  # The list of pages with a lot of meta-data. Same behavior like
   # `USERS` and `ACL`.
-	INDEX = if File.exists? "meta/index"
-		Fluence::Page::Index.new("meta/index").load!
+	PAGES = if File.exists? "meta/pages"
+		Fluence::Page::Index.new("meta/pages").load!
 	else
-		Fluence::Page::Index.build("data/pages")
+		Fluence::Page::Index.build("pages")
+	end
+
+  # The list of media with a lot of meta-data. Same behavior like
+  # `USERS` and `ACL`.
+	MEDIA = if File.exists? "meta/media"
+		Fluence::Page::Index.new("meta/media").load!
+	else
+		Fluence::Page::Index.build("media")
 	end
 end

@@ -32,7 +32,7 @@ class PagesController < ApplicationController
 
   private def show_show(page)
     body = page.read rescue ""
-    body_html = body ? Fluence::Markdown.to_html body, page, Fluence::INDEX.load! : ""
+    body_html = body ? Fluence::Markdown.to_html body, page, Fluence::PAGES.load! : ""
     Fluence::ACL.load!
 
 		if !page.exists?
@@ -72,7 +72,7 @@ class PagesController < ApplicationController
       begin
         new_page = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
         flash["success"] = "The page #{page.url} has been renamed to #{new_page.url}."
-				Fluence::INDEX.transaction! { |index| index.rename page, new_page.path }
+				Fluence::PAGES.transaction! { |index| index.rename page, new_page.path }
         Fluence::Page.remove_empty_directories page.path
         redirect_to new_page.real_url
       rescue e : Fluence::Page::AlreadyExist
@@ -85,14 +85,14 @@ class PagesController < ApplicationController
   end
 
   private def update_delete(page)
-      Fluence::INDEX.transaction! { |index| index.delete page }
+      Fluence::PAGES.transaction! { |index| index.delete page }
       page.delete current_user
       flash["success"] = "The page #{page.url} has been deleted."
       Fluence::Page.remove_empty_directories page.path
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?
-      # Fluence::INDEX.transaction! { |index| index.add page }
+      # Fluence::PAGES.transaction! { |index| index.add page }
       flash["danger"] = "Error: cannot remove #{page.url}, #{err.message}"
       redirect_to page.real_url
   end
@@ -101,7 +101,7 @@ class PagesController < ApplicationController
 			is_new = page.is_new?
       page.write current_user, params.body["body"]
       page.read_title!
-      Fluence::INDEX.transaction! { |index| index.add! page }
+      Fluence::PAGES.transaction! { |index| index.add! page }
       flash["success"] = %Q(The page #{page.url} has been #{is_new ? "created" : "updated"}.)
       redirect_to page.real_url
     rescue err

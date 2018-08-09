@@ -77,7 +77,7 @@ script type="text/template" id="qq-template"
         - if page.exists?
           #page-toc.col-12
             span Table of Contents
-            - if (index_entry = Fluence::INDEX[page]?) && (!index_entry.toc.empty?)
+            - if (index_entry = Fluence::PAGES[page]?) && (!index_entry.toc.empty?)
               == add_toc index_entry.toc
             hr
           #page-intlinks.col-12
