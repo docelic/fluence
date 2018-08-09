@@ -107,8 +107,9 @@ struct Fluence::Page < Fluence::Accessible
 
     # Renames `Page` in index. This is a memory-only operation
 		# and does not sync new contents to disk.
-    def rename(page : Fluence::Page, new_path)
-      @entries[new_path] = @entries.delete(page.path).not_nil!
+		# TODO: modify page data, not just path (modify page's path and url, and/or real_url)
+    def rename(page : Fluence::Page, new_page : Fluence::Page)
+      @entries[new_page.path] = @entries.delete(page.path).not_nil!
       self
     end
 

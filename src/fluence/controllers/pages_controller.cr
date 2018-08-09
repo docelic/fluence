@@ -72,7 +72,7 @@ class PagesController < ApplicationController
       begin
         new_page = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
         flash["success"] = "The page #{page.url} has been renamed to #{new_page.url}."
-				Fluence::PAGES.transaction! { |index| index.rename page, new_page.path }
+				Fluence::PAGES.transaction! { |index| index.rename page, new_page }
         Fluence::Page.remove_empty_directories page.path
         redirect_to new_page.real_url
       rescue e : Fluence::Page::AlreadyExist
