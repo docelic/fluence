@@ -69,10 +69,10 @@ script type="text/template" id="qq-template"
           #page-content.col-12
             span Page Content
             .row
-              .col
-                a.btn.btn-sm.btn-block.btn-success href="#" onclick="editor.togglePreview()" Toggle edit
-              .col
-                button.btn.btn-sm.btn-block.btn-success name="save" type="submit" value="save" form="edit-page" Save
+              .col-8
+                a.btn.btn-sm.btn-block.btn-success href="#" onclick="toggle(this)" id="button-toggle" white-space="normal" Toggle preview
+              .col-4
+                button.btn.btn-sm.btn-block.btn-success name="save" id="button-save" type="submit" value="save" form="edit-page" visibility="hidden" Save
             hr
         - if page.exists?
           #page-toc.col-12
@@ -123,3 +123,16 @@ script
   = "var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write}));"
   - if File.exists? page.path
     = "editor.togglePreview();"
+
+javascript:
+  function toggle(button){
+    if(document.getElementById("button-toggle").innerHTML == "Toggle edit"){
+      document.getElementById("button-toggle").innerHTML = "Toggle preview";
+      document.getElementById("button-save").style.visibility = 'visible';
+    }
+    else{
+      document.getElementById("button-toggle").innerHTML = "Toggle edit";
+      document.getElementById("button-save").style.visibility = 'hidden';
+    }
+    editor.togglePreview();
+  }
