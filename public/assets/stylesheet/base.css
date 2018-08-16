@@ -7,6 +7,13 @@ ul, ol {
   margin: 0 0 0 1em;
 }
 
+.input-group>.input-group-prepend {
+    flex: 0 0 20%;
+}
+.input-group .input-group-text {
+    width: 100%;
+}
+
 /*#trigger-upload {
 		color: white;
 		background-color: #00ABC7;
