@@ -56,5 +56,6 @@ Fluence.editor.togglePreview = function(){
 	else{
 		$("#button_save").show();
 		$("#button_toggle").html("Preview");
+		editor.codemirror.focus();
 	}
 }
