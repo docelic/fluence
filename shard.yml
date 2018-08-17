@@ -11,8 +11,7 @@ license: GPL-3
 dependencies:
   kemal:
     github: kemalcr/kemal
-    commit: 64fbe406d5cdeeaf8fe8be19ece5b1777e4b82b8
-    #branch: master
+    branch: master
   slang:
     github: jeromegn/slang
     branch: master

@@ -10,7 +10,7 @@ shards:
 
   kemal:
     github: kemalcr/kemal
-    commit: 64fbe406d5cdeeaf8fe8be19ece5b1777e4b82b8
+    commit: 9448360eac4273919c2bb6d2517a7234844aec2f
 
   kemal-flash:
     github: neovintage/kemal-flash
@@ -26,7 +26,7 @@ shards:
 
   markd:
     github: icyleaf/markd
-    commit: 3e1a3a0129d01de45d87ae8ade92de79e9d9129e
+    commit: f9101c18ee7bbdb7bfb3c0e9d91e55473ac195ca
 
   radix:
     github: luislavena/radix
