@@ -85,10 +85,16 @@ class PagesController < ApplicationController
   end
 
   private def update_delete(page)
-      Fluence::PAGES.transaction! { |index| index.delete page }
-      page.delete current_user
-      flash["success"] = "The page #{page.url} has been deleted."
-      Fluence::Page.remove_empty_directories page.path
+			pages = [page]
+			if !params.body["input-page-subtree-delete"]?.to_s.strip.empty?
+				#pages += Fluence::PAGES.find_below page
+			end
+			pages.each do |p|
+				Fluence::PAGES.transaction! { |index| index.delete page }
+				page.delete current_user
+				flash["success"] += "The page #{page.url} has been deleted. "
+				Fluence::Page.remove_empty_directories page.path
+			end
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?

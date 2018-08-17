@@ -104,6 +104,9 @@ script type="text/template" id="qq-template"
                     button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
                 .row
                   .col
+                    .form-group.form-check
+                     input type="checkbox" class="form-check-input" id="input-page-subtree-delete" name="input-page-subtree-delete"
+                     label class="form-check-label" for="input-page-subtree-delete" With subpages
                   .col
                     button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.url}`?')" Delete
             hr
@@ -121,7 +124,7 @@ script type="text/template" id="qq-template"
                 = groups_write.join ", "
 script
   = "var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write}));"
-  - if File.exists? page.path
+  - if page.exists?
     = "editor.togglePreview();"
 
 javascript:

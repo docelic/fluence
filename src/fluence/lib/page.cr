@@ -36,10 +36,14 @@ struct Fluence::Page < Fluence::Accessible
     end
     @path = Page.url_to_file @url
     @title = File.basename @url
-    @title = Page.read_title(@path) || @title if read_title && File.exists? @path
+    @title = Page.read_title(@path) || @title if read_title && exists?
     @slug = ""
     @toc = Page::TableOfContent::Toc.new
     @internal_links = Page::InternalLinks::LinkList.new
+	end
+
+	def exists?
+		File.exists? @path
 	end
 
   # Directory where the pages are stored
