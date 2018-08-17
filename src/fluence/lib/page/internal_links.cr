@@ -4,16 +4,16 @@ struct Fluence::Page < Fluence::Accessible
     alias Link = {Int32, String}
     alias LinkList = Array(Link)
 
-    def internal_links(index_context : Fluence::Page::Index = Fluence::PAGES)
-      InternalLinks.links @path, index_context, self
+    def intlinks(path : String)
+      InternalLinks.intlinks path
     end
 
-    def self.links(path : String, index : Fluence::Page::Index, page : Fluence::Page)
+    def self.intlinks(path : String)
       content = File.exists?(path) ? File.read path : ""
-      links_in_content content, index, page
+      links_in_content content
     end
 
-    def self.links_in_content(content : String, index : Fluence::Page::Index, page : Fluence::Page)
+    def self.links_in_content(content : String)
       links = LinkList.new
       link_begin = -1
       while link_begin = content.index("[[", link_begin + 1)
@@ -21,15 +21,9 @@ struct Fluence::Page < Fluence::Accessible
         next if link_end.nil?
         end_of_line = content.index '\n', link_begin
         next if end_of_line && end_of_line < link_end
-        page_search_text = content[link_begin + 2..link_end - 1]
-        links << get_link(link_begin + 2, page_search_text, index, page)
+        links << content[link_begin + 2..link_end - 1]
       end
       links
-    end
-
-    def self.get_link(begin_link_text, page_search_text, index, page) : Link
-      _, u = index.find page_search_text, page
-      {begin_link_text, u}
     end
   end
 end

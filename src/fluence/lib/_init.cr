@@ -55,21 +55,21 @@ module Fluence
 		Fluence::Page::Index.build("pages")
 	end
 
-  # The list of media with a lot of meta-data. Same behavior like
-  # `USERS` and `ACL`.
-	MEDIA = if File.exists? "meta/media"
-		Fluence::Page::Index.new("meta/media").load!
-	else
-		Fluence::Page::Index.build("media")
-	end
+#  # The list of media with a lot of meta-data. Same behavior like
+#  # `USERS` and `ACL`.
+#	MEDIA = if File.exists? "meta/media"
+#		Fluence::Page::Index.new("meta/media").load!
+#	else
+#		Fluence::Page::Index.build("media")
+#	end
 
-	# Install file watcher on data files.
-	# Exact use of the triggers is to be determined later.
-	# (It could be used to catch file modifications which happen
-	# outside of the wiki, and to automatically update the wiki
-	# index. This could be made to work live and report live stream
-	# of page and media changes to some admin page)
-	watch "data/**/*" do |e|
-		"Detected #{e.status} for file #{e.name}"
-	end
+#	# Install file watcher on data files.
+#	# Exact use of the triggers is to be determined later.
+#	# (It could be used to catch file modifications which happen
+#	# outside of the wiki, and to automatically update the wiki
+#	# index. This could be made to work live and report live stream
+#	# of page and media changes to some admin page)
+#	watch "data/**/*" do |e|
+#		"Detected #{e.status} for file #{e.name}"
+#	end
 end

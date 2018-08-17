@@ -65,7 +65,7 @@ script type="text/template" id="qq-template"
 
     .col
       .row.no-gutters
-        - if Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write
+        - if Fluence::ACL.permitted? current_user, page.url, Acl::Perm::Write
           #page-content.col-12
             span Page Content
             .row
@@ -86,7 +86,7 @@ script type="text/template" id="qq-template"
               - page.internal_links.each do |linkspec|
                 - pg = Fluence::Page.new linkspec[1]
                 li
-                  a href="#{pg.real_url}" = pg.title || pg.url
+                  a href="#{pg.url}" = pg.title || pg.name
             hr
           #page-management.col-12
             span Page Management
@@ -94,7 +94,7 @@ script type="text/template" id="qq-template"
                 .input-group
                   .input-group-prepend
                     span class="input-group-text" id="label-page-name" Page name
-                  input type="text" class="form-control" id="input-page-name" name="input-page-name" aria-describedby="label-page-name" value="#{page.url}"
+                  input type="text" class="form-control" id="input-page-name" name="input-page-name" aria-describedby="label-page-name" value="#{page.name}"
                 .row.mt-2
                   .col
                     .form-group.form-check
@@ -108,7 +108,7 @@ script type="text/template" id="qq-template"
                      input type="checkbox" class="form-check-input" id="input-page-subtree-delete" name="input-page-subtree-delete"
                      label class="form-check-label" for="input-page-subtree-delete" With subpages
                   .col
-                    button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.url}`?')" Delete
+                    button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.name}`?')" Delete
             hr
           #page-permissions.col-12
             span Page Permissions
@@ -123,7 +123,7 @@ script type="text/template" id="qq-template"
               .col
                 = groups_write.join ", "
 script
-  = "var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.real_url, Acl::Perm::Write}));"
+  = "var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.url, Acl::Perm::Write}));"
   - if page.exists?
     = "editor.togglePreview();"
 

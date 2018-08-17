@@ -16,6 +16,7 @@ struct Fluence::Page < Fluence::Accessible
 		def self.build(subdir : String, max_depth : Int = 1000) : Index
 			idx = Index.new "meta/#{subdir}"
 			files = file_list("data/#{subdir}", max_depth).each do |f|
+				# 'f' is name from subdir onwards, e.g. 'home', 'home/test', etc.
 				page = Fluence::Page.new f
 				idx.add page
 			end
@@ -37,7 +38,7 @@ struct Fluence::Page < Fluence::Accessible
 			# Separate files and directory
 			files = all_files.select { |file| !File.directory? file }.map{ |f| f.chomp(".md")}
 
-			# For the directories, call this function recursively
+			# For directories, call this function recursively
 			directories = all_files
 				.select { |file| File.directory? file }
 				.map { |dir| Page::Index.file_list(dir, max_depth - 1).as(Array(String)).map { |f| File.join dir, f } }
@@ -74,11 +75,11 @@ struct Fluence::Page < Fluence::Accessible
     end
 
     def [](page : Fluence::Page) : Fluence::Page
-      @entries[page.path]
+      @entries[page.name]
     end
 
     def []?(page : Fluence::Page) : Fluence::Page?
-      @entries[page.path]?
+      @entries[page.name]?
     end
 
 		#####
@@ -86,13 +87,13 @@ struct Fluence::Page < Fluence::Accessible
     # Adds a new `Page` into the index. This is a memory-only operation
 		# and does not sync new contents to disk.
     def add(page : Fluence::Page)
-      @entries[page.path] = Page.new page.url
+      @entries[page.name] = page
       self
     end
 
     # Adds a new `Page` into the index. This operation
 		# syncs new contents to disk.
-		def add!(page)
+		def add!(page : Fluence::Page)
 			add page
 			save!
 			self
@@ -101,7 +102,7 @@ struct Fluence::Page < Fluence::Accessible
     # Removes `Page` from `Index`. This is a memory-only operation
 		# and does not sync new contents to disk.
     def delete(page : Fluence::Page)
-      @entries.delete page.path
+      @entries.delete page.name
       self
     end
 
@@ -109,42 +110,44 @@ struct Fluence::Page < Fluence::Accessible
 		# and does not sync new contents to disk.
 		# TODO: modify page data, not just path (modify page's path and url, and/or real_url)
     def rename(page : Fluence::Page, new_page : Fluence::Page)
-      @entries[new_page.path] = @entries.delete(page.path).not_nil!
+      @entries[new_page.name] = @entries.delete(page.name).not_nil!
       self
     end
 
+		# TODO add delete!, rename! etc.
+
 		#####
 
-    # Find a matching *text* in the Index.
-    # If no matching content, return a default value.
-    def find(text : String, context : Page) : {String, String}
-      found = find_by_title text, context
-      return {found.title, found.url} unless found.nil?
-      {text, "#{context.real_url_dirname}/#{Page.title_to_slug text}"}
-    end
-
-    # Find the closest `Index`' `Page` to *text* based on the entries title
-    # and searching for the closer url as possible to the context
-    private def find_by_title(text : String, context : Page) : Page?
-      # exact_matched = @entries.select{|_, entry| entry.title == text }.values
-      # return choose_closer_url(exact_matched, context) unless exact_matched.empty?
-      slug_matched = @entries.select { |_, entry| entry.slug == Fluence::Page.title_to_slug(text) }.values
-      return choose_closer_url(slug_matched, context) unless slug_matched.empty?
-      nil
-    end
-
-    # Find the url which is the closest as possible than the context url (start with the maxmimum common chars).
-    private def choose_closer_url(entries : Array(Page), context : Page) : Page
-      raise "Cannot handle empty array" if entries.empty?
-      entries.reduce { |lhs, rhs| Index.url_closeness(context.url, lhs.url) >= Index.url_closeness(context.url, rhs.url) ? lhs : rhs }
-    end
-
-    # Computes the amount of common chars at the beginning of each string
-    def self.url_closeness(from : String, to : String)
-      from.size.times do |i|
-        return i if from[i] != to[i]
-      end
-      return from.size
-    end
+#    # Find a matching *text* in the Index.
+#    # If no matching content, return a default value.
+#    def find(text : String, context : Page) : {String, String}
+#      found = find_by_title text, context
+#      return {found.title, found.url} unless found.nil?
+#      {text, "#{context.real_url_dirname}/#{Page.title_to_slug text}"}
+#    end
+#
+#    # Find the closest `Index`' `Page` to *text* based on the entries title
+#    # and searching for the closer url as possible to the context
+#    private def find_by_title(text : String, context : Page) : Page?
+#      # exact_matched = @entries.select{|_, entry| entry.title == text }.values
+#      # return choose_closer_url(exact_matched, context) unless exact_matched.empty?
+#      slug_matched = @entries.select { |_, entry| entry.slug == Fluence::Page.title_to_slug(text) }.values
+#      return choose_closer_url(slug_matched, context) unless slug_matched.empty?
+#      nil
+#    end
+#
+#    # Find the url which is the closest as possible than the context url (start with the maxmimum common chars).
+#    private def choose_closer_url(entries : Array(Page), context : Page) : Page
+#      raise "Cannot handle empty array" if entries.empty?
+#      entries.reduce { |lhs, rhs| Index.url_closeness(context.url, lhs.url) >= Index.url_closeness(context.url, rhs.url) ? lhs : rhs }
+#    end
+#
+#    # Computes the amount of common chars at the beginning of each string
+#    def self.url_closeness(from : String, to : String)
+#      from.size.times do |i|
+#        return i if from[i] != to[i]
+#      end
+#      return from.size
+#    end
   end
 end

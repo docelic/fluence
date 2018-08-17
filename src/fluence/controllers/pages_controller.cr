@@ -14,20 +14,20 @@ class PagesController < ApplicationController
     page = Fluence::Page.new(query)
     # TODO: a real search
     title = "Search Results - #{title()}"
-    redirect_to query.empty? ? "/pages/home" : page.real_url
+    redirect_to query.empty? ? "/pages/home" : page.url
   end
 
   # get /pages/*path
   def show
     acl_permit! :read
     flash["danger"] = params.query["flash.danger"] if params.query["flash.danger"]?
-    pp params.url
-    page = Fluence::Page.new url: params.url["path"], read_title: true
-#    if (params.query["edit"]?) || !page.exists?
-#      show_edit(page)
-#    else
-      show_show(page)
-#    end
+    #pp params.url
+    page = Fluence::Pages[params.url["path"]]?
+    if (params.query["edit"]?) || !page
+      show_edit(page)
+    else
+     show_show(page)
+    end
   end
 
   private def show_show(page)
@@ -36,13 +36,13 @@ class PagesController < ApplicationController
     Fluence::ACL.load!
 
 		if !page.exists?
-			flash["info"] = "The page #{page.url} does not exist yet."
+			flash["info"] = "The page #{page.name} does not exist yet."
 			flash["info"] += " You could create it by typing in and saving new content." if
 				Fluence::ACL.permitted?(current_user, request.path, Acl::Perm::Write)
 		end
 
-    groups_read = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Read, true
-    groups_write = Fluence::ACL.groups_having_any_access_to page.real_url, Acl::Perm::Write, true
+    groups_read = Fluence::ACL.groups_having_any_access_to page.url, Acl::Perm::Read, true
+    groups_write = Fluence::ACL.groups_having_any_access_to page.url, Acl::Perm::Write, true
     title = "#{page.title} - #{title()}"
     # For menu on the left
     pages = Fluence::FileTree.build Fluence::Page.subdirectory
@@ -52,7 +52,7 @@ class PagesController < ApplicationController
   # post /pages/*path
   def update
     acl_permit! :write
-    page = Fluence::Page.new url: params.url["path"], read_title: true
+    page = Fluence::Pages[params.url["path"]]
     if params.body["rename"]?
       update_rename(page)
     elsif params.body["delete"]?
@@ -71,16 +71,16 @@ class PagesController < ApplicationController
       # TODO: if input-page-name do not begin with /, relative rename to the current path
       begin
         new_page = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
-        flash["success"] = "The page #{page.url} has been renamed to #{new_page.url}."
+        flash["success"] = "The page #{page.name} has been renamed to #{new_page.name}."
 				Fluence::PAGES.transaction! { |index| index.rename page, new_page }
         Fluence::Page.remove_empty_directories page.path
-        redirect_to new_page.real_url
+        redirect_to new_page.url
       rescue e : Fluence::Page::AlreadyExist
         flash["danger"] = e.to_s
-        redirect_to page.real_url
+        redirect_to page.url
       end
     else
-      redirect_to page.real_url
+      redirect_to page.url
     end
   end
 
@@ -92,15 +92,15 @@ class PagesController < ApplicationController
 			pages.each do |p|
 				Fluence::PAGES.transaction! { |index| index.delete page }
 				page.delete current_user
-				flash["success"] += "The page #{page.url} has been deleted. "
+				flash["success"] += "The page #{page.name} has been deleted. "
 				Fluence::Page.remove_empty_directories page.path
 			end
       redirect_to "/pages/home"
     rescue err
       # TODO: what if the page is not deleted but not indexed anymore ?
       # Fluence::PAGES.transaction! { |index| index.add page }
-      flash["danger"] = "Error: cannot remove #{page.url}, #{err.message}"
-      redirect_to page.real_url
+      flash["danger"] = "Error: cannot remove #{page.name}, #{err.message}"
+      redirect_to page.url
   end
 
   private def update_edit(page)
@@ -108,10 +108,10 @@ class PagesController < ApplicationController
       page.write current_user, params.body["body"]
       page.read_title!
       Fluence::PAGES.transaction! { |index| index.add! page }
-      flash["success"] = %Q(The page #{page.url} has been #{is_new ? "created" : "updated"}.)
-      redirect_to page.real_url
+      flash["success"] = %Q(The page #{page.name} has been #{is_new ? "created" : "updated"}.)
+      redirect_to page.url
     rescue err
-      flash["danger"] = "Error: cannot update #{page.url}, #{err.message}"
-      redirect_to page.real_url
+      flash["danger"] = "Error: cannot update #{page.name}, #{err.message}"
+      redirect_to page.url
   end
 end

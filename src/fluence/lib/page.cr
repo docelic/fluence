@@ -7,7 +7,7 @@ require "./page/*"
 # `Page` is a representation of something that can be accessed
 # from a URL /pages/*path.
 #
-# It is used to associate path, url and data.
+# It is used to associate path, name (and URL), and data.
 # Is is can also jails the path into the *OPTIONS.basedir* to be sure that
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
@@ -16,30 +16,47 @@ struct Fluence::Page < Fluence::Accessible
   include Fluence::Page::InternalLinks
 
 	YAML.mapping(
-		path: String,  # path of the file /srv/wiki/data/xxx
-		url: String,   # url of the page /pages/xxx
-		real_url: String,   # real url of the page /pages/xxx
+		path: String,  # absolute path of the file, e.g. /srv/wiki/data/pages/xxx
+		name: String,   # name of the page, e.g. xxx or xxx/subpage1
+		url: String,   # real url of the page /pages/xxx
 		title: String, # Any title
-		slug: String,  # Exact matching title
+		slug: String,  # URL-friendly title
 		toc: Page::TableOfContent::Toc,
-		internal_links: Page::InternalLinks::LinkList,
+		intlinks: Page::InternalLinks::LinkList,
 	)
 
-	def initialize(url : String, real_url : Bool = false, read_title : Bool = false)
-    url = Page.sanitize(url)
-    if real_url
-      @real_url = url
-      @url = @real_url[url_prefix.size..-1].strip "/"
+	def initialize(name : String, process : Bool = true, is_url : Bool = false)
+    name = Page.sanitize(name)
+    if is_url
+      @url = name
+      @name = @url[url_prefix.size..-1].strip "/"
     else
-      @url = url.strip "/"
-      @real_url = File.expand_path @url, url_prefix
+      @name = name.strip "/"
+      @url = url_prefix + "/" + name
     end
-    @path = Page.url_to_file @url
-    @title = File.basename @url
-    @title = Page.read_title(@path) || @title if read_title && exists?
-    @slug = ""
-    @toc = Page::TableOfContent::Toc.new
-    @internal_links = Page::InternalLinks::LinkList.new
+    @path = Page.name_to_directory @name
+		@title = nil
+
+		if process && exists?
+			@title, @toc, @intlinks = Page.process(@path)
+		else
+			@toc = Page::TableOfContent::Toc.new
+			@intlinks = Page::InternalLinks::LinkList.new
+		end
+
+		@title ||= File.basename @name
+		@slug = Page.title_to_slug @title
+	end
+
+	def process(path)
+    title = File.read(path).split("\n").find { |l| l.starts_with? "# " }
+    title = if title; title.strip("# ").strip else nil end
+
+		toc = toc path
+
+		intlinks = intlinks path
+
+		[title, toc, intlinks]
 	end
 
 	def exists?
@@ -56,17 +73,8 @@ struct Fluence::Page < Fluence::Accessible
     "/pages"
   end
 
-  def self.read_title(path : String) : String?
-    title = File.read(path).split("\n").find { |l| l.starts_with? "# " }
-    title && title.strip("# ").strip
-  end
-
-  def self.sanitize(url : String)
-    title_to_slug URI.unescape(url)
-  end
-
-  def read_title!
-    @title = Page.read_title(@path) || @title if File.exists?(@path)
+  def self.sanitize(text : String)
+    title_to_slug URI.unescape(text)
   end
 
 	def self.title_to_slug(title : String) : String

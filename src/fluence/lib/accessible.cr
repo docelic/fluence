@@ -24,44 +24,26 @@ abstract struct Fluence::Accessible
   getter path : String
 
   # Url of the page (without any prefix)
-  getter url : String
+  getter name : String
 
   # Complete Url of the page
-  getter real_url : String
+  getter url : String
 
   # Title of the page
   getter title : String
 
 	abstract def url_prefix : String
 
-  def initialize(url : String, real_url : Bool = false, read_title : Bool = false)
-    url = Page.sanitize(url)
-    if real_url
-      @real_url = url
-      @url = @real_url[url_prefix.size..-1].strip "/"
-    else
-      @url = url.strip "/"
-      @real_url = File.expand_path @url, url_prefix
-    end
-    @path = Page.url_to_file @url
-    @title = File.basename @url
-    @title = Page.read_title(@path) || @title if read_title && File.exists? @path
-		@slug = ""
-		@toc = Page::TableOfContent::Toc.new
-		@internal_links = Page::InternalLinks::LinkList.new
-  end
-
   # translates a name ("/test/title" for example)
   # into a file path ("/srv/data/test/ttle.md)
-  def self.url_to_file(url : String)
-    url_to_directory(url) + ".md"
+  def self.name_to_file(name : String)
+    name_to_directory(name) + ".md"
   end
 
   # translate a name ("/test/title" for example)
   # into a directory path ("/srv/data/test/ttle)
-  def self.url_to_directory(url : String)
-    page_dir = File.expand_path subdirectory
-    File.expand_path Page.sanitize(url), page_dir
+  def self.name_to_directory(name : String)
+    File.expand_path Page.sanitize(name), subdirectory
   end
 
   # verify if the *file* is in the current dir (avoid ../ etc.)
@@ -76,21 +58,6 @@ abstract struct Fluence::Accessible
     self
   end
 
-  # Get the directory of the *file* (~/data/test/home becomes ~/data/test)
-  def dirname
-    File.dirname @path
-  end
-
-  # Url without the page itself (/pages/test/home becomes /pages/test)
-  def url_dirname
-    File.dirname @url
-  end
-
-  # Real url without the page itself (/test/home becomes /test)
-  def real_url_dirname
-    File.dirname @real_url
-  end
-
   # Reads the *file* and returns the content.
   def read
     self.jail
@@ -98,38 +65,38 @@ abstract struct Fluence::Accessible
   end
 
   # Renames the page without modifying the current Page object.
-	# Returns the new Page object where only path, url, and real_url fields may be correct and/or initialized.
-  def rename(user : Fluence::User, new_url, overwrite = false)
-    self.jail
-    new_page = Fluence::Page.new new_url
-    new_page.jail
-    Dir.mkdir_p File.dirname new_page.path
-		if new_page.path == path
-			raise AlreadyExist.new "Old and new name are the same, renaming not possible."
-		end
-		if File.exists?(new_page.path) && !overwrite
-			raise AlreadyExist.new "Destination exists and overwriting was not requested."
-		else
-			File.rename self.path, new_page.path
-			files = [new_page.path]
-			dir = Page.url_to_directory self.url
-			if dir && File.exists?(dir)
-				new_dir = Page.url_to_directory(new_page.url)
-				File.rename dir, new_dir
-				files << dir
-				files << new_dir
-			end
-			commit! user, "rename", other_files: files
-		end
-		new_page
+	# Returns the new Page object where only path, name, and url fields may be correct and/or initialized.
+  def rename(user : Fluence::User, new_name, overwrite = false)
+#    self.jail
+#    Dir.mkdir_p File.dirname new_page.path
+#		if Fluence::PAGES[new_name]?
+#			raise AlreadyExist.new "Old and new name are the same, renaming not possible."
+#		end
+#		if File.exists?(new_page.path) && !overwrite
+#			raise AlreadyExist.new "Destination exists and overwriting was not requested."
+#		else
+#			File.rename self.path, new_page.path
+#			files = [new_page.path]
+#			dir = directory
+#			# TODO instead of dir mv, this needs to be done by moving pages one by one.
+#			if dir && File.exists?(dir)
+#				new_dir = new_page.directory
+#				File.rename dir, new_dir
+#				files << dir
+#				files << new_dir
+#			end
+#			commit! user, "rename", other_files: files
+#		end
+#		new_page
+		self.class.new new_name
   end
 
 	# Renames the page, updates self, and returns self
-	def rename!(user : Fluence::User, new_url, overwrite = false)
-		new_page = rename user, new_url, overwrite
+	def rename!(user : Fluence::User, new_name, overwrite = false)
+		new_page = rename user, new_name, overwrite
 		self.path = new_page.path
+		self.name = new_page.name
 		self.url = new_page.url
-		self.real_url = new_page.real_url
 		self
 	end
 
@@ -137,9 +104,8 @@ abstract struct Fluence::Accessible
   def write(user : Fluence::User, body)
     self.jail
     Dir.mkdir_p self.dirname
-    is_new = is_new?
     File.write @path, body
-    commit! user, is_new ? "create" : "update"
+    commit! user, exists? ? "update" : "create"
   end
 
   # Deletes the *file*, and commit
@@ -154,9 +120,9 @@ abstract struct Fluence::Accessible
     self.jail
     File.exists? @path
   end
-
-	def is_new?
-		!exists?
+	
+	def directory
+		@path.chomp ".md"
 	end
 
   # Save the modifications on the *file* into the git repository
@@ -168,7 +134,7 @@ abstract struct Fluence::Accessible
       Dir.cd Fluence::OPTIONS.basedir
 			all_files = @path + " " + other_files.join(" ")
       puts `git add -- #{all_files}`
-      puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@url}\" -- #{all_files}`
+      puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@name}\" -- #{all_files}`
     ensure
       Dir.cd dir
     end
