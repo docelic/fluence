@@ -1,4 +1,8 @@
-var Fluence = {};
+var Fluence = {
+	editor : {
+		isPreviewActive: false
+	}
+};
 
 Fluence.mde_options = function(can_edit) {
 	options = {
@@ -15,7 +19,7 @@ Fluence.mde_options = function(can_edit) {
 	};
 	if(can_edit) {
 		options["toolbar"].push(
-			"preview",
+			{ name: "preview", action: Fluence.editor.togglePreview, className: "fa fa-eye no-disable", title: "Preview" },
 			"side-by-side",
 			"|",
 			"bold",
@@ -40,4 +44,18 @@ Fluence.mde_options = function(can_edit) {
 		);
 	};
 	return options
+}
+
+Fluence.editor.togglePreview = function(){
+	editor.togglePreview();
+	Fluence.editor.isPreviewActive = !Fluence.editor.isPreviewActive
+	if (Fluence.editor.isPreviewActive){
+		$("#button_save").hide();
+		$("#button_toggle").html("Edit");
+	}
+	else{
+		$("#button_save").show();
+		$("#button_toggle").html("Preview");
+		editor.codemirror.focus();
+	}
 }
