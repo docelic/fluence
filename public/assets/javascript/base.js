@@ -19,7 +19,7 @@ Fluence.mde_options = function(can_edit) {
 	};
 	if(can_edit) {
 		options["toolbar"].push(
-			{ name: "preview", action: Fluence.editor.togglePreview, className: "fa fa-eye no-disable", title: "Preview" },
+			{ name: "preview", action: Fluence.editor.togglePreview, className: "fa fa-eye", noDisable: true, title: "Preview" },
 			"side-by-side",
 			"|",
 			"bold",
