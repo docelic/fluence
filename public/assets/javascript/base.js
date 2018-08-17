@@ -48,13 +48,13 @@ Fluence.mde_options = function(can_edit) {
 
 Fluence.editor.togglePreview = function(){
 	editor.togglePreview();
-	Fluence.editor.isPreviewActive = !Fluence.editor.isPreviewActive
+	Fluence.editor.isPreviewActive = !Fluence.editor.isPreviewActive;
 	if (Fluence.editor.isPreviewActive){
-		$("#button_save").hide();
+		//$("#button_save").hide();
 		$("#button_toggle").html("Edit");
 	}
 	else{
-		$("#button_save").show();
+		//$("#button_save").show();
 		$("#button_toggle").html("Preview");
 		editor.codemirror.focus();
 	}
