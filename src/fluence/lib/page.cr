@@ -28,23 +28,26 @@ struct Fluence::Page < Fluence::Accessible
 	def initialize(name : String, process : Bool = true, is_url : Bool = false)
     name = Page.sanitize(name)
     if is_url
-      @url = name
-      @name = @url[url_prefix.size..-1].strip "/"
+      url = name
+      name = url[url_prefix.size..-1].strip "/"
     else
-      @name = name.strip "/"
-      @url = url_prefix + "/" + name
+      name = name.strip "/"
+      url = url_prefix + "/" + name
     end
-    @path = Page.name_to_directory @name
-		@title = nil
+    path = "test"
+		title = nil
 
 		if process && exists?
-			@title, @toc, @intlinks = Page.process(@path)
+			title, @toc, @intlinks = Page.process(path)
 		else
 			@toc = Page::TableOfContent::Toc.new
 			@intlinks = Page::InternalLinks::LinkList.new
 		end
 
-		@title ||= File.basename @name
+		title ||= File.basename name
+
+		super(path, name, url, title)
+
 		@slug = Page.title_to_slug @title
 	end
 

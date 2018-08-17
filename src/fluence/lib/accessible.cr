@@ -34,6 +34,10 @@ abstract struct Fluence::Accessible
 
 	abstract def url_prefix : String
 
+	# Here due to https://github.com/crystal-lang/crystal/issues/2827
+	def initialize(@path : String, @name : String, @url : String, @title : String)
+	end
+
   # translates a name ("/test/title" for example)
   # into a file path ("/srv/data/test/ttle.md)
   def self.name_to_file(name : String)
