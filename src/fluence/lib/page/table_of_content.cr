@@ -1,5 +1,5 @@
-require "../accessible"
-struct Fluence::Page < Fluence::Accessible
+require "../file"
+struct Fluence::Page < Fluence::File
   module TableOfContent
     alias TocLine = {Int32, String}
     alias Toc = Array(TocLine)
@@ -14,7 +14,7 @@ struct Fluence::Page < Fluence::Accessible
 		end
     def self.toc(path : String) : Toc
       toc = Toc.new
-      File.open path, "r" do |f|
+      ::File.open path, "r" do |f|
 
 				code_block = false
 

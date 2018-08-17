@@ -1,12 +1,12 @@
 ul.list-unstyled
-  - page.files.sort! {|a,b| a.name <=> b.name}.each do |file|
+  - pages.sort{|a,b| a.name <=> b.name}.each do |page|
     li
-      - file_name = file.name.chomp(".md").strip("/")
+      - file_name = page.name.strip("/")
       - stack_join = stack.empty? ? nil : (stack.join("/") + "/")
-      - if file.name =~ /\.md$/
-        a href="/pages/#{stack_join}#{file_name}"
-          | #{Fluence::Page.new("#{stack_join}#{file_name}", false, true).title || file_name}
+      - if page.exists?
+        a href="#{page.url}"
+          = page.title
       - else
-        | #{file_name}
-    - if file.directory?
-      == add_page(file, stack + [file_name])
+        = file_name
+    - if page.directory?
+      == add_page(page.children1.values, stack + [file_name])

@@ -5,7 +5,7 @@ ul
       - stack_join = stack.empty? ? nil : (stack.join("/") + "/")
       - if file.name =~ /\.md$/
         a href="/pages/#{stack_join}#{file_name}"
-          | #{Fluence::Page.new("#{stack_join}#{file_name}", false, true).title || file_name}
+          | #{Fluence::Page.new("#{stack_join}#{file_name}").title || file_name}
       - else
         | #{file_name}
     - if file.directory?

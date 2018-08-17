@@ -1,6 +1,6 @@
 module Fluence::Helpers::Page
   # TODO: move that
-  def add_page(page, stack = [] of String)
+  def add_page(pages, stack = [] of String)
     String.build do |str|
       Slang.embed("src/fluence/views/pages/sitemap.directory.slang", "str")
     end

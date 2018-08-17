@@ -1,46 +1,55 @@
 require "yaml"
 
-struct Fluence::Page < Fluence::Accessible
-	# Index is an index of all wiki pages and their metadata.
+struct Fluence::Page < Fluence::File
+	# Index is an index of all files in a chosen subdirectory and their saved or generated metadata.
+	# The indexed subdirectories are usually `pages/` containing all Fluence Wiki pages, and `media/` containing all media/attachments associated with the individual pages.
   class Index < Lockable
     YAML.mapping(
       file: String,
+			directory: String,
       entries: Hash(String, Page) # path, entry
     )
 
-		# Initializes index. `@file` is path to YAML-formatted file with index data.
-    def initialize(@file : String)
+		# Creates an empty index.
+		# `@subdir` is name of the subdirectory within `basedir` that needs to be indexed, and will almost always be "pages" or "media".
+    def initialize(subdir : String)
+			@file = ::File.expand_path subdir, "meta"
+			@directory = ::File.expand_path subdir, Fluence::OPTIONS.basedir
       @entries = {} of String => Page
     end
 
+		# Creates an empty index, populates it with contents from desired subdir based on file search, and saves index contents to YAML file for persistence.
+		# If you want to load an existing YAML dump of an index instead of create an index anew, see `load!`.
 		def self.build(subdir : String, max_depth : Int = 1000) : Index
-			idx = Index.new "meta/#{subdir}"
-			files = file_list("data/#{subdir}", max_depth).each do |f|
-				page = Fluence::Page.new f
+			idx = Index.new subdir
+			files = file_list(idx.directory, max_depth).each do |f|
+				# 'f' is name from subdir onwards, e.g. 'home', 'home/test', etc.
+				page = Fluence::Page.new(f).process
 				idx.add page
 			end
 			idx.save!
 		end
 
-		# Builds an array of wiki pages
-		def self.file_list(to_scan : String, max_depth : Int = 1000) : Array
+		# Recursively finds files in the chosen starting directory.
+		# Default limit is a maximum of 1000 directories to enter and scan.
+		def self.file_list(subdir : String, max_depth : Int = 1000) : Array
 			# Stop the recursion
 			raise Exception.new "Max recursion depth reached (#{max_depth})" if max_depth < 1
 
 			# Save the current directory before getting in
 			dir_current = Dir.current
-			Dir.cd to_scan
+			Dir.cd subdir
 
 			# List the files and filter them
 			all_files = Dir.glob "*"
 
 			# Separate files and directory
-			files = all_files.select { |file| !File.directory? file }.map{ |f| f.chomp(".md")}
+			files = all_files.select { |file| !::File.directory? file }.map{ |f| f.chomp(".md")}
 
-			# For the directories, call this function recursively
+			# For directories, call this function recursively
 			directories = all_files
-				.select { |file| File.directory? file }
-				.map { |dir| Page::Index.file_list(dir, max_depth - 1).as(Array(String)).map { |f| File.join dir, f } }
+				.select { |file| ::File.directory? file }
+				.map { |dir| Page::Index.file_list(dir, max_depth - 1).as(Array(String)).map { |f| ::File.join dir, f } }
 				.each do |file_list|
 					files += file_list
 			end
@@ -52,8 +61,10 @@ struct Fluence::Page < Fluence::Accessible
 		end
 
     # Loads index contents from file, replacing any existing index content.
+		# This method is faster than `build`, but it will contain stale data if the indexed directories are modified manually.
+		# In such cases, just re-start Fluence with a command line option to rebuild the index, or delete the index in the `meta/` subdirectory and restart Fluence.
     def load!
-      if File.exists?(@file) && (new_index = Index.read(@file) rescue nil)
+      if ::File.exists?(@file) && (new_index = Index.read(@file) rescue nil)
         @entries = new_index.entries
         # @file = index.file
       else
@@ -62,65 +73,106 @@ struct Fluence::Page < Fluence::Accessible
       self
     end
 
-		# Creates index object with contents from index file
+		# Creates index from contents of YAML file. This is a low level function and you should generally use `load!` instead.
     def self.read(file : String)
-      Index.from_yaml File.read(file)
+      Index.from_yaml ::File.read(file)
     end
 
     # Saves current index to file, replacing any existing on-disk contents.
     def save!
-      File.write @file, self.to_yaml
+      ::File.write @file, self.to_yaml
       self
     end
 
+		# Returns Page from index, raises if missing.
+		# There is generally little use from sending a Page as argument to retrieve the same Page back, so this should be used just as a true-or-raise check for existence of pages.
     def [](page : Fluence::Page) : Fluence::Page
-      @entries[page.path]
+      @entries[page.name]
+    end
+		# Returns Page from index, raises if missing.
+    def [](name : String) : Fluence::Page
+      @entries[name]
     end
 
+		# Returns Page from index, nil if missing.
+		# There is generally little use from sending a Page as argument to retrieve the same Page back, so this should be used just as a true-or-nil check for existence of pages.
     def []?(page : Fluence::Page) : Fluence::Page?
-      @entries[page.path]?
+      @entries[page.name]?
+    end
+		# Returns Page from index, nil if missing.
+    def []?(name : String) : Fluence::Page?
+      @entries[name]?
     end
 
-		#####
-
-    # Adds a new `Page` into the index. This is a memory-only operation
-		# and does not sync new contents to disk.
+    # Adds a new `Page` into the index. This is a memory-only operation and does not sync new index contents to disk.
+		# Only index is affected, not the actual file.
     def add(page : Fluence::Page)
-      @entries[page.path] = Page.new page.url
+      @entries[page.name] = page
       self
     end
-
-    # Adds a new `Page` into the index. This operation
-		# syncs new contents to disk.
-		def add!(page)
+    # Adds a new `Page` into the index. This operation syncs new index contents to disk.
+		def add!(page : Fluence::Page)
 			add page
 			save!
 			self
 		end
 
-    # Removes `Page` from `Index`. This is a memory-only operation
-		# and does not sync new contents to disk.
+    # Removes a Page from Index. This is a memory-only operation and does not sync new index contents to disk.
+		# Recursive deletion is not handled here for now.
     def delete(page : Fluence::Page)
-      @entries.delete page.path
+      @entries.delete page.name
       self
     end
+    # Deletes a page from index. This operation syncs new index contents to disk.
+		# Recursive deletion is not handled here for now.
+		def delete!(page : Fluence::Page)
+			delete page
+			save!
+			self
+		end
 
-    # Renames `Page` in index. This is a memory-only operation
-		# and does not sync new contents to disk.
-		# TODO: modify page data, not just path (modify page's path and url, and/or real_url)
-    def rename(page : Fluence::Page, new_page : Fluence::Page)
-      @entries[new_page.path] = @entries.delete(page.path).not_nil!
+    # Renames `Page` in index. This is a memory-only operation and does not sync new contents to disk.
+		# Recursive renaming is not handled here for now.
+    def rename(page : Fluence::Page, new_name : String)
+      @entries[new_name] = @entries.delete(page.name).not_nil!
       self
     end
+    # Renames a page in index. This operation syncs new index contents to disk.
+		# Recursive renaming is not handled here for now.
+		def rename!(page : Fluence::Page)
+			rename page
+			save!
+			self
+		end
+
+		# Returns all children of file
+		def children(page : Fluence::Page)
+			dir = page.directory
+			@entries.select {|k,v| k =~ /^#{dir + ::File::SEPARATOR}/}
+		end
+		# Returns 1 level of children of file
+		def children1(page : Fluence::Page)
+			@entries.select {|k,v| k =~ /^#{page.name}\/[^\/]+$/}
+		end
+
+		# Returns all index chidlren (alias with `entries`)
+		def children
+			@entries
+		end
+		# Returns 1 level of children
+		def children1
+			@entries.select {|k,v| k =~ /^[^#{::File::SEPARATOR}]+$/}
+		end
 
 		#####
+		# TODO review these functions below
 
     # Find a matching *text* in the Index.
     # If no matching content, return a default value.
     def find(text : String, context : Page) : {String, String}
       found = find_by_title text, context
       return {found.title, found.url} unless found.nil?
-      {text, "#{context.real_url_dirname}/#{Page.title_to_slug text}"}
+      {text, "#{context.directory}/#{Page.title_to_slug text}"}
     end
 
     # Find the closest `Index`' `Page` to *text* based on the entries title

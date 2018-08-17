@@ -1,50 +1,62 @@
 require "uri"
 
-require "./accessible"
+require "./file"
 require "./errors"
 require "./page/*"
 
 # `Page` is a representation of something that can be accessed
 # from a URL /pages/*path.
 #
-# It is used to associate path, url and data.
+# It is used to associate path, name (and URL), and data.
 # Is is can also jails the path into the *OPTIONS.basedir* to be sure that
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
-struct Fluence::Page < Fluence::Accessible
-  include Fluence::Page::TableOfContent
-  include Fluence::Page::InternalLinks
+struct Fluence::Page < Fluence::File
+
+# Disabled for now due to:
+# https://github.com/crystal-lang/crystal/issues/2827
+#  include Fluence::Page::TableOfContent
+#  include Fluence::Page::InternalLinks
 
 	YAML.mapping(
-		path: String,  # path of the file /srv/wiki/data/xxx
-		url: String,   # url of the page /pages/xxx
-		real_url: String,   # real url of the page /pages/xxx
+		path: String,  # absolute path of the file, e.g. /srv/wiki/data/pages/xxx
+		name: String,   # name of the page, e.g. xxx or xxx/subpage1
+		url: String,   # real url of the page /pages/xxx
 		title: String, # Any title
-		slug: String,  # Exact matching title
+		slug: String,  # URL-friendly title
 		toc: Page::TableOfContent::Toc,
-		internal_links: Page::InternalLinks::LinkList,
+		intlinks: Page::InternalLinks::LinkList,
 	)
 
-	def initialize(url : String, real_url : Bool = false, read_title : Bool = false)
-    url = Page.sanitize(url)
-    if real_url
-      @real_url = url
-      @url = @real_url[url_prefix.size..-1].strip "/"
-    else
-      @url = url.strip "/"
-      @real_url = File.expand_path @url, url_prefix
-    end
-    @path = Page.url_to_file @url
-    @title = File.basename @url
-    @title = Page.read_title(@path) || @title if read_title && File.exists? @path
-    @slug = ""
-    @toc = Page::TableOfContent::Toc.new
-    @internal_links = Page::InternalLinks::LinkList.new
+	def initialize(name : String)
+    name = Page.sanitize(name).strip "/"
+		url = url_prefix + "/" + name
+    path = Page.name_to_directory(name)+ ".md"
+
+		# Needed due to https://github.com/crystal-lang/crystal/issues/2827
+		title = ::File.basename name
+		super(path,name,url,title)
+
+		@slug = Page.title_to_slug @title
+		@intlinks = Page::InternalLinks::LinkList.new
+		@toc = Page::TableOfContent::Toc.new
+	end
+
+	def process
+    title = ::File.read(@path).split("\n").find { |l| l.starts_with? "# " }
+    @title = if title; title.strip("# ").strip else "" end
+		@toc = Page::TableOfContent.toc @path
+		@intlinks = Page::InternalLinks.intlinks @path
+		self
+	end
+
+	def exists?
+		::File.exists? @path
 	end
 
   # Directory where the pages are stored
   def self.subdirectory
-    File.join(Fluence::OPTIONS.basedir, "pages") + File::SEPARATOR
+    ::File.join(Fluence::OPTIONS.basedir, "pages") + ::File::SEPARATOR
   end
 
   # Beginning of the URL
@@ -52,17 +64,8 @@ struct Fluence::Page < Fluence::Accessible
     "/pages"
   end
 
-  def self.read_title(path : String) : String?
-    title = File.read(path).split("\n").find { |l| l.starts_with? "# " }
-    title && title.strip("# ").strip
-  end
-
-  def self.sanitize(url : String)
-    title_to_slug URI.unescape(url)
-  end
-
-  def read_title!
-    @title = Page.read_title(@path) || @title if File.exists?(@path)
+  def self.sanitize(text : String)
+    title_to_slug URI.unescape(text)
   end
 
 	def self.title_to_slug(title : String) : String
@@ -70,10 +73,10 @@ struct Fluence::Page < Fluence::Accessible
 	end
 
   def self.remove_empty_directories(path)
-    page_dir_elements = File.dirname(path).split File::SEPARATOR
-    base_dir_elements = Fluence::Page.subdirectory.split File::SEPARATOR
+    page_dir_elements = ::File.dirname(path).split ::File::SEPARATOR
+    base_dir_elements = Fluence::Page.subdirectory.split ::File::SEPARATOR
     while page_dir_elements.size != base_dir_elements.size
-      dir_path = page_dir_elements.join(File::SEPARATOR)
+      dir_path = page_dir_elements.join(::File::SEPARATOR)
       if Dir.empty? dir_path
         Dir.rmdir dir_path
         page_dir_elements.pop
@@ -82,4 +85,8 @@ struct Fluence::Page < Fluence::Accessible
       end
     end
   end
+
+	def children1
+		Fluence::PAGES.children1 self
+	end
 end

@@ -24,12 +24,12 @@ class Fluence::Users < Lockable
   def initialize(@file, @default : User? = nil)
     @list = {} of String => User
     # TODO: set UNIX permissions
-    File.touch(@file)
+    ::File.touch(@file)
   end
 
   # read the users from the file (erase the modifications !)
   def load!
-    if File.exists?(@file) && (new_users = Users.from_yaml(File.read(@file)) rescue nil)
+    if ::File.exists?(@file) && (new_users = Users.from_yaml(::File.read(@file)) rescue nil)
       @list = new_users.list
       @default = new_users.default
       # @file = new_users.file
@@ -41,7 +41,7 @@ class Fluence::Users < Lockable
 
   # save the users into the file
   def save!
-    File.write @file, self.to_yaml
+    ::File.write @file, self.to_yaml
   end
 
   # add an user to the list
@@ -157,7 +157,7 @@ class Fluence::Users < Lockable
 end
 
 # file = "/tmp/users"
-# File.touch(file)
+# ::File.touch(file)
 # include Fluence
 # users = Users.new(file)
 # users.load!

@@ -3,7 +3,7 @@ module Fluence
     getter basedir : String
 
     def initialize
-      @basedir = File.expand_path ENV.fetch("WIKI_DATA", "data"), Dir.current
+      @basedir = ::File.expand_path ENV.fetch("FLUENCE_DATA", "data"), Dir.current
       Dir.mkdir_p @basedir
     end
   end
