@@ -1,9 +1,9 @@
 describe Fluence::Page::InternalLinks do
   it "test basic internal links listing" do
     index = Fluence::Page::Index.new("")
-    page = Fluence::Page.new(url: "home")
+    page = Fluence::Page.new("home")
     str = "I [[am-a-link]] and [[me-too]]\n"
-    links = Fluence::Page::InternalLinks.links_in_content(str, index, page)
+    links = Fluence::Page::InternalLinks.links_in_content str
 
     link1 = "am-a-link"
     link2 = "me-too"
@@ -12,8 +12,8 @@ describe Fluence::Page::InternalLinks do
 
     links.size.should eq 2
     links[0][0].should eq link1_idx
-    links[0][1].should eq "/pages/#{link1}"
+    links[0][1].should eq link1
     links[1][0].should eq link2_idx
-    links[1][1].should eq "/pages/#{link2}"
+    links[1][1].should eq link2
   end
 end
