@@ -42,7 +42,8 @@ class Fluence::Page < Fluence::File
 		@toc = Page::TableOfContent::Toc.new
 	end
 
-	def process
+	def process!
+		# TODO read all this from one copy of contents
     title = ::File.read(@path).split("\n").find { |l| l.starts_with? "# " }
     @title = if title; title.strip("# ").strip else @name end
 		@toc = Page::TableOfContent.toc @path

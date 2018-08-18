@@ -113,12 +113,18 @@ class PagesController < ApplicationController
   end
 
   private def update_edit(page)
-      page.write current_user, params.body["body"]
-      Fluence::PAGES.transaction! { |index| index.add! page }
-      flash["success"] = %Q(Page #{page.name} has been #{page.exists? ? "updated" : "created"}.)
-      redirect_to page.url
-    rescue err
-      flash["danger"] = "Error: cannot update #{page.name}, #{err.message}"
-      redirect_to page.url
+		action = page.exists? ? "updated" : "created"
+		Fluence::PAGES.transaction! { |index|
+			page.write current_user, params.body["body"]
+			page.process!
+			unless Fluence::PAGES[page]?
+				index.add! page
+			end
+		}
+		flash["success"] = %Q(Page #{page.name} has been #{action})
+		redirect_to page.url
+	rescue err
+		flash["danger"] = "Error: cannot update #{page.name}, #{err.message}"
+		redirect_to page.url
   end
 end

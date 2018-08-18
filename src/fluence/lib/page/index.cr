@@ -24,7 +24,7 @@ class Fluence::Page < Fluence::File
 			idx = Index.new subdir
 			files = file_list(idx.directory, max_depth).each do |f|
 				# 'f' is name from subdir onwards, e.g. 'home', 'home/test', etc.
-				page = Fluence::Page.new(f).process
+				page = Fluence::Page.new(f).process!
 				idx.add page
 			end
 			idx.save!
