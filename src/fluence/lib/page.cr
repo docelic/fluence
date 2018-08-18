@@ -11,7 +11,7 @@ require "./page/*"
 # Is is can also jails the path into the *OPTIONS.basedir* to be sure that
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
-struct Fluence::Page < Fluence::File
+class Fluence::Page < Fluence::File
 
 # Disabled for now due to:
 # https://github.com/crystal-lang/crystal/issues/2827

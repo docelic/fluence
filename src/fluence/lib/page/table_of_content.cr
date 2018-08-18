@@ -1,5 +1,5 @@
 require "../file"
-struct Fluence::Page < Fluence::File
+class Fluence::Page < Fluence::File
   module TableOfContent
     alias TocLine = {Int32, String}
     alias Toc = Array(TocLine)

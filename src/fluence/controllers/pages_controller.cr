@@ -78,13 +78,11 @@ class PagesController < ApplicationController
 					new_name = params.body["input-page-name"]
 					old_path = page.path
 
-					STDERR.puts Fluence::PAGES[page.name]?.nil?, Fluence::PAGES[new_name]?.nil?
-					STDERR.puts page.nil?, new_name.nil?
 					index.rename page, new_name
 					page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?, !!params.body["input-page-subtree"]?
 					Fluence::Page.remove_empty_directories old_path
 				}
-        flash["success"] = "The page #{old_name} has been renamed to #{page.name}."
+        flash["success"] = "Page #{old_name} has been renamed to #{page.name}."
         redirect_to page.url
       rescue e : Fluence::Page::AlreadyExists
         flash["danger"] = e.to_s
@@ -103,7 +101,7 @@ class PagesController < ApplicationController
 			pages.each do |p|
 				Fluence::PAGES.transaction! { |index| index.delete page }
 				page.delete current_user
-				flash["success"] += "The page #{page.name} has been deleted. "
+				flash["success"] = "Page #{page.name} has been deleted. "
 				Fluence::Page.remove_empty_directories page.path
 			end
       redirect_to "/pages/home"
@@ -117,7 +115,7 @@ class PagesController < ApplicationController
   private def update_edit(page)
       page.write current_user, params.body["body"]
       Fluence::PAGES.transaction! { |index| index.add! page }
-      flash["success"] = %Q(The page #{page.name} has been #{page.exists? ? "updated" : "created"}.)
+      flash["success"] = %Q(Page #{page.name} has been #{page.exists? ? "updated" : "created"}.)
       redirect_to page.url
     rescue err
       flash["danger"] = "Error: cannot update #{page.name}, #{err.message}"

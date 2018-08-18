@@ -7,7 +7,7 @@ require "./page/*"
 # from a URL /media/*path.
 #
 # As much as possible here should come from Fluence::File.
-struct Fluence::Media < Fluence::File
+class Fluence::Media < Fluence::File
 
   # Directory where media is stored
   def self.subdirectory

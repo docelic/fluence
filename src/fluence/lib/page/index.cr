@@ -1,6 +1,6 @@
 require "yaml"
 
-struct Fluence::Page < Fluence::File
+class Fluence::Page < Fluence::File
 	# Index is an index of all files in a chosen subdirectory and their saved or generated metadata.
 	# The indexed subdirectories are usually `pages/` containing all Fluence Wiki pages, and `media/` containing all media/attachments associated with the individual pages.
   class Index < Lockable

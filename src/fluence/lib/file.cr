@@ -6,14 +6,14 @@ require "./errors"
 # It is used to associate path, url and data.
 #
 # Pages and Media are two primary uses. Originally, all of this was
-# in the Page struct directly, but structs can only inherit from
-# abstract structs, so `File` was created as an abstract base
+# in the Page class directly, but class can only inherit from
+# abstract class, so `File` was created as an abstract base
 # for both Page and Media.
 #
 # Is is can also jail!s the path into the *OPTIONS.basedir* to be sure that
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
-abstract struct Fluence::File
+abstract class Fluence::File
 
 	class AlreadyExists < Exception
 	end
@@ -84,7 +84,7 @@ abstract struct Fluence::File
 		# but given that unintended deletions/overwrites of content can be
 		# a problem, test in a more certain way by testing file existence.
 		if ::File.exists?(new_page.path) && !overwrite
-			raise AlreadyExists.new "Destination exists and overwriting was not requested."
+			raise AlreadyExists.new %Q(Destination exists and overwriting was not requested. Do you want to visit the page #{new_page.name} instead?)
 		else
 			::File.rename path, new_page.path
 			files = [new_page.path]
@@ -110,9 +110,9 @@ abstract struct Fluence::File
 	# Renames the page, updates self, and returns self
 	def rename!(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true)
 		new_page = rename user, new_name, overwrite, subtree, git
-		self.path = new_page.path
-		self.name = new_page.name
-		self.url = new_page.url
+		@path = new_page.path
+		@name = new_page.name
+		@url = new_page.url
 		self
 	end
 
