@@ -44,7 +44,7 @@ struct Fluence::Page < Fluence::File
 
 	def process
     title = ::File.read(@path).split("\n").find { |l| l.starts_with? "# " }
-    @title = if title; title.strip("# ").strip else "" end
+    @title = if title; title.strip("# ").strip else @name end
 		@toc = Page::TableOfContent.toc @path
 		@intlinks = Page::InternalLinks.intlinks @path
 		self
@@ -86,6 +86,9 @@ struct Fluence::Page < Fluence::File
     end
   end
 
+	def children
+		Fluence::PAGES.children self
+	end
 	def children1
 		Fluence::PAGES.children1 self
 	end

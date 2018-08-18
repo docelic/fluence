@@ -15,7 +15,7 @@ require "./errors"
 # must be stored.
 abstract struct Fluence::File
 
-	class AlreadyExist < Exception
+	class AlreadyExists < Exception
 	end
 
   # Path of the file that contains the page
@@ -68,35 +68,48 @@ abstract struct Fluence::File
 
   # Renames the page without modifying the current Page object.
 	# Returns the new Page object where only path, name, and url fields may be correct and/or initialized.
-  def rename(user : Fluence::User, new_name, overwrite = false)
+  def rename(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true)
     self.jail!
     Dir.mkdir_p ::File.dirname new_name
-		if Fluence::PAGES[new_name]?
-			raise AlreadyExist.new "Old and new name are the same, renaming not possible."
+		if name == new_name
+			raise AlreadyExists.new "Old and new name are the same, renaming not possible."
 		end
-		new_file = Page.name_to_path new_name
-		if ::File.exists?(new_file) && !overwrite
-			raise AlreadyExist.new "Destination exists and overwriting was not requested."
+
+		# Mostly disposable, here just to check jail.
+		new_page = Page.new new_name
+		new_page.jail!
+
+		# TODO instead of raising, add flash message and skip
+		# It would be sufficient to check the Index for existence of page,
+		# but given that unintended deletions/overwrites of content can be
+		# a problem, test in a more certain way by testing file existence.
+		if ::File.exists?(new_page.path) && !overwrite
+			raise AlreadyExists.new "Destination exists and overwriting was not requested."
 		else
-			::File.rename self.path, new_file
-			files = [new_file]
-			dir = directory
-			# TODO instead of dir mv, this needs to be done by moving pages one by one.
-			if dir && ::File.exists?(dir)
-				new_dir = ::File.dirname new_file
-				#::File.rename dir, new_dir
-				files << dir
-				files << new_dir
+			::File.rename path, new_page.path
+			files = [new_page.path]
+
+			if subtree
+				page_children = children
+				page_children.each do |nm, pg|
+					# Replace self.name with new_name
+					new_nm = nm
+					new_nm = new_nm.sub @name, new_name
+					rename(user, new_nm, overwrite, subtree: false, git: false)
+					files << new_nm
+				end
 			end
-			commit! user, "rename", other_files: files
+			if git
+				commit! user, "rename", other_files: files
+			end
 		end
 		# Get from Index at this point
 		Fluence::Page.new new_name
   end
 
 	# Renames the page, updates self, and returns self
-	def rename!(user : Fluence::User, new_name, overwrite = false)
-		new_page = rename user, new_name, overwrite
+	def rename!(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true)
+		new_page = rename user, new_name, overwrite, subtree, git
 		self.path = new_page.path
 		self.name = new_page.name
 		self.url = new_page.url

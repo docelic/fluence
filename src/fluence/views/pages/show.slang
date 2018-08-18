@@ -106,8 +106,8 @@ script type="text/template" id="qq-template"
 									.row
 										.col
 											.form-group.form-check
-											 input type="checkbox" class="form-check-input" id="input-page-subtree-delete" name="input-page-subtree-delete"
-											 label class="form-check-label" for="input-page-subtree-delete" With subpages
+											 input type="checkbox" class="form-check-input" id="input-page-subtree" name="input-page-subtree"
+											 label class="form-check-label" for="input-page-subtree" With subpages
 										.col
 											button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.name}`?')" Delete
 							hr

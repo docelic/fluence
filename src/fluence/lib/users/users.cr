@@ -5,10 +5,10 @@ require "./user"
 #
 # TODO: mutex on add/remove/update
 class Fluence::Users < Lockable
-  class AlreadyExist < Exception
+  class AlreadyExists < Exception
   end
 
-  class NotExist < Exception
+  class NotExists < Exception
   end
 
   # getter file : String
@@ -46,7 +46,7 @@ class Fluence::Users < Lockable
 
   # add an user to the list
   def add(u : User)
-    raise AlreadyExist.new "User #{u.name} already exists" if (@list[u.name]?)
+    raise AlreadyExists.new "User #{u.name} already exists" if (@list[u.name]?)
     @list[u.name] = u
     self
   end
@@ -60,14 +60,14 @@ class Fluence::Users < Lockable
 
   # Remove an user from the list
   def delete(name : String)
-    raise NotExist.new "User #{name} is not in the list" if (!@list[name]?)
+    raise NotExists.new "User #{name} is not in the list" if (!@list[name]?)
     @list.delete name
     self
   end
 
   # replace an entry
   def update(name : String, u : User)
-    raise NotExist.new "User #{name} is not in the list" if (!@list[name]?)
+    raise NotExists.new "User #{name} is not in the list" if (!@list[name]?)
 
     # if the name change
     if name != u.name
@@ -82,7 +82,7 @@ class Fluence::Users < Lockable
   # find an user based on its name
   def find(name : String) : User
     user = @list[name]?
-    raise NotExist.new "User #{name} is not in the list" unless user
+    raise NotExists.new "User #{name} is not in the list" unless user
     user
   end
 

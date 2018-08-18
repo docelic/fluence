@@ -5,7 +5,7 @@ ul.list-unstyled
       - stack_join = stack.empty? ? nil : (stack.join("/") + "/")
       - if page.exists?
         a href="#{page.url}"
-          = page.title
+          = page.title || page.name
       - else
         = file_name
     - if page.directory?

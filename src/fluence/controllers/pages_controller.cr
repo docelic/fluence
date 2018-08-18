@@ -24,13 +24,12 @@ class PagesController < ApplicationController
   def show
     acl_permit! :read
     flash["danger"] = params.query["flash.danger"] if params.query["flash.danger"]?
-    #pp params.url
-    page = Fluence::PAGES[params.url["path"]]? || (Fluence::Page.new params.url["path"])
-    #if (params.query["edit"]?) || !page
-    #  show_edit(page)
-    #else
-     show_show(page)
-    #end
+		if page = Fluence::PAGES[params.url["path"]]?
+			# Page exists in the index
+		else
+			page = Fluence::Page.new params.url["path"]
+		end
+		show_show(page)
   end
 
   private def show_show(page)
@@ -71,16 +70,25 @@ class PagesController < ApplicationController
   private def update_rename(page)
     if !params.body["input-page-name"]?.to_s.strip.empty?
       # TODO: verify if the user can write on input-page-name
-      # TODO: if input-page-name do not begin with /, relative rename to the current path
+      # TODO: if input-page-name does not begin with /, do relative rename to the current path
+			old_url = page.url
       begin
-        new_page = page.rename current_user, params.body["input-page-name"], !!params.body["input-page-overwrite"]?
-        flash["success"] = "The page #{page.name} has been renamed to #{new_page.name}."
-				Fluence::PAGES.transaction! { |index| index.rename page, new_page.name }
-        Fluence::Page.remove_empty_directories page.path
-        redirect_to new_page.url
-      rescue e : Fluence::Page::AlreadyExist
-        flash["danger"] = e.to_s
+				old_name = page.name
+				Fluence::PAGES.transaction! { |index|
+					new_name = params.body["input-page-name"]
+					old_path = page.path
+
+					STDERR.puts Fluence::PAGES[page.name]?.nil?, Fluence::PAGES[new_name]?.nil?
+					STDERR.puts page.nil?, new_name.nil?
+					index.rename page, new_name
+					page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?, !!params.body["input-page-subtree"]?
+					Fluence::Page.remove_empty_directories old_path
+				}
+        flash["success"] = "The page #{old_name} has been renamed to #{page.name}."
         redirect_to page.url
+      rescue e : Fluence::Page::AlreadyExists
+        flash["danger"] = e.to_s
+        redirect_to old_url
       end
     else
       redirect_to page.url
