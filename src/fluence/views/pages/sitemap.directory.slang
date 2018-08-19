@@ -1,12 +1,13 @@
 ul.list-unstyled
-  - pages.sort{|a,b| a.name <=> b.name}.each do |page|
+  - names = pages.keys.sort!
+  - names.each do |name|
+    - page = pages[name][1]
     li
-      - file_name = page.name.strip("/")
       - stack_join = stack.empty? ? nil : (stack.join("/") + "/")
-      - if page.exists?
+      - if page
         a href="#{page.url}"
           = page.title
       - else
-        = file_name
-    - if page.directory?
-      == add_page(page.children1.values, stack + [file_name])
+        = name
+    - if !page || page.directory?
+      == add_page(Fluence::PAGES.children1( page ? page.name : pages[name][0]), stack + [name])

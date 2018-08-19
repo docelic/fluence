@@ -47,7 +47,7 @@ class PagesController < ApplicationController
     groups_write = Fluence::ACL.groups_having_any_access_to page.url, Acl::Perm::Write, true
     title = "#{page.title} - #{title()}"
     # For menu on the left
-    pages = Fluence::PAGES.children1.values
+    pages = Fluence::PAGES.children1
     render "show.slang"
   end
 
@@ -115,8 +115,7 @@ class PagesController < ApplicationController
   private def update_edit(page)
 		action = page.exists? ? "updated" : "created"
 		Fluence::PAGES.transaction! { |index|
-			page.write current_user, params.body["body"]
-			page.process!
+			page.update! current_user, params.body["body"]
 			unless Fluence::PAGES[page]?
 				index.add! page
 			end

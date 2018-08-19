@@ -86,19 +86,20 @@ abstract class Fluence::File
 		if ::File.exists?(new_page.path) && !overwrite
 			raise AlreadyExists.new %Q(Destination exists and overwriting was not requested. Do you want to visit the page #{new_page.name} instead?)
 		else
+			Dir.mkdir_p ::File.dirname new_page.path
 			::File.rename path, new_page.path
 			files = [new_page.path]
 
-			if subtree
-				page_children = children
-				page_children.each do |nm, pg|
-					# Replace self.name with new_name
-					new_nm = nm
-					new_nm = new_nm.sub @name, new_name
-					rename(user, new_nm, overwrite, subtree: false, git: false)
-					files << new_nm
-				end
-			end
+			#if subtree
+			#	page_children = children
+			#	page_children.each do |nm, pg|
+			#		# Replace self.name with new_name
+			#		new_nm = nm
+			#		new_nm = new_nm.sub @name, new_name
+			#		rename(user, new_nm, overwrite, subtree: false, git: false)
+			#		files << new_nm
+			#	end
+			#end
 			if git
 				commit! user, "rename", other_files: files
 			end
@@ -113,6 +114,13 @@ abstract class Fluence::File
 		@path = new_page.path
 		@name = new_page.name
 		@url = new_page.url
+		process!
+		self
+	end
+
+	def update!(user : Fluence::User, body)
+		write user, body
+		process!
 		self
 	end
 

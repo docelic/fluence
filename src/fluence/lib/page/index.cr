@@ -145,23 +145,45 @@ class Fluence::Page < Fluence::File
 			self
 		end
 
-		# Returns all children of file
-		def children(page : Fluence::Page)
-			dir = page.directory
-			@entries.select {|k,v| k =~ /^#{dir + ::File::SEPARATOR}/}
-		end
-		# Returns 1 level of children of file
 		def children1(page : Fluence::Page)
-			@entries.select {|k,v| k =~ /^#{page.name}\/[^\/]+$/}
+			ret = {} of String => {String,Page?}
+			@entries.each do |k,v|
+				if k =~ /^#{page.name}\/(.+?)($|\/)/
+					key = $1.to_s
+					val = ($2.to_s == "/") ? nil : v
+					if !ret[key]?
+						ret[key] = {k,val}
+					end
+				end
+			end
+			ret
 		end
-
-		# Returns all index chidlren (alias with `entries`)
-		def children
-			@entries
+		def children1(name : String)
+			ret = {} of String => {String,Page?}
+			@entries.each do |k,v|
+				if k =~ /^(#{name}\/(.+?))($|\/)/
+					key = $2.to_s
+					val = ($3.to_s == "/") ? nil : v
+					if !ret[key]?
+						ret[key] = {$1,val}
+					end
+				end
+			end
+			ret
 		end
-		# Returns 1 level of children
+		# Returns list of immediate children of the index, including subdirectories
 		def children1
-			@entries.select {|k,v| k =~ /^[^#{::File::SEPARATOR}]+$/}
+			ret = {} of String => {String,Page?}
+			@entries.each do |k,v|
+				if k =~ /^((.+?))($|\/)/
+					key = $2.to_s
+					val = ($3.to_s == "/") ? nil : v
+					if !ret[key]?
+						ret[key] = {$1,val}
+					end
+				end
+			end
+			ret
 		end
 
 		#####

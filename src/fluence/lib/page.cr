@@ -87,9 +87,6 @@ class Fluence::Page < Fluence::File
     end
   end
 
-	def children
-		Fluence::PAGES.children self
-	end
 	def children1
 		Fluence::PAGES.children1 self
 	end
