@@ -46,6 +46,7 @@ class Fluence::Page < Fluence::File
 		# TODO read all this from one copy of contents
     title = ::File.read(@path).split("\n").find { |l| l.starts_with? "# " }
     @title = if title; title.strip("# ").strip else @name.sub /^.+\//, "" end
+		@slug = Page.title_to_slug @title
 		@toc = Page::TableOfContent.toc @path
 		@intlinks = Page::InternalLinks.intlinks @path
 		self
