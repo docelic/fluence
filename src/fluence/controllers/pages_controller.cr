@@ -28,11 +28,26 @@ class PagesController < ApplicationController
 			# Page exists in the index
 		else
 			page = Fluence::Page.new params.url["path"]
+			# If page exists but was not found, this is a page someone added from cmdline. Incorporate it.
+			if page.exists?
+				Fluence::PAGES.transaction! { |index|
+					page.process!
+					index.add! page
+					flash["danger danger-created-externally"] = "Page exists on disk but was not created through the wiki. Processed and added it to the index"
+				}
+			end
 		end
 		show_show(page)
   end
 
   private def show_show(page)
+		if page.exists? && ( ::File.info(page.path).modification_time > page.modification_time)
+			Fluence::PAGES.transaction! { |index|
+				page.process!
+				flash["success success-re-process"] = "External modification to page detected. Processing any changes and showing the updated page."
+			}
+		end
+
     body = page.read rescue ""
     body_html = body ? Fluence::Markdown.to_html body, page, Fluence::PAGES.load! : ""
     Fluence::ACL.load!

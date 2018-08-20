@@ -26,6 +26,7 @@ class Fluence::Page < Fluence::File
 		slug: String,  # URL-friendly title
 		toc: Page::TableOfContent::Toc,
 		intlinks: Page::InternalLinks::LinkList,
+		modification_time: Time
 	)
 
 	def initialize(name : String)
@@ -40,6 +41,10 @@ class Fluence::Page < Fluence::File
 		@slug = Page.title_to_slug @title
 		@intlinks = Page::InternalLinks::LinkList.new
 		@toc = Page::TableOfContent::Toc.new
+
+		# This data will be inaccurate (i.e. be current time) if an existing page
+		# is created with Fluence::Page.new("existing_name") and #process! is not called.
+		@modification_time = Time.new
 	end
 
 	def process!
@@ -49,6 +54,7 @@ class Fluence::Page < Fluence::File
 		@slug = Page.title_to_slug @title
 		@toc = Page::TableOfContent.toc @path
 		@intlinks = Page::InternalLinks.intlinks @path
+		@modification_time = ::File.info(@path).modification_time
 		self
 	end
 
