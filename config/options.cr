@@ -20,6 +20,10 @@ module Fluence
 
 			@recursion_limit = 1000
 
+			@open_in_edit = false
+			@open_new_in_edit = true
+			@open_empty_in_edit = false
+
       Dir.mkdir_p @datadir
       Dir.mkdir_p @metadir
     end
@@ -35,6 +39,9 @@ module Fluence
     getter users_prefix : String
     getter admin_prefix : String
     getter recursion_limit : Int32
+    getter open_in_edit : Bool
+    getter open_new_in_edit : Bool
+    getter open_empty_in_edit : Bool
   end
 
   OPTIONS = Fluence::Options.new

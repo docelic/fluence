@@ -55,13 +55,13 @@ module Fluence
 		Fluence::Page::Index.build("pages")
 	end
 
-#  # The list of media with a lot of meta-data. Same behavior like
-#  # `USERS` and `ACL`.
-#	MEDIA = if File.exists? "#{Fluence::OPTIONS.metadir}/media"
-#		Fluence::Page::Index.new("media").load!
-#	else
-#		Fluence::Page::Index.build("media")
-#	end
+  # The list of media with a lot of meta-data. Same behavior like
+  # `USERS` and `ACL`.
+	MEDIA = if ::File.exists? "#{Fluence::OPTIONS.metadir}/media"
+		Fluence::Page::Index.new("media").load!
+	else
+		Fluence::Page::Index.build("media")
+	end
 
 #	# Install file watcher on data files.
 #	# Exact use of the triggers is to be determined later.

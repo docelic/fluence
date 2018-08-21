@@ -31,9 +31,9 @@ Router.get "#{Fluence::OPTIONS.pages_prefix}/search", PagesController, :search
 Router.get "#{Fluence::OPTIONS.pages_prefix}/*path", PagesController, :show
 Router.post "#{Fluence::OPTIONS.pages_prefix}/*path", PagesController, :update
 
-#Router.get "#{Fluence::OPTIONS.media_prefix}/*path", MediaController, :show
-#Router.post "#{Fluence::OPTIONS.media_prefix}/*path", MediaController, :update
-#Router.post "#{Fluence::OPTIONS.media_prefix}/upload", MediaController, :upload
+Router.get "#{Fluence::OPTIONS.media_prefix}/*path", MediaController, :show
+Router.post "#{Fluence::OPTIONS.media_prefix}/*path", MediaController, :update
+Router.post "#{Fluence::OPTIONS.media_prefix}/upload", MediaController, :upload
 
 Router.get "#{Fluence::OPTIONS.users_prefix}/login", UsersController, :login
 Router.post "#{Fluence::OPTIONS.users_prefix}/login", UsersController, :login_validates
