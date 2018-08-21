@@ -69,7 +69,7 @@ class Fluence::Page < Fluence::File
 
   # Beginning of the URL
   def url_prefix
-    "/pages"
+    Fluence::OPTIONS.pages_prefix
   end
 
   def self.sanitize(text : String)

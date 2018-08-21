@@ -25,13 +25,13 @@ nav.navbar.navbar-light.bg-light.navbar-expand-lg
             span | Logged in as
               = current_user.name
           li.nav-item
-            a.nav-link href="/users/logout" (Logout)
+            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/logout" (Logout)
         - else
           li.nav-item
-            a.nav-link href="/users/login" | Login
+            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/login" | Login
             li.navbar-text or
-            a.nav-link href="/users/register" Register
-      form#search-page.my-2.d-inline.w-50 action="/#{Fluence::OPTIONS.pages_prefix}/search" method="get"
+            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/register" Register
+      form#search-page.my-2.d-inline.w-50 action="#{Fluence::OPTIONS.pages_prefix}/search" method="get"
         .input-group
           input.form-control.mr-sm-2 name="q" type="search" placeholder="Search" aria-label="Search" autocomplete="on"
           /      datalist#search-list

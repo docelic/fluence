@@ -16,6 +16,6 @@ class Fluence::Media < Fluence::File
 
   # Beginning of the URL
 	def url_prefix
-		"/media"
+		Fluence::OPTIONS.media_prefix
 	end
 end

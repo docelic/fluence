@@ -13,7 +13,7 @@ class Fluence::Page < Fluence::File
 		# Creates an empty index.
 		# `@subdir` is name of the subdirectory within `datadir` that needs to be indexed, and will almost always be "pages" or "media".
     def initialize(subdir : String)
-			@file = ::File.expand_path subdir, "meta"
+			@file = ::File.expand_path subdir, Fluence::OPTIONS.metadir
 			@directory = ::File.expand_path subdir, Fluence::OPTIONS.datadir
       @entries = {} of String => Page
     end

@@ -10,7 +10,7 @@ module Fluence
   # The dir *meta* contains users account (with encrypted password),
   # the index of the pages (with table of content, links, titles, ...)
   # and user permissions
-  Dir.mkdir_p "meta"
+  Dir.mkdir_p Fluence::OPTIONS.metadir
 
 	Dir.mkdir_p Fluence::Page.subdirectory
 	Dir.mkdir_p Fluence::Media.subdirectory
@@ -21,11 +21,11 @@ module Fluence
   # The list of users is stored in *meta/users*. This file is updated when
   # a user is created/modified/deleted, but data is stored in RAM for
   # efficiency.
-  USERS = Fluence::Users.new("meta/users", DEFAULT_USER).load!
+  USERS = Fluence::Users.new("#{Fluence::OPTIONS.metadir}/users", DEFAULT_USER).load!
 
   # The list of permissions (group => path+permission) is stored in
   # file *meta/acl*. Similar behavior like `USERS`.
-  ACL = Acl::Groups.new("meta/acl").load!
+  ACL = Acl::Groups.new("#{Fluence::OPTIONS.metadir}/acl").load!
 
   # If there is no "guest", we assume that the ACL have not been initialized yet
   # and we create a group "guest" and "user".
@@ -49,7 +49,7 @@ module Fluence
 
   # The list of pages with a lot of meta-data. Same behavior like
   # `USERS` and `ACL`.
-	PAGES = if ::File.exists? "meta/pages"
+	PAGES = if ::File.exists? "#{Fluence::OPTIONS.metadir}/pages"
 		Fluence::Page::Index.new("pages").load!
 	else
 		Fluence::Page::Index.build("pages")
@@ -57,7 +57,7 @@ module Fluence
 
 #  # The list of media with a lot of meta-data. Same behavior like
 #  # `USERS` and `ACL`.
-#	MEDIA = if File.exists? "meta/media"
+#	MEDIA = if File.exists? "#{Fluence::OPTIONS.metadir}/media"
 #		Fluence::Page::Index.new("media").load!
 #	else
 #		Fluence::Page::Index.build("media")

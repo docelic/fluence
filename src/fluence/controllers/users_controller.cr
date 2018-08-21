@@ -17,7 +17,7 @@ class UsersController < ApplicationController
       flash["success"] = "You are now logged in as user '#{user.name}'."
       session.string("user.name", user.name)
       set_login_cookies_for(user.name)
-      redirect_to "/pages/home"
+      redirect_to Fluence::OPTIONS.homepage
     end
   end
 
