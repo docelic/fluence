@@ -1,6 +1,6 @@
 / - active = context.request.path == "/" ? "active" : ""
 / a class="nav-item #{active}" href="/" Home
-nav.navbar.navbar-expand-lg.bg-light
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
   .container-fluid.pr-0
     a.navbar-brand href="#" Fluence
     button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"

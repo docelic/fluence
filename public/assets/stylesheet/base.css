@@ -22,6 +22,9 @@ a[href*="//"] {
     padding-right: 13px;
 }
 
+a.nav-link{
+  color: blue !important; 
+}
 /*#trigger-upload {
 		color: white;
 		background-color: #00ABC7;
