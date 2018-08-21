@@ -62,14 +62,14 @@ abstract class Fluence::File
 
   # Reads the *file* and returns the content.
   def read
-    self.jail!
+    jail!
     ::File.read @path
   end
 
   # Renames the page without modifying the current Page object.
 	# Returns the new Page object where only path, name, and url fields may be correct and/or initialized.
   def rename(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true)
-    self.jail!
+    jail!
     Dir.mkdir_p ::File.dirname new_name
 		if name == new_name
 			raise AlreadyExists.new "Old and new name are the same, renaming not possible."
@@ -104,6 +104,7 @@ abstract class Fluence::File
 		@path = new_page.path
 		@name = new_page.name
 		@url = new_page.url
+		jail!
 		process!
 		self
 	end
@@ -116,22 +117,23 @@ abstract class Fluence::File
 
   # Writes into the *file*, and commit.
   def write(user : Fluence::User, body)
-    self.jail!
+    jail!
     Dir.mkdir_p self.directory
     ::File.write @path, body
     commit! user, exists? ? "update" : "create"
   end
 
-  # Deletes the *file*, and commit
+  # Deletes the *file*, and commits
   def delete(user : Fluence::User)
-    self.jail!
+    jail!
     ::File.delete @path
     commit! user, "delete"
+		self
   end
 
   # Checks if the *file* exists
   def exists?
-    self.jail!
+    jail!
     ret = ::File.exists? @path
 		ret
   end

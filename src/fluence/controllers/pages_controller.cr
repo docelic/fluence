@@ -115,23 +115,29 @@ class PagesController < ApplicationController
 		redirect_to main_page.url
   end
 
-  private def update_delete(page)
-			pages = [page]
-			if !params.body["input-page-subtree-delete"]?.to_s.strip.empty?
-				#pages += Fluence::PAGES.find_below page
+  private def update_delete(main_page)
+    unless params.body["input-page-name"]?.to_s.strip.empty?
+			pages = [main_page]
+			if params.body["input-page-subtree"]?
+				pages += main_page.children.values.map{|v| v[1]}
 			end
-			pages.each do |p|
-				Fluence::PAGES.transaction! { |index| index.delete page }
-				page.delete current_user
-				flash["success"] = "Page #{page.name} has been deleted. "
-				Fluence::Page.remove_empty_directories page.path
+
+			pages.each do |page|
+				begin
+					Fluence::PAGES.transaction! { |index|
+						index.delete page
+						page.delete current_user
+						Fluence::Page.remove_empty_directories page.path
+					}
+					flash["success success-#{page.name}"] = "Page #{page.name} has been deleted."
+				rescue e
+					flash["danger danger-#{page.name}"] = "Error deleting #{page.name}: #{e.to_s}"
+					redirect_to page.url
+					return
+				end
 			end
-      redirect_to "/pages/home"
-    rescue err
-      # TODO: what if the page is not deleted but not indexed anymore ?
-      # Fluence::PAGES.transaction! { |index| index.add page }
-      flash["danger"] = "Error: cannot remove #{page.name}, #{err.message}"
-      redirect_to page.url
+    end
+		redirect_to "/pages/home"
   end
 
   private def update_edit(page)
