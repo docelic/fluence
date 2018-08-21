@@ -9,28 +9,17 @@ nav.navbar.navbar-light.bg-light.navbar-expand-lg
 
     #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.mr-auto
-        li.nav-item class="active"
+        li.nav-item.active
           a.nav-link href="#{Fluence::OPTIONS.homepage}" Home
             span.sr-only (current)
-        li.nav-item
+        li.nav-item.active
           a.nav-link href="/sitemap" Sitemap
         - if Fluence::ACL.permitted?(current_user, "#{Fluence::OPTIONS.admin_prefix}/users", Acl::Perm::Read)
-          li.nav-item
+          li.nav-item.active
             a.nav-link href="#{Fluence::OPTIONS.admin_prefix}/users" Users
         - if Fluence::ACL.permitted?(current_user, "#{Fluence::OPTIONS.admin_prefix}/acls", Acl::Perm::Read)
-          li.nav-item
+          li.nav-item.active
             a.nav-link href="#{Fluence::OPTIONS.admin_prefix}/acls" ACLs
-        - if user_signed_in?
-          li.navbar-text
-            span | Logged in as
-              = current_user.name
-          li.nav-item
-            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/logout" (Logout)
-        - else
-          li.nav-item
-            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/login" | Login
-            li.navbar-text or
-            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/register" Register
       form#search-page.my-2.d-inline.w-50 action="#{Fluence::OPTIONS.pages_prefix}/search" method="get"
         .input-group
           input.form-control.mr-sm-2 name="q" type="search" placeholder="Search" aria-label="Search" autocomplete="on"
@@ -38,3 +27,15 @@ nav.navbar.navbar-light.bg-light.navbar-expand-lg
           /        - Fluence::PAGES.entries.values.each do |entry|
           /          option value=entry.url = entry.title
           button.btn.btn-outline-success.my-2.my-sm-0 type="submit" Search
+      ul.navbar-nav.mx-auto
+        - if user_signed_in?
+          li.navbar-text
+            span | Logged in as
+              = current_user.name
+          li.nav-item.active
+            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/logout" (Logout)
+        - else
+          li.nav-item.active
+            a.nav-link href="#{Fluence::OPTIONS.users_prefix}/login" | Login
+            li.navbar-text or
+            a.nav-link.active href="#{Fluence::OPTIONS.users_prefix}/register" Register

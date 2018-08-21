@@ -1,12 +1,9 @@
-h1.page-header Login
-
 .constainer-fluid
   .row.no-gutters
-    .col-3
+    .container.col-3
+      h2.page-header Login
       form#register method="post"
         fieldset
-          legend
-            | Login
           .form-group.row
             label.col-4.col-form-label for="input_username" Username
             .col-8
