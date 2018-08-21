@@ -157,7 +157,7 @@ class MediaController < ApplicationController
       if !filename.is_a?(String)
         "No filename included in upload"
       else
-        STDERR.puts "Uploading media for #{params.url["path"]}"
+        #STDERR.puts "Uploading media for #{params.url["path"]}"
         #file_path = ::File.join [Kemal.config.public_folder, "uploads/", filename]
         #File.open(file_path, "w") do |f|
         #IO.copy(file.tmpfile, f)
