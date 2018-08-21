@@ -62,7 +62,7 @@ class MediaController < ApplicationController
   # post /pages/*path
   def update
     acl_permit! :write
-    page = Fluence::MEDIA[params.url["path"]]? || (Fluence::Page.new params.url["path"])
+    page = Fluence::MEDIA[params.url["path"]]? || (Fluence::Media.new params.url["path"])
     if params.body["rename"]?
       update_rename(page)
     elsif params.body["delete"]?
@@ -94,11 +94,11 @@ class MediaController < ApplicationController
             old_path = page.path
 
             index.rename page, new_name
-            page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?, subtree: false, intlinks: !!params.body["input-page-intlinks"]?
-            Fluence::Page.remove_empty_directories old_path
+            page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?
+            Fluence::Media.remove_empty_directories old_path
           }
-          flash["success success-#{old_name}"] = "Page #{old_name} has been renamed to #{page.name}"
-        rescue e : Fluence::Page::AlreadyExists
+          flash["success success-#{old_name}"] = "Media #{old_name} has been renamed to #{page.name}"
+        rescue e : Fluence::Media::AlreadyExists
           flash["danger danger-#{page.name}"] = e.to_s
           redirect_to old_url
           return
@@ -120,9 +120,9 @@ class MediaController < ApplicationController
           Fluence::MEDIA.transaction! { |index|
             index.delete page
             page.delete current_user if page.exists?
-            Fluence::Page.remove_empty_directories page.path
+            Fluence::Media.remove_empty_directories page.path
           }
-          flash["success success-#{page.name}"] = "Page #{page.name} has been deleted"
+          flash["success success-#{page.name}"] = "Media #{page.name} has been deleted"
         rescue e
           flash["danger danger-#{page.name}"] = e.to_s
           redirect_to page.url
@@ -141,7 +141,7 @@ class MediaController < ApplicationController
         index.add! page
       end
     }
-    flash["success"] = %Q(Page #{page.name} has been #{action})
+    flash["success"] = %Q(Media #{page.name} has been #{action})
     redirect_to page.url
   rescue err
     flash["danger"] = "Error: cannot update #{page.name}, #{err.message}"
@@ -150,21 +150,52 @@ class MediaController < ApplicationController
 
   # post /media/upload
   def upload
-    acl_permit! :write
-    HTTP::FormData.parse(@env.request) do |file|
-      filename = file.filename
+		data = {} of String => String
 
-      if !filename.is_a?(String)
-        "No filename included in upload"
-      else
-        #STDERR.puts "Uploading media for #{params.url["path"]}"
-        #file_path = ::File.join [Kemal.config.public_folder, "uploads/", filename]
-        #File.open(file_path, "w") do |f|
-        #IO.copy(file.tmpfile, f)
-      end
+    HTTP::FormData.parse(@env.request) do |part|
+		STDERR.puts "in #{part.name}"
+			case part.name
+				when "qqpagename"
+					media_acl_permit! :write
+					data[part.name] = part.body.gets_to_end
+				when "qqfilename"
+					data[part.name] = Fluence::Media.sanitize(part.body.gets_to_end).strip "/"
+				when "qqfile"
+					if !data["qqpagename"]
+						flash["danger"] = %Q(No data["qqpagename"] included in upload, please try again)
+						redirect_to Fluence::Page.new(data["qqpagename"]).url
+						return
+					else
+						STDERR .puts "Creating with #{data["qqpagename"]}/#{data["qqfilename"]}"
+						media = Fluence::Media.new %Q(#{data["qqpagename"]}/#{data["qqfilename"]})
+						media.jail!
+					STDERR.puts "HERE WITH #{pp data}"
+						Dir.mkdir_p ::File.dirname media.path
+						File.open(media.path, "w") do |f|
+							IO.copy(part.body, f)
+						end
+					end
+				else
+					data[part.name] = part.body.gets_to_end
+			end
     end
+
     @env.response.content_type = "application/json"
     {success: true}.to_json
+  end
+
+
+  macro media_acl_permit!(perm)
+	# XXX some syntax error is popping up here
+  #  uses_login_cookies
+  #  if Fluence::ACL.permitted?(current_user, File.join Fluence::OPTIONS.pages_prefix, data["page_name"], Acl::PERM[{{perm}}])
+  #    puts "PERMITTED #{current_user.name} "+ File.join(Fluence::OPTIONS.pages_prefix, data["page_name"]+ " #{Acl::PERM[{{perm}}]}"
+  #  else
+  #    puts "NOT PERMITTED #{current_user.name} #{File.join Fluence::OPTIONS.pages_prefix, data["page_name"]} #{Acl::PERM[{{perm}}]}"
+  #    flash["danger"] = "You are not permitted to access this resource (#{File.join Fluence::OPTIONS.pages_prefix, data["page_name"]}, #{{{perm}}})."
+  #    redirect_to File.join Fluence::OPTIONS.pages_prefix, data["page_name"]
+  #    return # Stop the action
+  #  end
   end
 
 end
