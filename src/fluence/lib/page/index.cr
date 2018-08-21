@@ -146,16 +146,7 @@ class Fluence::Page < Fluence::File
 		end
 
 		def children1(page : Fluence::Page)
-			ret = {} of String => {String,Page?}
-			@entries.each do |k,v|
-				if k =~ /^#{page.name}\/(.+?)($|\/)/
-					key = $1.to_s
-					val = ($2.to_s == "/") ? nil : v
-					if !ret[key]?
-						ret[key] = {k,val}
-					end
-				end
-			end
+			children1(page.name)
 			ret
 		end
 		def children1(name : String)
@@ -163,10 +154,8 @@ class Fluence::Page < Fluence::File
 			@entries.each do |k,v|
 				if k =~ /^(#{name}\/(.+?))($|\/)/
 					key = $2.to_s
-					val = ($3.to_s == "/") ? nil : v
-					if !ret[key]?
-						ret[key] = {$1,val}
-					end
+					val = ($3 == "/") ? nil : v
+					ret[$1] = {key,val} if !ret[$1]? || val
 				end
 			end
 			ret
@@ -175,12 +164,22 @@ class Fluence::Page < Fluence::File
 		def children1
 			ret = {} of String => {String,Page?}
 			@entries.each do |k,v|
-				if k =~ /^((.+?))($|\/)/
-					key = $2.to_s
-					val = ($3.to_s == "/") ? nil : v
-					if !ret[key]?
-						ret[key] = {$1,val}
-					end
+				if k =~ /^(.+?)($|\/)/
+					key = $1.to_s
+					val = ($2.to_s == "/") ? nil : v
+					ret[$1] = {key,val} if !ret[$1]? || val
+				end
+			end
+			ret
+		end
+		# Returns list of all children pages
+		def children(page : Page)
+			ret = {} of String => {String,Page}
+			@entries.each do |k,v|
+				if k =~ /^#{page.name}\/.*?([^\/]+)$/
+					key = $1.to_s
+					val = v
+					ret[k] = {key,val} if !ret[k]? || val
 				end
 			end
 			ret

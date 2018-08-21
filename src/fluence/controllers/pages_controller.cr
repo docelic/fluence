@@ -82,30 +82,37 @@ class PagesController < ApplicationController
     end
   end
 
-  private def update_rename(page)
-    if !params.body["input-page-name"]?.to_s.strip.empty?
+  private def update_rename(main_page)
+    unless params.body["input-page-name"]?.to_s.strip.empty?
+			pages = [main_page]
+			if params.body["input-page-subtree"]?
+				pages += main_page.children.values.map{|v| v[1]}
+			end
       # TODO: verify if the user can write on input-page-name
       # TODO: if input-page-name does not begin with /, do relative rename to the current path
-			old_url = page.url
-      begin
-				old_name = page.name
-				Fluence::PAGES.transaction! { |index|
-					new_name = params.body["input-page-name"]
-					old_path = page.path
 
-					index.rename page, new_name
-					page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?, !!params.body["input-page-subtree"]?
-					Fluence::Page.remove_empty_directories old_path
-				}
-        flash["success"] = "Page #{old_name} has been renamed to #{page.name}."
-        redirect_to page.url
-      rescue e : Fluence::Page::AlreadyExists
-        flash["danger"] = e.to_s
-        redirect_to old_url
-      end
-    else
-      redirect_to page.url
+			old_main_page_name = main_page.name
+			pages.each do |page|
+				old_url = page.url
+				begin
+					old_name = page.name
+					Fluence::PAGES.transaction! { |index|
+						new_name = page.name.sub /^#{old_main_page_name}/, params.body["input-page-name"]
+						old_path = page.path
+
+						index.rename page, new_name
+						page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?, false
+						Fluence::Page.remove_empty_directories old_path
+					}
+					flash["success success-#{old_name}"] = "Page #{old_name} has been renamed to #{page.name}."
+				rescue e : Fluence::Page::AlreadyExists
+					flash["danger danger-#{page.name}"] = e.to_s
+					redirect_to old_url
+					return
+				end
+			end
     end
+		redirect_to main_page.url
   end
 
   private def update_delete(page)

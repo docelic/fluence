@@ -97,4 +97,8 @@ class Fluence::Page < Fluence::File
 	def children1
 		Fluence::PAGES.children1 self
 	end
+
+	def children
+		Fluence::PAGES.children self
+	end
 end

@@ -8,6 +8,6 @@ ul.list-unstyled
         a href="#{page.url}"
           = page.title
       - else
-        = name
+        = pages[name][0]
     - if !page || page.directory?
-      == add_page(Fluence::PAGES.children1( page ? page.name : pages[name][0]), stack + [name])
+      == add_page(Fluence::PAGES.children1( page ? page.name : name), stack << pages[name][0])

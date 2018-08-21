@@ -90,16 +90,6 @@ abstract class Fluence::File
 			::File.rename path, new_page.path
 			files = [new_page.path]
 
-			#if subtree
-			#	page_children = children
-			#	page_children.each do |nm, pg|
-			#		# Replace self.name with new_name
-			#		new_nm = nm
-			#		new_nm = new_nm.sub @name, new_name
-			#		rename(user, new_nm, overwrite, subtree: false, git: false)
-			#		files << new_nm
-			#	end
-			#end
 			if git
 				commit! user, "rename", other_files: files
 			end
@@ -142,7 +132,8 @@ abstract class Fluence::File
   # Checks if the *file* exists
   def exists?
     self.jail!
-    ::File.exists? @path
+    ret = ::File.exists? @path
+		ret
   end
 	
 	def directory
