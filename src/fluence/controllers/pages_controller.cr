@@ -44,7 +44,7 @@ class PagesController < ApplicationController
 		if page.exists? && ( ::File.info(page.path).modification_time > page.modification_time)
 			Fluence::PAGES.transaction! { |index|
 				page.process!
-				flash["success success-re-process"] = "External modification to page detected. Processing any changes and showing the updated page"
+				flash["warning warning-re-process"] = "External modification to page detected. Processing any changes and showing the updated page"
 			}
 		end
 

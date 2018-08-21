@@ -9,6 +9,33 @@ require "./page/*"
 # As much as possible here should come from Fluence::File.
 class Fluence::Media < Fluence::File
 
+	YAML.mapping(
+		path: String,  # absolute path of the file, e.g. /srv/wiki/data/pages/xxx
+		name: String,   # name of the page, e.g. xxx or xxx/subpage1
+		url: String,   # real url of the page /pages/xxx
+		title: String, # Any title
+		slug: String,  # URL-friendly title
+		modification_time: Time,
+		size: UInt64
+	)
+
+	def initialize(name : String)
+    name = Page.sanitize(name).strip "/"
+		url = url_prefix + "/" + name
+    path = Page.name_to_directory(name)+ ".md"
+
+		# Needed due to https://github.com/crystal-lang/crystal/issues/2827
+		title = ::File.basename name
+		super(path,name,url,title)
+
+		@slug = Page.title_to_slug @title
+
+		# This data will be inaccurate (i.e. be current time) if an existing page
+		# is created with Fluence::Page.new("existing_name") and #process! is not called.
+		@modification_time = Time.new
+		@size = 0
+	end
+
   # Directory where media is stored
   def self.subdirectory
 		::File.join(Fluence::OPTIONS.datadir, "media") + ::File::SEPARATOR
@@ -17,5 +44,82 @@ class Fluence::Media < Fluence::File
   # Beginning of the URL
 	def url_prefix
 		Fluence::OPTIONS.media_prefix
+	end
+
+  # Renames the page without modifying the current Page object.
+  # Returns the new Page object where only path, name, and url fields may be correct and/or initialized.
+  def rename(user : Fluence::User, new_name, overwrite = false, git = true)
+    jail!
+    Dir.mkdir_p ::File.dirname new_name
+    if name == new_name
+      raise AlreadyExists.new "Old and new name are the same, renaming not possible."
+    end
+
+    # Mostly disposable, here just to check jail.
+    new_page = Media.new new_name
+    new_page.jail!
+
+    # TODO instead of raising, add flash message and skip
+    # It would be sufficient to check the Index for existence of page,
+    # but given that unintended deletions/overwrites of content can be
+    # a problem, test in a more certain way by testing file existence.
+    if ::File.exists?(new_page.path) && !overwrite
+      raise AlreadyExists.new %Q(Destination exists and overwriting was not requested. Do you want to open #{new_page.name} instead?)
+    else
+      Dir.mkdir_p ::File.dirname new_page.path
+      ::File.rename path, new_page.path
+      files = [new_page.path]
+
+      if git
+        commit! user, "rename", other_files: files
+      end
+    end
+
+    Fluence::Media.new new_name
+  end
+
+  # Renames the page, updates self, and returns self
+  def rename!(user : Fluence::User, new_name, overwrite = false, git = true)
+    old_name = @name
+    new_page = rename user, new_name, overwrite, git
+    @path = new_page.path
+    @name = new_page.name
+    @url = new_page.url
+    jail!
+    process!
+
+    self
+  end
+
+  def process!
+    #@title = # Can we read it out from media files?
+    @slug = Page.title_to_slug @name
+    fi = ::File.info(@path)
+    @modification_time = fi.modification_time
+    @size = fi.size
+    self
+  end    
+
+  # translates a name ("/test/title" for example)
+  # into a file path ("/srv/data/test/title)
+  def self.name_to_path(name : String)
+    name_to_directory(name)
+  end     
+
+
+	# These are here but should just return [] since we don't use sub-content with media
+	def children1
+		Fluence::MEDIA.children1 self
+	end
+	def children
+		Fluence::MEDIA.children self
+	end
+
+	def directory
+		raise Exception.new "NotImplemented"
+	end
+
+	def directory?
+		false
 	end
 end
