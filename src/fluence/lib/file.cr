@@ -68,7 +68,7 @@ abstract class Fluence::File
 
   # Renames the page without modifying the current Page object.
 	# Returns the new Page object where only path, name, and url fields may be correct and/or initialized.
-  def rename(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true)
+  def rename(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true, intlinks = false)
     jail!
     Dir.mkdir_p ::File.dirname new_name
 		if name == new_name
@@ -99,13 +99,27 @@ abstract class Fluence::File
   end
 
 	# Renames the page, updates self, and returns self
-	def rename!(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true)
-		new_page = rename user, new_name, overwrite, subtree, git
+	def rename!(user : Fluence::User, new_name, overwrite = false, subtree = false, git = true, intlinks : Bool? = nil)
+		old_name = @name
+		new_page = rename user, new_name, overwrite, subtree, git, intlinks
 		@path = new_page.path
 		@name = new_page.name
 		@url = new_page.url
 		jail!
 		process!
+
+		if intlinks
+			Fluence::PAGES.entries.each do |n,p|
+				p.intlinks.each_with_index do |l, i|
+					p.intlinks[i] = { l[0], l[1].gsub /^#{old_name}(?=\/|$)/, @name }
+					p.jail! # Just in case
+					content = ::File.read p.path
+					content = content .gsub /(?<!\\)\[\[#{old_name}\]\]/, "[[" + @name + "]]"
+					::File.write p.path, content
+				end
+			end
+		end
+
 		self
 	end
 

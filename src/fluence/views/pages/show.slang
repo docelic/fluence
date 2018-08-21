@@ -97,6 +97,15 @@ script type="text/template" id="qq-template"
                       span class="input-group-text" id="label-page-name" Page name
                     input type="text" class="form-control" id="input-page-name" name="input-page-name" aria-describedby="label-page-name" value="#{page.name}"
                   .row.mt-2
+                  .row
+                    .col
+                      .form-group.form-check
+                       input type="checkbox" class="form-check-input" id="input-page-subtree" name="input-page-subtree"
+                       label class="form-check-label" for="input-page-subtree" With subpages
+                    .col
+                      .form-group.form-check
+                       input type="checkbox" class="form-check-input" id="input-page-intlinks" name="input-page-intlinks"
+                       label class="form-check-label" for="input-page-intlinks" Update links
                     .col
                       .form-group.form-check
                        input type="checkbox" class="form-check-input" id="input-page-overwrite" name="input-page-overwrite"
@@ -105,9 +114,6 @@ script type="text/template" id="qq-template"
                       button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
                   .row
                     .col
-                      .form-group.form-check
-                       input type="checkbox" class="form-check-input" id="input-page-subtree" name="input-page-subtree"
-                       label class="form-check-label" for="input-page-subtree" With subpages
                     .col
                       button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.name}`?')" Delete
               hr

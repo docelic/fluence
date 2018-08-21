@@ -33,7 +33,7 @@ class PagesController < ApplicationController
 				Fluence::PAGES.transaction! { |index|
 					page.process!
 					index.add! page
-					flash["danger danger-created-externally"] = "Page exists on disk but was not created through the wiki. Processed and added it to the index"
+					flash["warning warning-created-externally"] = "Page exists on disk but was not created through the wiki. Processed and added it to the index"
 				}
 			end
 		end
@@ -44,7 +44,7 @@ class PagesController < ApplicationController
 		if page.exists? && ( ::File.info(page.path).modification_time > page.modification_time)
 			Fluence::PAGES.transaction! { |index|
 				page.process!
-				flash["success success-re-process"] = "External modification to page detected. Processing any changes and showing the updated page."
+				flash["success success-re-process"] = "External modification to page detected. Processing any changes and showing the updated page"
 			}
 		end
 
@@ -53,8 +53,8 @@ class PagesController < ApplicationController
     Fluence::ACL.load!
 
 		if !page.exists?
-			flash["info"] = "The page #{page.name} does not exist yet."
-			flash["info"] += " You could create it by typing in and saving new content." if
+			flash["info"] = "The page #{page.name} does not exist yet"
+			flash["info"] += " You could create it by typing in and saving new content" if
 				Fluence::ACL.permitted?(current_user, request.path, Acl::Perm::Write)
 		end
 
@@ -101,10 +101,10 @@ class PagesController < ApplicationController
 						old_path = page.path
 
 						index.rename page, new_name
-						page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?, false
+						page.rename! current_user, new_name, !!params.body["input-page-overwrite"]?, subtree: false, intlinks: !!params.body["input-page-intlinks"]?
 						Fluence::Page.remove_empty_directories old_path
 					}
-					flash["success success-#{old_name}"] = "Page #{old_name} has been renamed to #{page.name}."
+					flash["success success-#{old_name}"] = "Page #{old_name} has been renamed to #{page.name}"
 				rescue e : Fluence::Page::AlreadyExists
 					flash["danger danger-#{page.name}"] = e.to_s
 					redirect_to old_url
@@ -129,7 +129,7 @@ class PagesController < ApplicationController
 						page.delete current_user if page.exists?
 						Fluence::Page.remove_empty_directories page.path
 					}
-					flash["success success-#{page.name}"] = "Page #{page.name} has been deleted."
+					flash["success success-#{page.name}"] = "Page #{page.name} has been deleted"
 				rescue e
 					flash["danger danger-#{page.name}"] = e.to_s
 					redirect_to page.url
