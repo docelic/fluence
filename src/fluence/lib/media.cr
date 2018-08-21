@@ -20,18 +20,18 @@ class Fluence::Media < Fluence::File
 	)
 
 	def initialize(name : String)
-    name = Page.sanitize(name).strip "/"
+    name = Media.sanitize(name).strip "/"
 		url = url_prefix + "/" + name
-    path = Page.name_to_directory(name)+ ".md"
+    path = Media.name_to_directory(name)
 
 		# Needed due to https://github.com/crystal-lang/crystal/issues/2827
 		title = ::File.basename name
 		super(path,name,url,title)
 
-		@slug = Page.title_to_slug @title
+		@slug = Media.title_to_slug @title
 
 		# This data will be inaccurate (i.e. be current time) if an existing page
-		# is created with Fluence::Page.new("existing_name") and #process! is not called.
+		# is created with Fluence::Media.new("existing_name") and #process! is not called.
 		@modification_time = Time.new
 		@size = 0
 	end
@@ -46,8 +46,8 @@ class Fluence::Media < Fluence::File
 		Fluence::OPTIONS.media_prefix
 	end
 
-  # Renames the page without modifying the current Page object.
-  # Returns the new Page object where only path, name, and url fields may be correct and/or initialized.
+  # Renames the page without modifying the current Media object.
+  # Returns the new Media object where only path, name, and url fields may be correct and/or initialized.
   def rename(user : Fluence::User, new_name, overwrite = false, git = true)
     jail!
     Dir.mkdir_p ::File.dirname new_name
@@ -93,7 +93,7 @@ class Fluence::Media < Fluence::File
 
   def process!
     #@title = # Can we read it out from media files?
-    @slug = Page.title_to_slug @name
+    @slug = Media.title_to_slug @name
     fi = ::File.info(@path)
     @modification_time = fi.modification_time
     @size = fi.size
@@ -121,5 +121,9 @@ class Fluence::Media < Fluence::File
 
 	def directory?
 		false
+	end
+
+	def self.title_to_slug(title : String) : String
+		title.gsub(/[^[:alnum:]^\/\.]+/, "-")
 	end
 end
