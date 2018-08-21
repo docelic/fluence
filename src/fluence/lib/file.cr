@@ -39,7 +39,7 @@ abstract class Fluence::File
   # translate a name ("/test/title" for example)
   # into a directory path ("/srv/data/test/title)
   def self.name_to_directory(name : String)
-    ::File.expand_path Page.sanitize(name), subdirectory
+    ::File.expand_path self.sanitize(name), subdirectory
   end
 
   # verify if the *file* is in the current dir (avoid ../ etc.)
@@ -113,11 +113,11 @@ abstract class Fluence::File
 	end
 
   def self.sanitize(text : String)
-    title_to_slug URI.unescape(text)
+    self.title_to_slug URI.unescape(text)
   end
 
 	def self.title_to_slug(title : String) : String
-		title.gsub(/[^[:alnum:]^\/]/, "-").gsub(/-+/, '-').downcase
+		title.gsub(/[^[:alnum:]^\/]+/, "-").downcase
 	end
 
   def self.remove_empty_directories(path)
