@@ -33,17 +33,17 @@ module Fluence
   # of operation in a scope
   if ACL["guest"]?.nil?
     ACL.add("guest")
-    ACL["guest"]["/users/*"] = Acl::Perm::Write
+    ACL["guest"]["#{Fluence::OPTIONS.users_prefix}/*"] = Acl::Perm::Write
     ACL["guest"]["/sitemap"] = Acl::Perm::Read
-    ACL["guest"]["/pages*"] = Acl::Perm::Read
+    ACL["guest"]["#{Fluence::OPTIONS.pages_prefix}/*"] = Acl::Perm::Read
     ACL["guest"]["/"] = Acl::Perm::Read
     ACL.add("user")
     ACL["user"]["/*"] = Acl::Perm::Read
-    ACL["user"]["/users/login"] = Acl::Perm::None
-    ACL["user"]["/users/register"] = Acl::Perm::None
-    ACL["user"]["/pages*"] = Acl::Perm::Write
-    ACL["user"]["/media*"] = Acl::Perm::Write
-    ACL["user"]["/admin*"] = Acl::Perm::Write
+    ACL["user"]["#{Fluence::OPTIONS.users_prefix}/login"] = Acl::Perm::None
+    ACL["user"]["#{Fluence::OPTIONS.users_prefix}/register"] = Acl::Perm::None
+    ACL["user"]["#{Fluence::OPTIONS.pages_prefix}/*"] = Acl::Perm::Write
+    ACL["user"]["#{Fluence::OPTIONS.media_prefix}/*"] = Acl::Perm::Write
+    ACL["user"]["#{Fluence::OPTIONS.admin_prefix}/*"] = Acl::Perm::Write
     ACL.save!
   end
 
