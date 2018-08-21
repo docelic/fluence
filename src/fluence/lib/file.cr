@@ -10,7 +10,7 @@ require "./errors"
 # abstract class, so `File` was created as an abstract base
 # for both Page and Media.
 #
-# Is is can also jail!s the path into the *OPTIONS.basedir* to be sure that
+# Is is can also jail!s the path into the *OPTIONS.datadir* to be sure that
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
 abstract class Fluence::File
@@ -49,7 +49,7 @@ abstract class Fluence::File
   end
 
   # verify if the *file* is in the current dir (avoid ../ etc.)
-  # it will raise a `Error403` if the file is out of the basedir
+  # it will raise a `Error403` if the file is out of the datadir
   def jail!
     # TODO: consider security of ".git/"
 
@@ -170,7 +170,7 @@ abstract class Fluence::File
   def commit!(user : Fluence::User, message, other_files : Array(String) = [] of String)
     dir = Dir.current
     begin
-      Dir.cd Fluence::OPTIONS.basedir
+      Dir.cd Fluence::OPTIONS.datadir
 			all_files = @path + " " + other_files.join(" ")
       puts `git add -- #{all_files}`
       puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@name}\" -- #{all_files}`

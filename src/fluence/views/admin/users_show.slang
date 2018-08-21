@@ -3,7 +3,7 @@
     .container.col-6
       h1 User Managment 
       h3 Create a new User
-      form#register-new-user method="post" action="/admin/users/create"
+      form#register-new-user method="post" action="#{Fluence::OPTIONS.admin_prefix}/users/create"
         fieldset
           legend
             | Admin
@@ -39,7 +39,7 @@
             .col-4
               span=user.groups.join(", ")
             .col-4
-              form method="post" action="/admin/users/delete"
+              form method="post" action="#{Fluence::OPTIONS.admin_prefix}/users/delete"
                 input type="hidden" name="username" value=user.name
                 input.form-control.btn.btn-md.btn-danger name="delete" type="submit" value="Delete"
           hr

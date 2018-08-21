@@ -18,7 +18,7 @@ class AdminController < ApplicationController
     rescue err
       flash["danger"] = "Cannot register this account: #{err.message}."
     end
-    redirect_to "/admin/users"
+    redirect_to "#{Fluence::OPTIONS.admin_prefix}/users"
   end
 
   # post /admin/users/delete
@@ -26,7 +26,7 @@ class AdminController < ApplicationController
     acl_permit! :write
     Fluence::USERS.transaction! { |users| users.delete params.body["username"] }
     flash["success"] = "The user #{params.body["username"]} has been deleted."
-    redirect_to "/admin/users"
+    redirect_to "#{Fluence::OPTIONS.admin_prefix}/users"
   end
 
   # get /admin/acls
@@ -48,7 +48,7 @@ class AdminController < ApplicationController
       acls[group][path] = perm
     end
     flash["success"] = "ACL #{group} :: #{path} :: #{perm} has been added"
-    redirect_to "/admin/acls"
+    redirect_to "#{Fluence::OPTIONS.admin_prefix}/acls"
   end
 
   # post /admin/acls/update
@@ -66,7 +66,7 @@ class AdminController < ApplicationController
     rescue err
       flash["danger"] = "Unable to process that: #{err.message}."
     end
-    redirect_to "/admin/acls"
+    redirect_to "#{Fluence::OPTIONS.admin_prefix}/acls"
   end
 
   # post /admin/acls/delete
@@ -78,6 +78,6 @@ class AdminController < ApplicationController
       acls[group].delete path
     end
     flash["success"] = "ACL #{group} :: #{path} has been deleted."
-    redirect_to "/admin/acls"
+    redirect_to "#{Fluence::OPTIONS.admin_prefix}/acls"
   end
 end

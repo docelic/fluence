@@ -16,8 +16,8 @@ class PagesController < ApplicationController
 		#end
 		page = nil
     title = "Search Results - #{title()}"
-    #redirect_to (query.empty? || !page) ? "/pages/home" : page.url
-    redirect_to "/pages/home"
+    #redirect_to (query.empty? || !page) ? "#{Fluence::OPTIONS.homepage}" : page.url
+    redirect_to "#{Fluence::OPTIONS.homepage}"
   end
 
   # get /pages/*path
@@ -137,7 +137,7 @@ class PagesController < ApplicationController
 				end
 			end
     end
-		redirect_to "/pages/home"
+		redirect_to "#{Fluence::OPTIONS.homepage}"
   end
 
   private def update_edit(page)

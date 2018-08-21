@@ -24,28 +24,28 @@ end
 Router.get "/", HomeController, :index
 
 Router.get "/sitemap", PagesController, :sitemap
-#Router.get "/mediamap", MediaController, :sitemap
+#Router.get "#{Fluence::OPTIONS.media_prefix}map", MediaController, :sitemap
 
-Router.get "/pages/search", PagesController, :search
+Router.get "#{Fluence::OPTIONS.pages_prefix}/search", PagesController, :search
 
-Router.get "/pages/*path", PagesController, :show
-Router.post "/pages/*path", PagesController, :update
+Router.get "#{Fluence::OPTIONS.pages_prefix}/*path", PagesController, :show
+Router.post "#{Fluence::OPTIONS.pages_prefix}/*path", PagesController, :update
 
-#Router.get "/media/*path", MediaController, :show
-#Router.post "/media/*path", MediaController, :update
-#Router.post "/media/upload", MediaController, :upload
+#Router.get "#{Fluence::OPTIONS.media_prefix}/*path", MediaController, :show
+#Router.post "#{Fluence::OPTIONS.media_prefix}/*path", MediaController, :update
+#Router.post "#{Fluence::OPTIONS.media_prefix}/upload", MediaController, :upload
 
-Router.get "/users/login", UsersController, :login
-Router.post "/users/login", UsersController, :login_validates
-Router.get "/users/register", UsersController, :register
-Router.post "/users/register", UsersController, :register_validates
-Router.get "/users/logout", UsersController, :logout
+Router.get "#{Fluence::OPTIONS.users_prefix}/login", UsersController, :login
+Router.post "#{Fluence::OPTIONS.users_prefix}/login", UsersController, :login_validates
+Router.get "#{Fluence::OPTIONS.users_prefix}/register", UsersController, :register
+Router.post "#{Fluence::OPTIONS.users_prefix}/register", UsersController, :register_validates
+Router.get "#{Fluence::OPTIONS.users_prefix}/logout", UsersController, :logout
 
-Router.get "/admin/users", AdminController, :users_show
-Router.post "/admin/users/create", AdminController, :user_create
-Router.post "/admin/users/delete", AdminController, :user_delete
+Router.get "#{Fluence::OPTIONS.admin_prefix}#{Fluence::OPTIONS.users_prefix}", AdminController, :users_show
+Router.post "#{Fluence::OPTIONS.admin_prefix}#{Fluence::OPTIONS.users_prefix}/create", AdminController, :user_create
+Router.post "#{Fluence::OPTIONS.admin_prefix}#{Fluence::OPTIONS.users_prefix}/delete", AdminController, :user_delete
 
-Router.get "/admin/acls", AdminController, :acls_show
-Router.post "/admin/acls/update", AdminController, :acl_update
-Router.post "/admin/acls/create", AdminController, :acl_create
-Router.post "/admin/acls/delete", AdminController, :acl_delete
+Router.get "#{Fluence::OPTIONS.admin_prefix}/acls", AdminController, :acls_show
+Router.post "#{Fluence::OPTIONS.admin_prefix}/acls/update", AdminController, :acl_update
+Router.post "#{Fluence::OPTIONS.admin_prefix}/acls/create", AdminController, :acl_create
+Router.post "#{Fluence::OPTIONS.admin_prefix}/acls/delete", AdminController, :acl_delete

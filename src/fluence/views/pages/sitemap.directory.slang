@@ -8,7 +8,7 @@ ul.list-unstyled
         a href="#{page.url}"
           = page.title
       - else
-        a href="/pages/#{name}"
+        a href="/#{Fluence::OPTIONS.pages_prefix}/#{name}"
           = pages[name][0]
         span.small (empty)
     - if !page || page.directory?

@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     # TODO: make a notification
     if user.nil?
       flash["danger"] = "User or password doesn't match."
-      redirect_to "/users/login"
+      redirect_to "#{Fluence::OPTIONS.users_prefix}/login"
     else
       flash["success"] = "You are now logged in as user '#{user.name}'."
       session.string("user.name", user.name)
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     acl_permit! :read
     session.destroy
     delete_login_cookies
-    redirect_to "/users/login"
+    redirect_to "#{Fluence::OPTIONS.users_prefix}/login"
   end
 
   # get /users/register
@@ -42,10 +42,10 @@ class UsersController < ApplicationController
     begin
       user = Fluence::USERS.register! params.body["username"].to_s, params.body["password"].to_s
       flash["success"] = "You are now registered with the username '#{user.name}'. Please log in."
-      redirect_to "/users/login"
+      redirect_to "#{Fluence::OPTIONS.users_prefix}/login"
     rescue err
       flash["danger"] = "Cannot register this account: #{err.message}."
-      redirect_to "/users/register"
+      redirect_to "#{Fluence::OPTIONS.users_prefix}/register"
     end
   end
 end

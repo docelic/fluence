@@ -3,7 +3,7 @@
     .container.col-6
       h1 ACL Management
       h3 Create a new ACL
-        form#acl-create method="post" action="/admin/acls/create"
+        form#acl-create method="post" action="#{Fluence::OPTIONS.admin_prefix}/acls/create"
           fieldset
             .form-group.row.pt-1
               label.col-5.col-form-label for="input_group_acl" Groups
@@ -52,23 +52,23 @@
                     label.bg-warning.px-2.py-2=perm.to_s
               .col-2
                 .row
-                  form.col-6#admin-acl method="post" action="/admin/acls/update"
+                  form.col-6#admin-acl method="post" action="#{Fluence::OPTIONS.admin_prefix}/acls/update"
                     input type="hidden" name="group" value=group.name
                     input type="hidden" name="path" value=path.to_s
                     button.btn.btn-xs.btn-success type="submit" name="change" value="write"
                       span Write
-                  form.col-6#admin-acl method="post" action="/admin/acls/update"
+                  form.col-6#admin-acl method="post" action="#{Fluence::OPTIONS.admin_prefix}/acls/update"
                     input type="hidden" name="group" value=group.name
                     input type="hidden" name="path" value=path.to_s
                     button.btn.btn-xs.btn-info type="submit" name="change" value="read"
                       Span Read
                 .row.pt-2
-                  form.col-6#admin-acl method="post" action="/admin/acls/update"
+                  form.col-6#admin-acl method="post" action="#{Fluence::OPTIONS.admin_prefix}/acls/update"
                     input type="hidden" name="group" value=group.name
                     input type="hidden" name="path" value=path.to_s
                     button.btn.btn-xs.btn-warning type="submit" name="change" value="none"
                       Span None
-                  form.col-6#admin-acl method="post" action="/admin/acls/delete"
+                  form.col-6#admin-acl method="post" action="#{Fluence::OPTIONS.admin_prefix}/acls/delete"
                     input type="hidden" name="group" value=group.name
                     input type="hidden" name="path" value=path.to_s
                     button.btn.btn-xs.btn-danger type="submit" name="change" value="delete"

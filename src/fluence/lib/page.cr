@@ -8,7 +8,7 @@ require "./page/*"
 # from a URL /pages/*path.
 #
 # It is used to associate path, name (and URL), and data.
-# Is is can also jails the path into the *OPTIONS.basedir* to be sure that
+# Is is can also jails the path into the *OPTIONS.datadir* to be sure that
 # there is no attack by writing files outside of the directory where the pages
 # must be stored.
 class Fluence::Page < Fluence::File
@@ -64,7 +64,7 @@ class Fluence::Page < Fluence::File
 
   # Directory where the pages are stored
   def self.subdirectory
-    ::File.join(Fluence::OPTIONS.basedir, "pages") + ::File::SEPARATOR
+    ::File.join(Fluence::OPTIONS.datadir, "pages") + ::File::SEPARATOR
   end
 
   # Beginning of the URL

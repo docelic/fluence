@@ -11,7 +11,7 @@ class Fluence::Media < Fluence::File
 
   # Directory where media is stored
   def self.subdirectory
-		::File.join(Fluence::OPTIONS.basedir, "media") + ::File::SEPARATOR
+		::File.join(Fluence::OPTIONS.datadir, "media") + ::File::SEPARATOR
 	end
 
   # Beginning of the URL

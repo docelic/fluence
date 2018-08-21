@@ -11,16 +11,16 @@ class Fluence::Page < Fluence::File
     )
 
 		# Creates an empty index.
-		# `@subdir` is name of the subdirectory within `basedir` that needs to be indexed, and will almost always be "pages" or "media".
+		# `@subdir` is name of the subdirectory within `datadir` that needs to be indexed, and will almost always be "pages" or "media".
     def initialize(subdir : String)
 			@file = ::File.expand_path subdir, "meta"
-			@directory = ::File.expand_path subdir, Fluence::OPTIONS.basedir
+			@directory = ::File.expand_path subdir, Fluence::OPTIONS.datadir
       @entries = {} of String => Page
     end
 
 		# Creates an empty index, populates it with contents from desired subdir based on file search, and saves index contents to YAML file for persistence.
 		# If you want to load an existing YAML dump of an index instead of create an index anew, see `load!`.
-		def self.build(subdir : String, max_depth : Int = 1000) : Index
+		def self.build(subdir : String, max_depth : Int = Fluence::OPTIONS.recursion_limit) : Index
 			idx = Index.new subdir
 			files = file_list(idx.directory, max_depth).each do |f|
 				# 'f' is name from subdir onwards, e.g. 'home', 'home/test', etc.
@@ -31,8 +31,8 @@ class Fluence::Page < Fluence::File
 		end
 
 		# Recursively finds files in the chosen starting directory.
-		# Default limit is a maximum of 1000 directories to enter and scan.
-		def self.file_list(subdir : String, max_depth : Int = 1000) : Array
+		# Default limit is a maximum of Fluence::OPTIONS.recursion_limit directories to enter and scan.
+		def self.file_list(subdir : String, max_depth : Int = Fluence::OPTIONS.recursion_limit) : Array
 			# Stop the recursion
 			raise Exception.new "Max recursion depth reached (#{max_depth})" if max_depth < 1
 

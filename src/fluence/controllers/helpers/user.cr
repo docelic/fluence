@@ -56,10 +56,10 @@ module Fluence::Helpers::User
       puts "NOT PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
       flash["danger"] = "You are not permitted to access this resource (#{request.path}, #{{{perm}}})."
       redirect_to case request.path
-	when "/pages/home"
-		"/users/register"
+	when "#{Fluence::OPTIONS.homepage}"
+		"#{Fluence::OPTIONS.users_prefix}/register"
 	else
-		"/pages/home"
+		"#{Fluence::OPTIONS.homepage}"
 	end
       return # Stop the action
     end
