@@ -88,42 +88,44 @@ script type="text/template" id="qq-template"
                 li
                   a href="#{pg.url}" = pg.title || pg.name
             hr
-					- if Fluence::ACL.permitted? current_user, page.url, Acl::Perm::Write
-						#page-management.col-12
-							span Page Management
-								form#manage-page method="post"
-									.input-group
-										.input-group-prepend
-											span class="input-group-text" id="label-page-name" Page name
-										input type="text" class="form-control" id="input-page-name" name="input-page-name" aria-describedby="label-page-name" value="#{page.name}"
-									.row.mt-2
-										.col
-											.form-group.form-check
-											 input type="checkbox" class="form-check-input" id="input-page-overwrite" name="input-page-overwrite"
-											 label class="form-check-label" for="input-page-overwrite" Overwrite
-										.col
-											button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
-									.row
-										.col
-											.form-group.form-check
-											 input type="checkbox" class="form-check-input" id="input-page-subtree" name="input-page-subtree"
-											 label class="form-check-label" for="input-page-subtree" With subpages
-										.col
-											button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.name}`?')" Delete
-							hr
-						#page-permissions.col-12
-							span Page Permissions
-							.row
-								.col-auto
-									| Read:
-								.col
-									= groups_read.join ", "
-								.w-100
-								.col-auto
-									| Write:
-								.col
-									= groups_write.join ", "
+          - if Fluence::ACL.permitted? current_user, page.url, Acl::Perm::Write
+            #page-management.col-12
+              span Page Management
+                form#manage-page method="post"
+                  .input-group
+                    .input-group-prepend
+                      span class="input-group-text" id="label-page-name" Page name
+                    input type="text" class="form-control" id="input-page-name" name="input-page-name" aria-describedby="label-page-name" value="#{page.name}"
+                  .row.mt-2
+                    .col
+                      .form-group.form-check
+                       input type="checkbox" class="form-check-input" id="input-page-overwrite" name="input-page-overwrite"
+                       label class="form-check-label" for="input-page-overwrite" Overwrite
+                    .col
+                      button.btn.btn-sm.btn-block.btn-warning name="rename" type="submit" value="rename" form="manage-page" Rename
+                  .row
+                    .col
+                      .form-group.form-check
+                       input type="checkbox" class="form-check-input" id="input-page-subtree" name="input-page-subtree"
+                       label class="form-check-label" for="input-page-subtree" With subpages
+                    .col
+                      button.btn.btn-sm.btn-block.btn-danger name="delete" type="submit" value="delete" form="manage-page" onclick="return confirm('Really delete page `#{page.name}`?')" Delete
+              hr
+            #page-permissions.col-12
+              span Page Permissions
+              .row
+                .col-auto
+                  | Read:
+                .col
+                  = groups_read.join ", "
+                .w-100
+                .col-auto
+                  | Write:
+                .col
+                  = groups_write.join ", "
 script
   = "var editor = new InscrybMDE(Fluence.mde_options(#{Fluence::ACL.permitted? current_user, page.url, Acl::Perm::Write}));"
   - if page.exists?
     = "Fluence.editor.togglePreview();"
+  - else
+    = "editor.codemirror.focus();"

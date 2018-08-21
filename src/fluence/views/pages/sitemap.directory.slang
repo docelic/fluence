@@ -8,8 +8,8 @@ ul.list-unstyled
         a href="#{page.url}"
           = page.title
       - else
-        = pages[name][0]
         a href="/pages/#{name}"
-          | (create)
+          = pages[name][0]
+        span.small (empty)
     - if !page || page.directory?
       == add_page(Fluence::PAGES.children1( page ? page.name : name), stack << pages[name][0])
