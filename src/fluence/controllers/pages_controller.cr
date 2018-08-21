@@ -126,12 +126,12 @@ class PagesController < ApplicationController
 				begin
 					Fluence::PAGES.transaction! { |index|
 						index.delete page
-						page.delete current_user
+						page.delete current_user if page.exists?
 						Fluence::Page.remove_empty_directories page.path
 					}
 					flash["success success-#{page.name}"] = "Page #{page.name} has been deleted."
 				rescue e
-					flash["danger danger-#{page.name}"] = "Error deleting #{page.name}: #{e.to_s}"
+					flash["danger danger-#{page.name}"] = e.to_s
 					redirect_to page.url
 					return
 				end
