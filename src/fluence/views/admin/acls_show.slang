@@ -29,13 +29,13 @@
         h3 Manage Existing ACLs
         .row
           .col-3
-            span style="font-weight:bold" Concerned
+            span style="font-weight:bold" Group
           .col-3
-            label style="font-weight:bold" Path
+            label style="font-weight:bold" Page URL pattern
           .col-4
-            label style="font-weight:bold" Permission
+            label style="font-weight:bold" Current permission
           .col-2
-            label style="font-weight:bold" Action
+            label style="font-weight:bold" Change permission to
         hr
         - acls.groups.each do |_, group|
           - group.permissions.each do |path, perm|
