@@ -148,7 +148,6 @@ module Fluence
 
 		def children1(page : T)
 			children1(page.name)
-			ret
 		end
 		def children1(name : String)
 			ret = {} of String => {String,T?}

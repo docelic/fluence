@@ -37,10 +37,12 @@ class PagesController < ApplicationController
 				}
 			end
 		end
-		show_show(page)
+		media = Fluence::MEDIA[page.name]? || Fluence::Media.new page.name
+
+		show_show(page, media)
   end
 
-  private def show_show(page)
+  private def show_show(page, media)
 		if page.exists? && ( ::File.info(page.path).modification_time > page.modification_time)
 			Fluence::PAGES.transaction! { |index|
 				page.process!
@@ -61,8 +63,10 @@ class PagesController < ApplicationController
     groups_read = Fluence::ACL.groups_having_any_access_to page.url, Acl::Perm::Read, true
     groups_write = Fluence::ACL.groups_having_any_access_to page.url, Acl::Perm::Write, true
     title = "#{page.title} - #{title()}"
+
     # For menu on the left
     pages = Fluence::PAGES.children1
+
     render "show.slang"
   end
 

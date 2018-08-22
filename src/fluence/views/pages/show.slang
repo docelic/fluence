@@ -58,10 +58,17 @@ script type="text/template" id="qq-template"
           form#edit-page method="post"
             fieldset
               textarea.form-control name="body" = body
-        .col-12
-          span Page Media
+        .col-6
+          span Attachments
             div id="uploader"
             script var uploader = new qq.FineUploader({ element: document.getElementById("uploader"), request: { endpoint: '#{Fluence::OPTIONS.media_prefix}/upload', params: { qqpagename: '#{page.name}'}}, debug: true, deleteFile: { enabled: true, endpoint: 'Fluence::OPTIONS.media_prefix/upload', params: { qqpagename: '#{page.name}'}}, thumbnails: { placeholders: { waitingPath: '/assets/stylesheet/waiting-generic.png', notAvailablePath: '/assets/stylesheet/not_available-generic.png' } }, autoUpload: false}); qq(document.getElementById("trigger-upload")).attach("click", function() { uploader.uploadStoredFiles(); });
+        .col-6
+          span Attached Documents
+            ol
+              - media.children1.each do |name, spec|
+							  - m = spec[1].not_nil!
+                li
+                  a href="#{m.url}" = m.title || m.name
 
     .col
       .row.no-gutters
