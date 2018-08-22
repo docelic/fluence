@@ -153,7 +153,6 @@ class MediaController < ApplicationController
 		data = {} of String => String
 
     HTTP::FormData.parse(@env.request) do |part|
-		STDERR.puts "in #{part.name}"
 			case part.name
 				when "qqpagename"
 					media_acl_permit! :write
@@ -166,14 +165,20 @@ class MediaController < ApplicationController
 						redirect_to Fluence::Page.new(data["qqpagename"]).url
 						return
 					else
-						STDERR .puts "Creating with #{data["qqpagename"]}/#{data["qqfilename"]}"
 						media = Fluence::Media.new %Q(#{data["qqpagename"]}/#{data["qqfilename"]})
 						media.jail!
-					STDERR.puts "HERE WITH #{pp data}"
-						Dir.mkdir_p ::File.dirname media.path
-						File.open(media.path, "w") do |f|
-							IO.copy(part.body, f)
-						end
+
+						action = "added"
+						Fluence::MEDIA.transaction! { |index|
+							Dir.mkdir_p ::File.dirname media.path
+							File.open(media.path, "w") do |f|
+								IO.copy(part.body, f)
+							end
+
+							unless Fluence::MEDIA[media]?
+								index.add! media
+							end
+						}
 					end
 				else
 					data[part.name] = part.body.gets_to_end
@@ -184,18 +189,7 @@ class MediaController < ApplicationController
     {success: true}.to_json
   end
 
-
-  macro media_acl_permit!(perm)
-	# XXX some syntax error is popping up here
-  #  uses_login_cookies
-  #  if Fluence::ACL.permitted?(current_user, File.join Fluence::OPTIONS.pages_prefix, data["page_name"], Acl::PERM[{{perm}}])
-  #    puts "PERMITTED #{current_user.name} "+ File.join(Fluence::OPTIONS.pages_prefix, data["page_name"]+ " #{Acl::PERM[{{perm}}]}"
-  #  else
-  #    puts "NOT PERMITTED #{current_user.name} #{File.join Fluence::OPTIONS.pages_prefix, data["page_name"]} #{Acl::PERM[{{perm}}]}"
-  #    flash["danger"] = "You are not permitted to access this resource (#{File.join Fluence::OPTIONS.pages_prefix, data["page_name"]}, #{{{perm}}})."
-  #    redirect_to File.join Fluence::OPTIONS.pages_prefix, data["page_name"]
-  #    return # Stop the action
-  #  end
-  end
+	macro media_acl_permit!(perm)
+	end
 
 end
