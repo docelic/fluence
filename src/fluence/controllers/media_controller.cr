@@ -12,7 +12,7 @@ class MediaController < ApplicationController
   # get /pages/search?q=
   def search
     #if query = params.query["q"]
-    # page = Fluence::Page.new(query.not_nil!)
+    # page = Fluence::Media.new(query.not_nil!)
     # # TODO: a real search
     #end
     page = nil
@@ -28,7 +28,7 @@ class MediaController < ApplicationController
     if page = Fluence::MEDIA[params.url["path"]]?
       # Page exists in the index
     else
-      page = Fluence::Page.new params.url["path"]
+      page = Fluence::Media.new params.url["path"]
       # If page exists but was not found, this is a page someone added from cmdline. Incorporate it.
       if page.exists?
         Fluence::MEDIA.transaction! { |index|

@@ -6,7 +6,7 @@ struct Fluence::Markdown
   include Markdown::Render
 
   property text : String
-  property index : Page::Index
+  property index : Fluence::Index(Fluence::Page)
   property context : Page
   @cursor : Int32
   @code_line : Bool
@@ -64,14 +64,14 @@ struct Fluence::Markdown
     end
   end
 
-  def self.to_markdown(input : String, context : Page, index : Page::Index) : String
+  def self.to_markdown(input : String, context : Page, index : Fluence::Index(Fluence::Page)) : String
     Markdown.new(input, context, index).build
   end
 
   # ```
   # Page::Markdown.to_html("Test of [[internal-link]]", current_page, index_of_internal_links)
   # ```
-  def self.to_html(input : String, context : Page, index : Page::Index) : String
+  def self.to_html(input : String, context : Page, index : Fluence::Index(Fluence::Page)) : String
     ::Markd.to_html to_markdown(input, context, index)
   end
 end

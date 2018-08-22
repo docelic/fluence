@@ -50,17 +50,17 @@ module Fluence
   # The list of pages with a lot of meta-data. Same behavior like
   # `USERS` and `ACL`.
 	PAGES = if ::File.exists? "#{Fluence::OPTIONS.metadir}/pages"
-		Fluence::Page::Index.new("pages").load!
+		Fluence::Index(Fluence::Page).new("pages").load!
 	else
-		Fluence::Page::Index.build("pages")
+		Fluence::Index(Fluence::Page).build("pages")
 	end
 
   # The list of media with a lot of meta-data. Same behavior like
   # `USERS` and `ACL`.
 	MEDIA = if ::File.exists? "#{Fluence::OPTIONS.metadir}/media"
-		Fluence::Page::Index.new("media").load!
+		Fluence::Index(Fluence::Media).new("media").load!
 	else
-		Fluence::Page::Index.build("media")
+		Fluence::Index(Fluence::Media).build("media")
 	end
 
 #	# Install file watcher on data files.
