@@ -172,7 +172,7 @@ module Fluence
 			end
 			ret
 		end
-		# Returns list of all children pages
+		# Returns list of all children pages for page
 		def children(page : T)
 			ret = {} of String => {String,T}
 			@entries.each do |k,v|
@@ -181,6 +181,17 @@ module Fluence
 					val = v
 					ret[k] = {key,val} if !ret[k]? || val
 				end
+			end
+			ret
+		end
+		# Returns list of all pages in index
+		def children
+			ret = {} of String => {String,T}
+			# Format here is a little unusual so it remains compatible with above
+			@entries.each do |k,v|
+				key = k.to_s
+				val = v
+				ret[k] = {key,val}
 			end
 			ret
 		end

@@ -120,7 +120,7 @@ class Fluence::Media < Fluence::File
 	end
 
 	def directory?
-		false
+		Dir.exists? self.class.name_to_path(@name)
 	end
 
 	def self.title_to_slug(title : String) : String

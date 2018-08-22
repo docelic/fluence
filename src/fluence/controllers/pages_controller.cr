@@ -2,10 +2,10 @@ class PagesController < ApplicationController
   # get /sitemap
   def sitemap
     acl_permit! :read
-    #pages = Fluence::FileTree.build Fluence::Page.subdirectory
-		#media = Fluence::FileTree.build Fluence::Media.subdirectory
+    pages = Fluence::PAGES.children1
+		media = Fluence::MEDIA.children1
     title = "Sitemap - #{title()}"
-    #render "sitemap.slang"
+    render "sitemap.slang"
   end
 
   # get /pages/search?q=

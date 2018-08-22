@@ -4,10 +4,10 @@
       h1.page-header Sitemap
   .row
     .col
-      span Pages
+      h2 Pages
       #pages-hierarchy
         == add_page pages
     .col
-      span Media
+      h2 Media
       #pages-hierarchy
-        == add_page media
+        == add_media media

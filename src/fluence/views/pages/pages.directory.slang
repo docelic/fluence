@@ -1,7 +1,7 @@
 ul.list-unstyled
-  - names = pages.keys.sort!
+  - names = entries.keys.sort!
   - names.each do |name|
-    - page = pages[name][1]
+    - page = entries[name][1]
     li
       - stack_join = stack.empty? ? nil : (stack.join("/") + "/")
       - if page
@@ -9,7 +9,7 @@ ul.list-unstyled
           = page.title
       - else
         a href="#{Fluence::OPTIONS.pages_prefix}/#{name}"
-          = pages[name][0]
+          = entries[name][0]
         span.small (empty)
     - if !page || page.directory?
-      == add_page(Fluence::PAGES.children1( page ? page.name : name), stack << pages[name][0])
+      == add_page(Fluence::PAGES.children1( page ? page.name : name), stack << entries[name][0])
