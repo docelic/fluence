@@ -28,14 +28,14 @@
       .container
         h3 Manage Existing ACLs
         .row
-          .col-3
-            span style="font-weight:bold" Group
-          .col-3
-            label style="font-weight:bold" Page URL pattern
-          .col-4
-            label style="font-weight:bold" Current permission
           .col-2
-            label style="font-weight:bold" Change permission to
+            label style="font-weight:bold" Group
+          .col-4
+            label style="font-weight:bold" Page URL Pattern
+          .col-4
+            label style="font-weight:bold" Current Permission
+          .col-2
+            label style="font-weight:bold" Change to
         hr
         - acls.groups.each do |_, group|
           - group.permissions.each do |path, perm|
