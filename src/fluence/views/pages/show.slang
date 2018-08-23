@@ -61,14 +61,55 @@ script type="text/template" id="qq-template"
         .col-6
           span Attachments
             div id="uploader"
-            script var uploader = new qq.FineUploader({ element: document.getElementById("uploader"), request: { endpoint: '#{Fluence::OPTIONS.media_prefix}/upload', params: { qqpagename: '#{page.name}'}}, debug: true, deleteFile: { enabled: true, endpoint: 'Fluence::OPTIONS.media_prefix/upload', params: { qqpagename: '#{page.name}'}}, thumbnails: { placeholders: { waitingPath: '/assets/stylesheet/waiting-generic.png', notAvailablePath: '/assets/stylesheet/not_available-generic.png' } }, autoUpload: false}); qq(document.getElementById("trigger-upload")).attach("click", function() { uploader.uploadStoredFiles(); });
+            javascript:
+              var uploader = new qq.FineUploader({
+                  element: document.getElementById("uploader"),
+                  request: {
+                      endpoint: '#{Fluence::OPTIONS.media_prefix}/upload',
+                      params: {
+                          qqpagename: '#{page.name}'
+                      }
+                  },
+                  debug: true,
+                  deleteFile: {
+                      enabled: true,
+                      endpoint: 'Fluence::OPTIONS.media_prefix/upload',
+                      params: {
+                          qqpagename: '#{page.name}'
+                      }
+                  },
+                  thumbnails: {
+                      placeholders: {
+                          waitingPath: '/assets/stylesheet/waiting-generic.png',
+                          notAvailablePath: '/assets/stylesheet/not_available-generic.png'
+                      }
+                  },
+                  autoUpload: false,
+                  callbacks: {
+                    onAllComplete: function(succeeded){
+                      /*TODO: 
+                        - 2 files with same name
+                        - paused files (this callback will return nothing if ALL files are not successfully uploaded, paused file will block it)
+                        - add if statements for succeeded array */
+                      var hook = '#{Fluence::OPTIONS.media_prefix}/home/'
+                      for(var i=0; i<succeeded.length;i++){
+                        var name = this.getName(i)
+                        var tag = '<a class="list-group-item" href="' + hook + name + '">' + name + '</a>'
+                        $('#attachments').append(tag);
+                      }
+                      this.reset();
+                    }
+                  }
+              });
+              qq(document.getElementById("trigger-upload")).attach("click", function() {
+                  uploader.uploadStoredFiles();
+              });
         .col-6
           span Attached Documents
-            ol
+            .list-group id="attachments"
               - media.children1.each do |name, spec|
-							  - m = spec[1].not_nil!
-                li
-                  a href="#{m.url}" = m.title || m.name
+                - m = spec[1].not_nil!
+                a.list-group-item href="#{m.url}" = m.title || m.name
 
     .col
       .row.no-gutters
