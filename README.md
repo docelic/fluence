@@ -9,6 +9,8 @@ Fluence uses Bootstrap 4 and jQuery 3.3.1 slim.
 
 ## Installation and Startup
 
+Fluence is implemented in Crystal and you will need a Crystal compiler. Obtain it from https://crystal-lang.org/docs/installation/.
+
 Download and compile:
 
 ```bash
