@@ -91,10 +91,19 @@ script type="text/template" id="qq-template"
                         - 2 files with same name
                         - paused files (this callback will return nothing if ALL files are not successfully uploaded, paused file will block it)
                         - add if statements for succeeded array */
-                      var hook = '#{Fluence::OPTIONS.media_prefix}/home/'
-                      for(var i=0; i<succeeded.length;i++){
+                      var hook = '#{Fluence::OPTIONS.media_prefix}/#{page.name}/'
+                      for(var i=0; i<succeeded.length; i++){
                         var name = this.getName(i)
-                        var tag = '<a class="list-group-item" href="' + hook + name + '">' + name + '</a>'
+                        var tag = new String(
+                        `<div class='row'>
+                          <div class='col-9'>
+                            <a class='list-group-item' href='${hook + name}'>  ${name}  </a>
+                          </div>
+                            <div class='col-3'>
+                              <input class='form-control' name='url' value='${hook + name}' type='hidden'>
+                              <input class='form-control btn btn-sm btn-danger' name=${name} value='Delete' type='submit'>
+                            </div>
+                        </div>`)
                         $('#attachments').append(tag);
                       }
                       this.reset();
@@ -106,10 +115,17 @@ script type="text/template" id="qq-template"
               });
         .col-6
           span Attached Documents
-            .list-group id="attachments"
-              - media.children1.each do |name, spec|
-                - m = spec[1].not_nil!
-                a.list-group-item href="#{m.url}" = m.title || m.name
+            form action="#{Fluence::OPTIONS.media_prefix}/delete"
+              .list-group id="attachments"
+                - media.children1.each do |name, spec|
+                  - m = spec[1].not_nil!
+                  .row
+                    .col-9
+                      a.list-group-item href="#{m.url}" = m.title || m.name
+                    .col-3
+                      input.form-control type="hidden" name="path" value="#{m.url}" 
+                      input.form-control.btn.btn-sm.btn-danger name="#{m.title || m.name}" type="submit" value="Delete"
+
 
     .col
       .row.no-gutters
