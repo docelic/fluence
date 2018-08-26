@@ -1,23 +1,22 @@
 class MediaController < ApplicationController
-
   # get /sitemap
   def sitemap
     acl_permit! :read
-    #pages = Fluence::FileTree.build Fluence::Page.subdirectory
-    #media = Fluence::FileTree.build Fluence::Media.subdirectory
+    # pages = Fluence::FileTree.build Fluence::Page.subdirectory
+    # media = Fluence::FileTree.build Fluence::Media.subdirectory
     title = "Sitemap - #{title()}"
-    #render "sitemap.slang"
+    # render "sitemap.slang"
   end
 
   # get /pages/search?q=
   def search
-    #if query = params.query["q"]
+    # if query = params.query["q"]
     # page = Fluence::Media.new(query.not_nil!)
     # # TODO: a real search
-    #end
+    # end
     page = nil
     title = "Search Results - #{title()}"
-    #redirect_to (query.empty? || !page) ? "#{Fluence::OPTIONS.homepage}" : page.url
+    # redirect_to (query.empty? || !page) ? "#{Fluence::OPTIONS.homepage}" : page.url
     redirect_to "#{Fluence::OPTIONS.homepage}"
   end
 
@@ -42,7 +41,7 @@ class MediaController < ApplicationController
   end
 
   private def show_show(page)
-    if page.exists? && ( ::File.info(page.path).modification_time > page.modification_time)
+    if page.exists? && (::File.info(page.path).modification_time > page.modification_time)
       Fluence::MEDIA.transaction! { |index|
         page.process!
         STDERR.puts "External modification to #{page.path} detected. Processing any changes"
@@ -53,10 +52,10 @@ class MediaController < ApplicationController
     Fluence::ACL.load!
 
     if !page.exists?
-			# 404
+      # 404
     end
 
-		send_file @env, page.path
+    send_file @env, page.path
   end
 
   # post /pages/*path
@@ -67,9 +66,9 @@ class MediaController < ApplicationController
       update_rename(page)
     elsif params.body["delete"]?
       update_delete(page)
-    # We do not want empty body to mean page deletion.
-    #elsif (params.body["body"]?.to_s.empty?)
-    #  update_delete(page)
+      # We do not want empty body to mean page deletion.
+      # elsif (params.body["body"]?.to_s.empty?)
+      #  update_delete(page)
     else
       update_edit(page)
     end
@@ -79,7 +78,7 @@ class MediaController < ApplicationController
     unless params.body["input-page-name"]?.to_s.strip.empty?
       pages = [main_page]
       if params.body["input-page-subtree"]?
-        pages += main_page.children.values.map{|v| v[1]}
+        pages += main_page.children.values.map { |v| v[1] }
       end
       # TODO: verify if the user can write on input-page-name
       # TODO: if input-page-name does not begin with /, do relative rename to the current path
@@ -109,10 +108,10 @@ class MediaController < ApplicationController
   end
 
   private def update_delete(main_page)
-    unless params.body["input-page-name"]?.to_s.strip.empty?
+    unless params.body["media-name"]?.to_s.strip.empty?
       pages = [main_page]
       if params.body["input-page-subtree"]?
-        pages += main_page.children.values.map{|v| v[1]}
+        pages += main_page.children.values.map { |v| v[1] }
       end
 
       pages.each do |page|
@@ -150,46 +149,45 @@ class MediaController < ApplicationController
 
   # post /media/upload
   def upload
-		data = {} of String => String
+    data = {} of String => String
 
     HTTP::FormData.parse(@env.request) do |part|
-			case part.name
-				when "qqpagename"
-					media_acl_permit! :write
-					data[part.name] = part.body.gets_to_end
-				when "qqfilename"
-					data[part.name] = Fluence::Media.sanitize(part.body.gets_to_end).strip "/"
-				when "qqfile"
-					if !data["qqpagename"]
-						flash["danger"] = %Q(No data["qqpagename"] included in upload, please try again)
-						redirect_to Fluence::Page.new(data["qqpagename"]).url
-						return
-					else
-						media = Fluence::Media.new %Q(#{data["qqpagename"]}/#{data["qqfilename"]})
-						media.jail!
+      case part.name
+      when "qqpagename"
+        media_acl_permit! :write
+        data[part.name] = part.body.gets_to_end
+      when "qqfilename"
+        data[part.name] = Fluence::Media.sanitize(part.body.gets_to_end).strip "/"
+      when "qqfile"
+        if !data["qqpagename"]
+          flash["danger"] = %Q(No data["qqpagename"] included in upload, please try again)
+          redirect_to Fluence::Page.new(data["qqpagename"]).url
+          return
+        else
+          media = Fluence::Media.new %Q(#{data["qqpagename"]}/#{data["qqfilename"]})
+          media.jail!
 
-						action = "added"
-						Fluence::MEDIA.transaction! { |index|
-							Dir.mkdir_p ::File.dirname media.path
-							File.open(media.path, "w") do |f|
-								IO.copy(part.body, f)
-							end
+          action = "added"
+          Fluence::MEDIA.transaction! { |index|
+            Dir.mkdir_p ::File.dirname media.path
+            File.open(media.path, "w") do |f|
+              IO.copy(part.body, f)
+            end
 
-							unless Fluence::MEDIA[media]?
-								index.add! media
-							end
-						}
-					end
-				else
-					data[part.name] = part.body.gets_to_end
-			end
+            unless Fluence::MEDIA[media]?
+              index.add! media
+            end
+          }
+        end
+      else
+        data[part.name] = part.body.gets_to_end
+      end
     end
 
     @env.response.content_type = "application/json"
     {success: true}.to_json
   end
 
-	macro media_acl_permit!(perm)
+  macro media_acl_permit!(perm)
 	end
-
 end

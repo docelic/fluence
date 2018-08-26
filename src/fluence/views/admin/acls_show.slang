@@ -10,7 +10,7 @@
           .form-group.row
             label.col-2.col-form-label for="input_group_acl" Groups
             .col-10
-              input.form-control id="input_group_acl" name="groups" type="text"
+              input.form-control id="input_group_acl" name="group" type="text"
           .form-group.row.pt-2
             label.col-2.col-form-label for="input_path_acl" Path
             .col-10

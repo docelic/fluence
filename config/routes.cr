@@ -24,7 +24,7 @@ end
 Router.get "/", HomeController, :index
 
 Router.get "/sitemap", PagesController, :sitemap
-#Router.get "#{Fluence::OPTIONS.media_prefix}map", MediaController, :sitemap
+# Router.get "#{Fluence::OPTIONS.media_prefix}map", MediaController, :sitemap
 
 Router.get "#{Fluence::OPTIONS.pages_prefix}/search", PagesController, :search
 

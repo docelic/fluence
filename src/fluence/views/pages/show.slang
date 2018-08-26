@@ -100,8 +100,8 @@ script type="text/template" id="qq-template"
                             <a class='list-group-item' href='${hook + name}'>  ${name}  </a>
                           </div>
                             <div class='col-3'>
-                              <input class='form-control' name='url' value='${hook + name}' type='hidden'>
-                              <input class='form-control btn btn-sm btn-danger' name=${name} value='Delete' type='submit'>
+                              <input class='form-control' name='media-name' value='${name}' type='hidden'>
+                              <input class='form-control btn btn-sm btn-danger' name='delete' value='Delete' type='submit' formaction=${hook+name}>
                             </div>
                         </div>`)
                         $('#attachments').append(tag);
@@ -115,7 +115,7 @@ script type="text/template" id="qq-template"
               });
         .col-6
           span Attached Documents
-            form action="#{Fluence::OPTIONS.media_prefix}/delete"
+            form#manage-attachments method="post"
               .list-group id="attachments"
                 - media.children1.each do |name, spec|
                   - m = spec[1].not_nil!
@@ -123,10 +123,8 @@ script type="text/template" id="qq-template"
                     .col-9
                       a.list-group-item href="#{m.url}" = m.title || m.name
                     .col-3
-                      input.form-control type="hidden" name="path" value="#{m.url}" 
-                      input.form-control.btn.btn-sm.btn-danger name="#{m.title || m.name}" type="submit" value="Delete"
-
-
+                      input.form-control type="hidden" name="media-name" value="#{m.title || m.name}"
+                      input.form-control.btn.btn-sm.btn-danger name="delete" value="Delete" type="submit" formaction="#{Fluence::OPTIONS.media_prefix}/#{page.name}/#{m.title || m.name}"
     .col
       .row.no-gutters
         - if Fluence::ACL.permitted? current_user, page.url, Acl::Perm::Write
