@@ -95,18 +95,20 @@ script type="text/template" id="qq-template"
                       for(var i=0; i<succeeded.length; i++){
                         var name = this.getName(i)
                         var tag = new String(
-                        `<div class='row'>
+                        `<div class='row border-bottom'>
                           <div class='col-9'>
                             <a class='list-group-item' href='${hook + name}'>  ${name}  </a>
                           </div>
                             <div class='col-3'>
                               <input class='form-control' name='media-name' value='${name}' type='hidden'>
-                              <input class='form-control btn btn-sm btn-danger' name='delete' value='Delete' type='submit' formaction=${hook+name}>
+                              <button class='btn btn-sm btn-danger my-1' name='delete' value='Delete' type='submit' formaction=${hook+name} onclick=\"return confirm('Really delete attachment ${name}?')\"> 
+                                Delete
+                              </button>
                             </div>
                         </div>`)
                         $('#attachments').append(tag);
                       }
-                      this.reset();
+                      this.clearStoredFiles();
                     }
                   }
               });
@@ -116,15 +118,15 @@ script type="text/template" id="qq-template"
         .col-6
           span Attached Documents
             form#manage-attachments method="post"
-              .list-group id="attachments"
+              .list-group.list-group-flush id="attachments"
                 - media.children1.each do |name, spec|
                   - m = spec[1].not_nil!
-                  .row
+                  .row.border-bottom
                     .col-9
                       a.list-group-item href="#{m.url}" = m.title || m.name
                     .col-3
                       input.form-control type="hidden" name="media-name" value="#{m.title || m.name}"
-                      input.form-control.btn.btn-sm.btn-danger name="delete" value="Delete" type="submit" formaction="#{Fluence::OPTIONS.media_prefix}/#{page.name}/#{m.title || m.name}"
+                      button.btn.btn-sm.btn-danger.my-1 name="delete" value="Delete" type="submit" formaction="#{Fluence::OPTIONS.media_prefix}/#{page.name}/#{m.title || m.name}" onclick="return confirm('Really delete attachment `#{m.title || m.name}`?')" Delete
     .col
       .row.no-gutters
         - if Fluence::ACL.permitted? current_user, page.url, Acl::Perm::Write
