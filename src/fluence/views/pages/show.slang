@@ -86,28 +86,27 @@ script type="text/template" id="qq-template"
                   },
                   autoUpload: false,
                   callbacks: {
-                    onAllComplete: function(succeeded){
+                    onComplete: function(id, name, responseJSON){
                       /*TODO: 
                         - 2 files with same name
                         - paused files (this callback will return nothing if ALL files are not successfully uploaded, paused file will block it)
                         - add if statements for succeeded array */
                       var hook = '#{Fluence::OPTIONS.media_prefix}/#{page.name}/'
-                      for(var i=0; i<succeeded.length; i++){
-                        var name = this.getName(i)
-                        var tag = new String(
-                        `<div class='row border-bottom'>
-                          <div class='col-9'>
-                            <a class='list-group-item' href='${hook + name}'>  ${name}  </a>
+                      var tag = new String(
+                      `<div class='row border-bottom'>
+                        <div class='col-9'>
+                          <a class='list-group-item' href='${hook + name}'>  ${name}  </a>
+                        </div>
+                          <div class='col-3'>
+                            <input class='form-control' name='media-name' value='${name}' type='hidden'>
+                            <button class='btn btn-sm btn-danger my-1' name='delete' value='Delete' type='submit' formaction=${hook+name} onclick=\"return confirm('Really delete attachment ${name}?')\"> 
+                              Delete
+                            </button>
                           </div>
-                            <div class='col-3'>
-                              <input class='form-control' name='media-name' value='${name}' type='hidden'>
-                              <button class='btn btn-sm btn-danger my-1' name='delete' value='Delete' type='submit' formaction=${hook+name} onclick=\"return confirm('Really delete attachment ${name}?')\"> 
-                                Delete
-                              </button>
-                            </div>
-                        </div>`)
-                        $('#attachments').append(tag);
-                      }
+                      </div>`)
+                      $('#attachments').append(tag);
+                    },
+                    onAllComplete: function(){
                       this.clearStoredFiles();
                     }
                   }
