@@ -116,7 +116,7 @@ class Fluence::Media < Fluence::File
 	end
 
 	def directory
-		raise Exception.new "NotImplemented"
+		dir = @path.sub /\/[^\/]+?$/, ""
 	end
 
 	def directory?

@@ -169,10 +169,11 @@ class MediaController < ApplicationController
 
           action = "added"
           Fluence::MEDIA.transaction! { |index|
-            Dir.mkdir_p ::File.dirname media.path
-            File.open(media.path, "w") do |f|
-              IO.copy(part.body, f)
-            end
+            #Dir.mkdir_p ::File.dirname media.path
+            #File.open(media.path, "w") do |f|
+            #  IO.copy(part.body, f)
+            #end
+            media.write current_user, part.body
 
             unless Fluence::MEDIA[media]?
               index.add! media
