@@ -98,13 +98,13 @@ class Fluence::Media < Fluence::File
     @modification_time = fi.modification_time
     @size = fi.size
     self
-  end    
+  end
 
   # translates a name ("/test/title" for example)
   # into a file path ("/srv/data/test/title)
   def self.name_to_path(name : String)
     name_to_directory(name)
-  end     
+  end
 
 
 	# These are here but should just return [] since we don't use sub-content with media
