@@ -53,7 +53,6 @@ All in all, the Fluence Wiki is usable. On-disk format for data won't change so 
 Things to watch out for currently:
 
 1. The default permissions scheme (which works and can be configured via both `meta/acls` and GUI) by default makes all registered users automatically be admin, and registrations are always open and don't require any confirmation. Therefore, the initial target for deployment and test of Fluence are small/trusted intranets and teams.
-1. Uploaded media files do not show automatically in the list of media attached to the page. A page reload is needed after upload for them to show, and there is also no GUI button to delete uploaded media (but as a workaround you can remove it from disk, delete `meta/media`, and restart Fluence).
 
 Things we have in mind or are working on are listed in [project issues](https://github.com/crystallabs/fluence/issues). Your comments will help us decide on priorities.
 
