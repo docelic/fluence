@@ -1,3 +1,9 @@
+**Build status**: [![Build Status](https://travis-ci.com/crystallabs/fluence.svg?branch=master)](https://travis-ci.com/crystallabs/fluence)
+[![Version](https://img.shields.io/github/tag/crystallabs/fluence.svg?maxAge=360)](https://github.com/crystallabs/fluence/releases/latest)
+[![License](https://img.shields.io/github/license/crystallabs/fluence.svg)](https://github.com/crystallabs/fluence/blob/master/LICENSE)
+
+**Project status**: `[X] Being developed  [X] Usable  [ ] Functionally complete`
+
 # Fluence
 
 Elegant wiki powered by Crystal, with markdown as native format and a WYSIWYG editor.
