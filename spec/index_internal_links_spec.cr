@@ -1,7 +1,7 @@
 describe Fluence::Page::InternalLinks do
   it "test basic internal links listing" do
-    index = Fluence::Index(Fluence::Page).new("")
-    page = Fluence::Page.new("home")
+    #index = Fluence::Index(Fluence::Page).new("")
+    #page = Fluence::Page.new("home")
     str = "I [[am-a-link]] and [[me-too]]\n"
     links = Fluence::Page::InternalLinks.links_in_content str
 

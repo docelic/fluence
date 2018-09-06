@@ -23,7 +23,7 @@ module Fluence
 		# If you want to load an existing YAML dump of an index instead of create an index anew, see `load!`.
 		def self.build(subdir : String, max_depth : Int = Fluence::OPTIONS.recursion_limit) : Index
 			idx = Index(T).new subdir
-			files = file_list(idx.directory, max_depth).each do |f|
+			file_list(idx.directory, max_depth).each do |f|
 				# 'f' is name from subdir onwards, e.g. 'home', 'home/test', etc.
 				page = T.new(f).process!
 				idx.add page
@@ -48,7 +48,7 @@ module Fluence
 			files = all_files.select { |file| !::File.directory? file }.map{ |f| f.chomp(".md")}
 
 			# For directories, call this function recursively
-			directories = all_files
+			all_files
 				.select { |file| ::File.directory? file }
 				.map { |dir| Fluence::Index.file_list(dir, max_depth - 1).as(Array(String)).map { |f| ::File.join dir, f } }
 				.each do |file_list|

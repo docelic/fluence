@@ -23,8 +23,9 @@ Download and compile:
 git clone https://github.com/crystallabs/fluence
 cd fluence
 shards
+bin/ameba      # Warnings reported here are non-critical
 crystal spec
-make # or 'make release'
+make           # or 'make release'
 ```
 
 The result of the compilation will be one executable file &mdash; bin/fluence.

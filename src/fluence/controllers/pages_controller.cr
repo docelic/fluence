@@ -14,8 +14,8 @@ class PagesController < ApplicationController
 		#	page = Fluence::Page.new(query.not_nil!)
 		#	# TODO: a real search
 		#end
-		page = nil
-    title = "Search Results - #{title()}"
+		#page = nil
+    #title = "Search Results - #{title()}"
     #redirect_to (query.empty? || !page) ? "#{Fluence::OPTIONS.homepage}" : page.url
     redirect_to "#{Fluence::OPTIONS.homepage}"
   end
@@ -44,7 +44,7 @@ class PagesController < ApplicationController
 
   private def show_show(page, media)
 		if page.exists? && ( ::File.info(page.path).modification_time > page.modification_time)
-			Fluence::PAGES.transaction! { |index|
+			Fluence::PAGES.transaction! { |_|
 				page.process!
 				flash["warning warning-re-process"] = "External modification to page detected. Processing any changes and showing the updated page"
 			}

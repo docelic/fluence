@@ -88,7 +88,7 @@ class Fluence::Users < Lockable
 
   # find an user based on its name
   def find?(name : String) : User?
-    user = @list[name]?
+		@list[name]?
   end
 
   def [](name : String) : User

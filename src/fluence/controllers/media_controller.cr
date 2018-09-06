@@ -4,7 +4,7 @@ class MediaController < ApplicationController
     acl_permit! :read
     # pages = Fluence::FileTree.build Fluence::Page.subdirectory
     # media = Fluence::FileTree.build Fluence::Media.subdirectory
-    title = "Sitemap - #{title()}"
+    #title = "Sitemap - #{title()}"
     # render "sitemap.slang"
   end
 
@@ -14,8 +14,8 @@ class MediaController < ApplicationController
     # page = Fluence::Media.new(query.not_nil!)
     # # TODO: a real search
     # end
-    page = nil
-    title = "Search Results - #{title()}"
+    #page = nil
+    #title = "Search Results - #{title()}"
     # redirect_to (query.empty? || !page) ? "#{Fluence::OPTIONS.homepage}" : page.url
     redirect_to "#{Fluence::OPTIONS.homepage}"
   end
@@ -42,13 +42,13 @@ class MediaController < ApplicationController
 
   private def show_show(page)
     if page.exists? && (::File.info(page.path).modification_time > page.modification_time)
-      Fluence::MEDIA.transaction! { |index|
+      Fluence::MEDIA.transaction! { |_|
         page.process!
         STDERR.puts "External modification to #{page.path} detected. Processing any changes"
       }
     end
 
-    body = page.read rescue ""
+    #body = page.read rescue ""
     Fluence::ACL.load!
 
     if !page.exists?
@@ -167,7 +167,7 @@ class MediaController < ApplicationController
           media = Fluence::Media.new %Q(#{data["qqpagename"]}/#{data["qqfilename"]})
           media.jail!
 
-          action = "added"
+          #action = "added"
           Fluence::MEDIA.transaction! { |index|
             #Dir.mkdir_p ::File.dirname media.path
             #File.open(media.path, "w") do |f|

@@ -80,7 +80,6 @@ class Fluence::Media < Fluence::File
 
   # Renames the page, updates self, and returns self
   def rename!(user : Fluence::User, new_name, overwrite = false, git = true)
-    old_name = @name
     new_page = rename user, new_name, overwrite, git
     @path = new_page.path
     @name = new_page.name
@@ -116,7 +115,7 @@ class Fluence::Media < Fluence::File
 	end
 
 	def directory
-		dir = @path.sub /\/[^\/]+?$/, ""
+		@path.sub /\/[^\/]+?$/, ""
 	end
 
 	def directory?

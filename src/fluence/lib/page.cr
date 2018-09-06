@@ -129,7 +129,7 @@ class Fluence::Page < Fluence::File
 		process!
 
 		if intlinks
-			Fluence::PAGES.entries.each do |n,p|
+			Fluence::PAGES.entries.each do |_,p|
 				p.intlinks.each_with_index do |l, i|
 					p.intlinks[i] = { l[0], l[1].gsub /^#{old_name}(?=\/|$)/, @name }
 					p.jail! # Just in case
