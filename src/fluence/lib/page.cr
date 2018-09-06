@@ -142,7 +142,7 @@ class Fluence::Page < Fluence::File
 
 		self
 	end
-	
+
 	def directory
 		@path.chomp ".md"
 	end
