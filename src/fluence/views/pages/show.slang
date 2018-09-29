@@ -92,18 +92,32 @@ script type="text/template" id="qq-template"
                         - paused files (this callback will return nothing if ALL files are not successfully uploaded, paused file will block it)
                         - add if statements for succeeded array */
                       var hook = '#{Fluence::OPTIONS.media_prefix}/#{page.name}/'
-                      var tag = new String(
-                      `<div class='row border-bottom'>
-                        <div class='col-9'>
-                          <a class='list-group-item' href='${hook + name}'>  ${name}  </a>
-                        </div>
-                          <div class='col-3'>
-                            <input class='form-control' name='media-name' value='${name}' type='hidden'>
-                            <button class='btn btn-sm btn-danger my-1' name='delete' value='Delete' type='submit' formaction=${hook+name} onclick=\"return confirm('Really delete attachment ${name}?')\"> 
-                              Delete
-                            </button>
+                      var tag = new String()
+                      if (responseJSON.success){
+                        tag = new String(
+                        `<div class='row border-bottom'>
+                          <div class='col-9'>
+                            <a class='list-group-item' href='${hook + name}'>  ${name}  </a>
                           </div>
-                      </div>`)
+                            <div class='col-3'>
+                              <input class='form-control' name='media-name' value='${name}' type='hidden'>
+                              <button class='btn btn-sm btn-danger my-1' name='delete' value='Delete'   type='submit' formaction=${hook+name} onclick=\"return confirm('Really delete attachment ${name}?')\"> 
+                                Delete
+                              </button>
+                            </div>
+                        </div>`)
+                    }
+                      else {
+                        tag = new String(
+                        `<div class='row border-bottom'>
+                          <div class='col-9'>
+                            <a class='list-group-item list-group-item-danger' href='#' data-toggle='tooltip' data-placement='top' title='${responseJSON.error}' disabled>  ${name}  </a>
+                          </div>
+                            <div class='col-3'>
+                              <input class='form-control' name='media-name' value='${name}' type='hidden'>
+                            </div>
+                        </div>`)                        
+                      }
                       $('#attachments').append(tag);
                     },
                     onError: function(id,name,reason){
