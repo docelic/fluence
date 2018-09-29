@@ -151,44 +151,52 @@ class MediaController < ApplicationController
   def upload
     data = {} of String => String
 
+    @env.response.content_type = "application/json"
+    ret = {success: true}
+
     HTTP::FormData.parse(@env.request) do |part|
       case part.name
       when "qqpagename"
-        media_acl_permit! :write
-        data[part.name] = part.body.gets_to_end
+        data["qqpagename"] = part.body.gets_to_end
+        page_path = File.join Fluence::OPTIONS.pages_prefix, data["qqpagename"]
+        if !Fluence::ACL.permitted?(current_user, page_path, Acl::Perm::Write)
+          ret = {success: false, error: "You are not permitted to access this resource (#{page_path}, write)."}
+        end
       when "qqfilename"
-        data[part.name] = Fluence::Media.sanitize(part.body.gets_to_end).strip "/"
+        if ret[:success]
+          data[part.name] = Fluence::Media.sanitize(part.body.gets_to_end).strip "/"
+        end
       when "qqfile"
-        if !data["qqpagename"]
-          flash["danger"] = %Q(No data["qqpagename"] included in upload, please try again)
-          redirect_to Fluence::Page.new(data["qqpagename"]).url
-          return
-        else
-          media = Fluence::Media.new %Q(#{data["qqpagename"]}/#{data["qqfilename"]})
-          media.jail!
+        if ret[:success]
+          if !data["qqpagename"]
+            flash["danger"] = %Q(No data["qqpagename"] included in upload, please try again)
+            redirect_to Fluence::Page.new(data["qqpagename"]).url
+            return
+          else
+            media = Fluence::Media.new %Q(#{data["qqpagename"]}/#{data["qqfilename"]})
+            media.jail!
 
-          #action = "added"
-          Fluence::MEDIA.transaction! { |index|
-            #Dir.mkdir_p ::File.dirname media.path
-            #File.open(media.path, "w") do |f|
-            #  IO.copy(part.body, f)
-            #end
-            media.write current_user, part.body
+            #action = "added"
+            Fluence::MEDIA.transaction! { |index|
+              #Dir.mkdir_p ::File.dirname media.path
+              #File.open(media.path, "w") do |f|
+              #  IO.copy(part.body, f)
+              #end
+              media.write current_user, part.body
 
-            unless Fluence::MEDIA[media]?
-              index.add! media
-            end
-          }
+              unless Fluence::MEDIA[media]?
+                index.add! media
+              end
+            }
+          end
         end
       else
-        data[part.name] = part.body.gets_to_end
+        if ret[:success]
+          data[part.name] = part.body.gets_to_end
+        end
       end
     end
 
-    @env.response.content_type = "application/json"
-    {success: true}.to_json
+    ret.to_json
   end
-
-  macro media_acl_permit!(perm)
-	end
 end

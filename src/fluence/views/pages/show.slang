@@ -106,6 +106,9 @@ script type="text/template" id="qq-template"
                       </div>`)
                       $('#attachments').append(tag);
                     },
+                    onError: function(id,name,reason){
+                      console.log(reason);
+                    },
                     onAllComplete: function(){
                       this.clearStoredFiles();
                     }

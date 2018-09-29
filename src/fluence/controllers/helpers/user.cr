@@ -48,19 +48,19 @@ module Fluence::Helpers::User
     end
   end
 
-  macro acl_permit!(perm)
+  macro acl_permit!(perm, path = request.path)
     uses_login_cookies
-    if Fluence::ACL.permitted?(current_user, request.path, Acl::PERM[{{perm}}])
-      puts "PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
+    if Fluence::ACL.permitted?(current_user, {{path}}, Acl::PERM[{{perm}}])
+      puts "PERMITTED #{current_user.name} #{{{path}}} #{Acl::PERM[{{perm}}]}"
     else
-      puts "NOT PERMITTED #{current_user.name} #{request.path} #{Acl::PERM[{{perm}}]}"
-      flash["danger"] = "You are not permitted to access this resource (#{request.path}, #{{{perm}}})."
-      redirect_to case request.path
-			when Fluence::OPTIONS.homepage
-				"#{Fluence::OPTIONS.users_prefix}/register"
-			else
-				Fluence::OPTIONS.homepage
-			end
+      puts "NOT PERMITTED #{current_user.name} #{{{path}}} #{Acl::PERM[{{perm}}]}"
+      flash["danger"] = "You are not permitted to access this resource (#{{{path}}}, #{{{perm}}})."
+      redirect_to case {{path}}
+      when Fluence::OPTIONS.homepage
+        "#{Fluence::OPTIONS.users_prefix}/register"
+      else
+        Fluence::OPTIONS.homepage
+      end
       return # Stop the action
     end
   end
