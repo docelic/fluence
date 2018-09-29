@@ -184,6 +184,8 @@ class MediaController < ApplicationController
               #end
               media.write current_user, part.body
 
+              media.process!
+
               unless Fluence::MEDIA[media]?
                 index.add! media
               end
