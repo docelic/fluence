@@ -10,7 +10,7 @@ shards:
 
   kemal:
     github: kemalcr/kemal
-    commit: 9448360eac4273919c2bb6d2517a7234844aec2f
+    commit: b389022b35202319b59396f30b3cac87fd8d393a
 
   kemal-flash:
     github: neovintage/kemal-flash
@@ -18,7 +18,7 @@ shards:
 
   kemal-session:
     github: kemalcr/kemal-session
-    commit: bc720cca9c27e391b4b3fc32ae7cc23f4d3f3fdc
+    commit: b98aec297110f148cfdf0c250810bdcce30aede9
 
   kilt:
     github: jeromegn/kilt
@@ -26,7 +26,7 @@ shards:
 
   markd:
     github: icyleaf/markd
-    commit: f9101c18ee7bbdb7bfb3c0e9d91e55473ac195ca
+    commit: 69f49f565bb4a015f8745242f6e4daf9b510782d
 
   radix:
     github: luislavena/radix
@@ -35,8 +35,4 @@ shards:
   slang:
     github: jeromegn/slang
     commit: f33c23be9d477a07627a124d0b79d6cdb7a9132e
-
-  watchbird:
-    github: Sauilitired/watchbird
-    commit: ffac2957534899f8ec5fe29db9d48953e34d416a
 
