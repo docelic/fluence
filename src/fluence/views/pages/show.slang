@@ -112,12 +112,12 @@
                       }
                         else {
                           tag = new String(
-                          `<div class='row border-bottom'>
+                          `<div class='row border-bottom'  data-toggle='tooltip' data-placement='top' title='${responseJSON.error}'>
                             <div class='col-9'>
-                              <a class='list-group-item list-group-item-danger' href='#' data-toggle='tooltip' data-placement='top' title='${responseJSON.error}' disabled>  ${name}  </a>
+                              <a class='list-group-item' href='#'>  ${name}  </a>
                             </div>
                               <div class='col-3'>
-                                <input class='form-control' name='media-name' value='${name}' type='hidden'>
+                                <p class='text-danger'>FAILED</p>
                               </div>
                           </div>`)
                         }
