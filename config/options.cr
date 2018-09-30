@@ -2,6 +2,10 @@ module Fluence
   class Options
     def initialize
 
+      # Host/port to listen on.
+      @host = "0.0.0.0"
+      @port = 3000
+
       # Brand name, full name (including optional credit to Fluence Wiki), and logo.
       @brand = "Fluence"
       @brand_info = "#{@brand} - Fluence Wiki"
@@ -40,6 +44,8 @@ module Fluence
       Dir.mkdir_p @metadir
     end
 
+    getter host : String
+    getter port : Int32
     getter brand : String
     getter brand_info : String
     getter brand_logo : String
