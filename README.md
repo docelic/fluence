@@ -35,7 +35,7 @@ To configure Fluence, please do so in `config/options.cr`. After changing the op
 
 ## Example
 
-Here's how it currently looks:
+Here is how it currently looks:
 
 ![Fluence Wiki Screenshot](https://raw.githubusercontent.com/crystallabs/fluence/master/docs/screenshot.png)
 
