@@ -1,8 +1,6 @@
-require "tempfile"
-
 describe Acl do
   it "test the users permissions" do
-    acls = Acl::Groups.new Tempfile.new("spec").to_s
+    acls = Acl::Groups.new File.tempfile("spec").to_s
     g1 = Acl::Group.new(
       name: "user",
       default: Acl::Perm::Read,
@@ -53,7 +51,7 @@ describe Acl do
   end
 
   it "groups having" do
-    acls = Acl::Groups.new Tempfile.new("spec").to_s
+    acls = Acl::Groups.new File.tempfile("spec").to_s
     acls.add "guest"
     acls.add "admin"
     acls["guest"]["/*"] = Acl::Perm::Read

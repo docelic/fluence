@@ -1,5 +1,3 @@
-require "tempfile"
-
 describe Fluence::Markdown do
   it "test internal links" do
     page = Fluence::Page.new("test")
