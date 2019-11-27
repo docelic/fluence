@@ -10,7 +10,7 @@ Elegant wiki powered by Crystal, with markdown as native format and a WYSIWYG ed
 
 It uses file-based storage versioned using Git. Wiki pages are created as files and directories on disk and they can be modified in Fluence or via filesystem directly.
 
-Fluence uses Bootstrap 4 and jQuery 3.4.1 slim.
+Fluence uses latest versions: Bootstrap 4.4.0, jQuery 3.4.1 slim, InscrybMDE 1.11.6.
 
 ## Installation and Startup
 
