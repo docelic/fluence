@@ -58,7 +58,7 @@ class Acl::Group
     if matched_permissions.empty?
       default.to_i >= access.to_i
     else
-      # keep the longuest path
+      # keep the longest path
       match = matched_permissions.reduce { |l, r| l[0] >= r[0] ? l : r }
       match[1].to_i >= access.to_i
     end
@@ -73,7 +73,7 @@ class Acl::Group
     found_min_size[1]
   end
 
-  # Same than Path[String]? but returns the defaut value if not found
+  # Same than Path[String]? but returns the default value if not found
   def matching(path : String) : Acl::Perm
     acl = self.matching?(path)
     return @default if acl.nil?
@@ -86,7 +86,7 @@ class Acl::Group
     found && found[1]
   end
 
-  # Same than Path[String]? but returns the defaut value if not found
+  # Same than Path[String]? but returns the default value if not found
   def [](path : String) : Acl::Perm
     acl = self[path]?
     return @default if acl.nil?

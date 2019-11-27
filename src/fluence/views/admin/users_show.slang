@@ -1,7 +1,7 @@
 .container-fluid
   .row-no-gutters
     .container.col-6
-      h1 User Managment 
+      h1 User Management
       h3 Create a new User
       form#register-new-user method="post" action="#{Fluence::OPTIONS.admin_prefix}/users/create"
         fieldset

@@ -3,7 +3,7 @@ require "./user"
 # The class `Users` handles a list of `User`, with add, remove, update an find operation.
 # An instance of `Users` must be linked with a file which can be read of updated
 #
-# TODO: mutex on add/remove/update
+# TODO: Mutex on add/remove/update
 class Fluence::Users < Lockable
   class AlreadyExists < Exception
   end

@@ -42,7 +42,7 @@ class Fluence::Media < Fluence::File
 	end
 
   # Beginning of the URL
-	def url_prefix
+	def url_prefix : String
 		Fluence::OPTIONS.media_prefix
 	end
 

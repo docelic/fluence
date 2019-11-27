@@ -1,4 +1,4 @@
-.constainer-fluid
+.container-fluid
   .row.no-gutters
     .container.col-3
       h2.page-header Register

@@ -102,7 +102,7 @@ class Acl::Groups < Lockable
     @groups.keys.includes? group
   end
 
-  def group_exists?(group : Acl::Groum) : Bool
+  def group_exists?(group : Acl::Group) : Bool
     group_exists? group.name
   end
 

@@ -217,7 +217,7 @@ module Fluence
       nil
     end
 
-    # Find the url which is the closest as possible than the context url (start with the maxmimum common chars).
+    # Find the url which is the closest as possible than the context url (start with the maximum common chars).
     private def choose_closer_url(entries : Array(T), context : T) : T
       raise "Cannot handle empty array" if entries.empty?
       entries.reduce { |lhs, rhs| Index.url_closeness(context.url, lhs.url) >= Index.url_closeness(context.url, rhs.url) ? lhs : rhs }

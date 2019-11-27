@@ -9,7 +9,7 @@ require "kilt/slang"
 require "../src/fluence/version"
 require "../src/fluence/lib/_init"
 require "../src/fluence/controllers/application_controller"
-require "./routes"
+require "../config/routes"
 
 require "../config/application"
 

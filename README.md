@@ -29,7 +29,7 @@ The result of the compilation will be one executable file &mdash; bin/fluence.
 
 Run this file and visit [http://localhost:3000/](http://localhost:3000/) in your browser.
 
-To configure Fluence, please do so in `config/options.cr`. After changing the options, you need to re-start and/or re-build Fluence.
+To configure Fluence, please do so in `config/options.cr`. After changing the options, you need to rebuild Fluence.
 
 ## Example
 

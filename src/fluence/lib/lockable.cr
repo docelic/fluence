@@ -8,7 +8,7 @@ abstract class Lockable
   @lock : Mutex = Mutex.new
 
   # Execute some operation on the object, and then save it.
-  # The content can be loaded before executing the operations optionaly.
+  # The content can be loaded before executing the operations optionally.
   #
   # ```
   # someLockableObject.transaction(read: true) { |obj| obj.update_operation(...) }

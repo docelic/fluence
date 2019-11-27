@@ -4,7 +4,7 @@ require "../acl/entity"
 # An `User` is a couple name/password/groups/token.
 # The *name* and *groups* is public, the *password* and the *token* are private.
 # The password is used to recognize an user when login in with a form for example.
-# The token is used to recognize an user by a cookie for exemple.
+# The token is used to recognize an user by a cookie for example.
 class Fluence::User
   class Invalid < Exception
   end
@@ -28,7 +28,7 @@ class Fluence::User
     raise "Invalid name #{@name}" if !@name =~ /^[A-Za-z0-9 _.-]+$/ # Security: Avoid escaping and injection of code
   end
 
-  # Encrypts the passwod using `Crypto::Bcrypt`.
+  # Encrypts the password using `Crypto::Bcrypt`.
   #
   # ```
   # Fluence::User.new("admin", "password", %w(admin)).encrypt!.password # => "$2a$11$G2i2.Km1DRbJtqDBFRhKXuSn8IwNVt7AypAP328T1OYq0wBugkgCm"

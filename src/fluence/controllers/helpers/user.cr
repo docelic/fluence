@@ -15,7 +15,7 @@ module Fluence::Helpers::User
           session.string("user.name", user.name)
           set_login_cookies_for(user.name)
         else
-          puts "Invalid cookies creditentials"
+          puts "Invalid cookies credentials"
           delete_cookie "user.name"
           delete_cookie "user.token"
         end
