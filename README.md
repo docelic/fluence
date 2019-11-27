@@ -2,9 +2,7 @@
 [![Version](https://img.shields.io/github/tag/crystallabs/fluence.svg?maxAge=360)](https://github.com/crystallabs/fluence/releases/latest)
 [![License](https://img.shields.io/github/license/crystallabs/fluence.svg)](https://github.com/crystallabs/fluence/blob/master/LICENSE)
 
-**Project status**: `[X] Being developed  [X] Usable  [ ] Functionally complete`
-
-# Fluence
+# Fluence 0.5.0
 
 Elegant wiki powered by Crystal, with markdown as native format and a WYSIWYG editor.
 
