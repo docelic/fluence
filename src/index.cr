@@ -85,64 +85,66 @@ module Fluence
       self
     end
 
-		# Returns T from index, raises if missing.
-		# There is generally little use from sending a T as argument to retrieve the same T back, so this should be used just as a true-or-raise check for existence of pages.
     def [](page : T) : T
-      @entries[page.name]
+      page = self[page]?
+      page ? page : raise Exception.new "Missing: '#{page.path}'"
     end
-		# Returns T from index, raises if missing.
-    def [](name : String) : T
-      @entries[name]
-    end
-
-		# Returns T from index, nil if missing.
-		# There is generally little use from sending a T as argument to retrieve the same T back, so this should be used just as a true-or-nil check for existence of pages.
     def []?(page : T) : T?
-      @entries[page.name]?
-    end
-		# Returns T from index, nil if missing.
-    def []?(name : String) : T?
-      @entries[name]?
+      ::File.exists?(page.path) ? page : nil
     end
 
-    # Adds a new `T` into the index. This is a memory-only operation and does not sync new index contents to disk.
-		# Only index is affected, not the actual file.
+    def []?(name : String) : T?
+      page = T.new name
+      self[page]?
+    end
+    def [](name : String) : T
+      page = T.new name
+      self[page]
+    end
+
+    # Writes page to disk. Does not commit to Git.
     def add(page : T)
-      @entries[page.name] = page
+      page.jail!
+      page.content.try do |content| ::File.write page.path, content end
       self
     end
     # Adds a new `T` into the index. This operation syncs new index contents to disk.
 		def add!(page : T)
 			add page
-			save!
+			#commit! user, "update"
 			self
 		end
 
     # Removes a T from Index. This is a memory-only operation and does not sync new index contents to disk.
 		# Recursive deletion is not handled here for now.
     def delete(page : T)
-      @entries.delete page.name
+      page.jail!
+      ::File.delete page.path
       self
     end
     # Deletes a page from index. This operation syncs new index contents to disk.
 		# Recursive deletion is not handled here for now.
 		def delete!(page : T)
 			delete page
-			save!
+			#commit! user, "delete"
 			self
 		end
 
     # Renames `T` in index. This is a memory-only operation and does not sync new contents to disk.
 		# Recursive renaming is not handled here for now.
     def rename(page : T, new_name : String)
-      @entries[new_name] = @entries.delete(page.name).not_nil!
-      self
+      old = page
+      new = T.new new_name
+      old.jail!
+      new.jail!
+      ::File.rename old.path, new.path
+      {old, new}
     end
     # Renames a page in index. This operation syncs new index contents to disk.
 		# Recursive renaming is not handled here for now.
 		def rename!(page : T)
-			rename page
-			save!
+			old, new = rename page
+			#commit! user, new, other_files: old
 			self
 		end
 

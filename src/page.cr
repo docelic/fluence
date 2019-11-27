@@ -47,6 +47,8 @@ class Fluence::Page < Fluence::File
 		# is created with Fluence::Page.new("existing_name") and #process! is not called.
 		@modification_time = Time.local
 		@size = 0
+
+    jail!
 	end
 
   # translates a name ("/test/title" for example)

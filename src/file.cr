@@ -12,8 +12,8 @@ require "./errors"
 # It can also jail! the path into the *OPTIONS.datadir*.
 abstract class Fluence::File
 
-	class AlreadyExists < Exception
-	end
+  class AlreadyExists < Exception
+  end
 
   # Path of the file that contains the page
   getter path : String
@@ -27,11 +27,13 @@ abstract class Fluence::File
   # Title of the page
   getter title : String
 
-	# Pointless initialize needed due to https://github.com/crystal-lang/crystal/issues/2827
-	def initialize(@path,@name,@url,@title)
-	end
+  getter content : String?
 
-	abstract def url_prefix : String
+  # Pointless initialize needed due to https://github.com/crystal-lang/crystal/issues/2827
+  def initialize(@path,@name,@url,@title)
+  end
+
+  abstract def url_prefix : String
 
   # translate a name ("/test/title" for example)
   # into a directory path ("/srv/data/test/title)
@@ -57,11 +59,11 @@ abstract class Fluence::File
     ::File.read @path
   end
 
-	def update!(user : Fluence::User, body)
-		write user, body
-		process!
-		self
-	end
+  def update!(user : Fluence::User, body)
+    write user, body
+    process!
+    self
+  end
 
   # Writes into the *file*, and commit.
   def write(user : Fluence::User, body)
@@ -76,7 +78,7 @@ abstract class Fluence::File
     jail!
     ::File.delete @path
     commit! user, "delete"
-		self
+    self
   end
 
   # Checks if the *file* exists
@@ -85,9 +87,9 @@ abstract class Fluence::File
     ::File.exists? @path
   end
 
-	def parent_directory
-		::File.dirname @path
-	end
+  def parent_directory
+    ::File.dirname @path
+  end
 
   # Save the modifications on the *file* into the git repository
   # TODO: lock before commit
@@ -96,7 +98,7 @@ abstract class Fluence::File
     dir = Dir.current
     begin
       Dir.cd Fluence::OPTIONS.datadir
-			all_files = @path + " " + other_files.join(" ")
+      all_files = @path + " " + other_files.join(" ")
       puts `git add -- #{all_files}`
       puts `git commit --no-gpg-sign --author \"#{user.name} <#{user.name}@localhost>\" -m \"#{message} #{@name}\" -- #{all_files}`
     ensure
@@ -104,17 +106,17 @@ abstract class Fluence::File
     end
   end
 
-	def exists?
-		::File.exists? @path
-	end
+  def exists?
+    ::File.exists? @path
+  end
 
   def self.sanitize(text : String)
     self.title_to_slug URI.decode(text)
   end
 
-	def self.title_to_slug(title : String) : String
-		title.gsub(/[^[:alnum:]^\/]+/, "-").downcase
-	end
+  def self.title_to_slug(title : String) : String
+    title.gsub(/[^[:alnum:]^\/]+/, "-").downcase
+  end
 
   def self.remove_empty_directories(path)
     page_dir_elements = ::File.dirname(path).split ::File::SEPARATOR

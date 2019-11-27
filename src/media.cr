@@ -34,6 +34,8 @@ class Fluence::Media < Fluence::File
 		# is created with Fluence::Media.new("existing_name") and #process! is not called.
 		@modification_time = Time.local
 		@size = 0
+
+    jail!
 	end
 
   # Directory where media is stored
