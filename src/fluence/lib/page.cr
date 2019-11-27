@@ -74,7 +74,7 @@ class Fluence::Page < Fluence::File
   end
 
   # Beginning of the URL
-  def url_prefix
+  def url_prefix : String
     Fluence::OPTIONS.pages_prefix
   end
 

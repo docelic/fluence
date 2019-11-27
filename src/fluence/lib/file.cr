@@ -6,13 +6,10 @@ require "./errors"
 # It is used to associate path, url and data.
 #
 # Pages and Media are two primary uses. Originally, all of this was
-# in the Page class directly, but class can only inherit from
-# abstract class, so `File` was created as an abstract base
-# for both Page and Media.
+# in the Page class directly. Now file is separate `File` to serve
+# as basis for both Page and Media.
 #
-# Is is can also jail!s the path into the *OPTIONS.datadir* to be sure that
-# there is no attack by writing files outside of the directory where the pages
-# must be stored.
+# It can also jail! the path into the *OPTIONS.datadir*.
 abstract class Fluence::File
 
 	class AlreadyExists < Exception
@@ -47,7 +44,7 @@ abstract class Fluence::File
   def jail!
     # TODO: consider security of ".git/"
 
-    # the @file is already expanded (::File.expand_path) in the constructor
+    # The @fpath is already expanded (::File.expand_path) in the constructor
     if self.class.subdirectory != @path[0..(self.class.subdirectory.size - 1)]
       raise Error403.new "Out of chroot (#{@path} on #{self.class.subdirectory})"
     end
@@ -85,8 +82,7 @@ abstract class Fluence::File
   # Checks if the *file* exists
   def exists?
     jail!
-    ret = ::File.exists? @path
-		ret
+    ::File.exists? @path
   end
 
 	def parent_directory

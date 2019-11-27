@@ -26,7 +26,7 @@ class ApplicationController
   end
 
   def title
-    "Fluence Wiki"
+    Fluence::OPTIONS.brand_info
   end
 end
 

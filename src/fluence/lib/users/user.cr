@@ -52,7 +52,7 @@ class Fluence::User
   #########################
   include Acl::Entity
 
-  # getter groups : Array(String)
+  getter groups : Array(String)
 
   def group?(group : String) : Bool
     @groups.includes? group

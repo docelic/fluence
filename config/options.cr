@@ -30,7 +30,7 @@ module Fluence
       # Recursion limit for any recursive functions
       @recursion_limit = 1000
 
-      # Do all, or only new and/or only empty pages open in edit mode by default?
+      # Do all, or only new and/or only empty pages, open in edit mode by default?
       # By default, only new pages open in edit mode; existing and empty pages open in view mode.
       @open_in_edit = false
       @open_new_in_edit = true
