@@ -7,7 +7,7 @@ class ApplicationController
     end
 
     def delete_cookie(name)
-      set_cookie(name: name, value: "", expires: Time.now)
+      set_cookie(name: name, value: "", expires: Time.local)
     end
   end
 end

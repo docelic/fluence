@@ -4,7 +4,7 @@ version: 0.4.0
 authors:
   - Davor Ocelic <docelic@crystallabs.io>
 
-crystal: 0.26.0
+crystal: 0.31.1
 
 license: GPL-3
 
@@ -26,7 +26,3 @@ dependencies:
     github: icyleaf/markd
     branch: master
 
-development_dependencies:
-  ameba:
-    github: veelenga/ameba
-    version: ~> 0.8.0

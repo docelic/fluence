@@ -8,7 +8,7 @@ html lang="en"
 
     link rel="stylesheet" href="/assets/stylesheet/bootstrap.min.css"
     / link rel="stylesheet" href="/assets/stylesheet/bootstrap-theme.min.css"
-    script src="/assets/javascript/jquery-3.3.1.slim.min.js"
+    script src="/assets/javascript/jquery-3.4.1.slim.min.js"
     script src="/assets/javascript/popper.min.js"
     script src="/assets/javascript/bootstrap.min.js"
     link rel="stylesheet" href="/assets/stylesheet/highlight.min.css"

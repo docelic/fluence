@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     # TODO: make a notification
     begin
       user = Fluence::USERS.register! params.body["username"].to_s, params.body["password"].to_s
-      flash["success"] = "You are now registered with the username '#{user.name}'. Please log in."
+      flash["success"] = "You have now registered a new username '#{user.name}'. Please log in."
       redirect_to "#{Fluence::OPTIONS.users_prefix}/login"
     rescue err
       flash["danger"] = "Cannot register this account: #{err.message}."

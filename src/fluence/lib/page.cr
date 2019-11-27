@@ -45,7 +45,7 @@ class Fluence::Page < Fluence::File
 
 		# This data will be inaccurate (i.e. be current time) if an existing page
 		# is created with Fluence::Page.new("existing_name") and #process! is not called.
-		@modification_time = Time.new
+		@modification_time = Time.local
 		@size = 0
 	end
 
