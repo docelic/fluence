@@ -1,10 +1,10 @@
 require "spec"
 
-require "../src/fluence/lib/lockable"
-require "../src/fluence/lib/index"
+require "../src/lockable"
+require "../src/index"
 require "../config/options"
 
-require "../src/fluence/lib/acl"
-require "../src/fluence/lib/page"
-require "../src/fluence/lib/wikimd/**"
-require "../src/fluence/lib/users/**"
+require "../src/acl"
+require "../src/page"
+require "../src/wikimd/**"
+require "../src/users/**"
