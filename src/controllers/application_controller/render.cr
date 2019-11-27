@@ -23,7 +23,7 @@ class ApplicationController
   # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   # THE SOFTWARE.
   module Render
-    macro render_template(filename, path = "src/fluence/views")
+    macro render_template(filename, path = "src/views")
       {% if filename.id.split("/").size > 2 %}
         Kilt.render("{{filename.id}}")
       {% else %}
@@ -31,7 +31,7 @@ class ApplicationController
       {% end %}
     end
 
-    macro render(filename, layout = true, path = "src/fluence/views", folder = __FILE__)
+    macro render(filename, layout = true, path = "src/views", folder = __FILE__)
       # NOTE: content is basically yield rails layouts.
       {% if filename.id.split("/").size > 1 %}
         content = render_template("#{{{filename}}}", {{path}})

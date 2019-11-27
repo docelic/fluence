@@ -2,12 +2,12 @@ module Fluence::Helpers::Page
   # TODO: move that
   def add_page(entries, stack = [] of String)
     String.build do |str|
-      Slang.embed("src/fluence/views/pages/pages.directory.slang", "str")
+      Slang.embed("src/views/pages/pages.directory.slang", "str")
     end
   end
   def add_media(entries, stack = [] of String)
     String.build do |str|
-      Slang.embed("src/fluence/views/pages/media.directory.slang", "str")
+      Slang.embed("src/views/pages/media.directory.slang", "str")
     end
   end
 
@@ -41,7 +41,7 @@ module Fluence::Helpers::Page
       add_toc_level(b, index_entry)
     end
     String.build do |str|
-      Slang.embed("src/fluence/views/pages/toc.slang", "str")
+      Slang.embed("src/views/pages/toc.slang", "str")
     end
   end
 end

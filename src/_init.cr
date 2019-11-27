@@ -1,4 +1,4 @@
-require "../../../config/options"
+require "../config/options"
 
 require "./lockable"
 require "./errors"

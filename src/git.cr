@@ -1,4 +1,4 @@
-require "../../../config/options"
+require "../config/options"
 
 module Fluence::Git
   extend self
