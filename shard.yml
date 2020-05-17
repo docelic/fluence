@@ -14,15 +14,11 @@ dependencies:
     branch: master
   slang:
     github: jeromegn/slang
-    branch: master
   kemal-session:
     github: kemalcr/kemal-session
-    branch: master
   kemal-flash:
     github: neovintage/kemal-flash
-    branch: master
-    #version: 0.1.0
   markd:
     github: icyleaf/markd
-    branch: master
-
+  kilt:
+    github: jeromegn/kilt

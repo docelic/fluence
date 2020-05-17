@@ -4,7 +4,7 @@ require "./perm"
 
 # The Group is identified by a *name* and has *permissions* on a set of paths.
 # It is used by `Groups`.
-# NOTE: I did not used Hash().new(default) because it is annoying with passing the permissions in the constructor
+# NOTE: I did not use Hash().new(default) because it is annoying with passing the permissions in the constructor
 class Acl::Group
   # getter name : String
   # getter permissions : Hash(String, Acl::Perm)
@@ -43,7 +43,7 @@ class Acl::Group
     @permissions = permissions.map { |k, v| {Acl::Path.new(k), v} }.to_h
   end
 
-  # Check if the group as the `Acl::Perm` required to have access to a given path.
+  # Check if the group has the `Acl::Perm` required to have access to a given path.
   #
   # - *path* is the path that must be checked
   # - *access* is the minimal `Acl::Perm` required for a given operation
@@ -73,7 +73,7 @@ class Acl::Group
     found_min_size[1]
   end
 
-  # Same than Path[String]? but returns the default value if not found
+  # Same as Path[String]? but returns the default value if not found
   def matching(path : String) : Acl::Perm
     acl = self.matching?(path)
     return @default if acl.nil?
@@ -86,7 +86,7 @@ class Acl::Group
     found && found[1]
   end
 
-  # Same than Path[String]? but returns the default value if not found
+  # Same as Path[String]? but returns the default value if not found
   def [](path : String) : Acl::Perm
     acl = self[path]?
     return @default if acl.nil?

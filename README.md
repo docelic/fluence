@@ -58,7 +58,3 @@ Important things to have in mind currently:
 1. The default permissions scheme (which works and can be configured via both `meta/acls` and GUI) by default makes all registered users automatically be admin, and registrations are always open and don't require any confirmation. Therefore, the initial target for deployment and test of Fluence are small/trusted intranets and teams.
 
 Things we have in mind or are working on are listed in [project issues](https://github.com/crystallabs/fluence/issues). Your comments will help us decide on priorities.
-
-## Contributors
-
-- [Nephos](https://github.com/Nephos) Arthur Poulet - Fluence was originally developed based on Arthur's [Wikicr](https://github.com/Nephos/wikicr). Thanks!

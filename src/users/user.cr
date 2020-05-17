@@ -1,17 +1,13 @@
 require "crypto/bcrypt/password"
 require "../acl/entity"
 
-# An `User` is a couple name/password/groups/token.
+# A `User` consists of name/password/groups/token.
 # The *name* and *groups* is public, the *password* and the *token* are private.
 # The password is used to recognize an user when login in with a form for example.
 # The token is used to recognize an user by a cookie for example.
 class Fluence::User
   class Invalid < Exception
   end
-
-  # getter name : String
-  # getter password : String
-  # getter groups : Array(String)
 
   YAML.mapping(
     name: String,
@@ -22,10 +18,10 @@ class Fluence::User
 
   # ```
   # User.new "admin", "password", %w(admin user)
-  # User.new "nephos", "password", %w(user guest)
+  # User.new "regular", "password", %w(user guest)
   # ```
   def initialize(@name, @password, @groups = [] of String, @token : String? = nil)
-    raise "Invalid name #{@name}" if !@name =~ /^[A-Za-z0-9 _.-]+$/ # Security: Avoid escaping and injection of code
+    raise "Invalid name #{@name}" if @name !~ /^[A-Za-z0-9 _.-]+$/ # Security: Avoid escaping and injection of code
   end
 
   # Encrypts the password using `Crypto::Bcrypt`.

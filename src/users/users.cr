@@ -1,6 +1,6 @@
 require "./user"
 
-# The class `Users` handles a list of `User`, with add, remove, update an find operation.
+# The class `Users` handles a list of `User`, with add, remove, update, and find operation.
 # An instance of `Users` must be linked with a file which can be read of updated
 #
 # TODO: Mutex on add/remove/update
@@ -44,21 +44,21 @@ class Fluence::Users < Lockable
     ::File.write @file, self.to_yaml
   end
 
-  # add an user to the list
+  # add a user to the list
   def add(u : User)
     raise AlreadyExists.new "User #{u.name} already exists" if (@list[u.name]?)
     @list[u.name] = u
     self
   end
 
-  # Removes an user from the list
+  # Removes a user from the list
   # @see #delete(String)
   def delete(u : User)
     delete u.name
     self
   end
 
-  # Remove an user from the list
+  # Remove a user from the list
   def delete(name : String)
     raise NotExists.new "User #{name} is not in the list" if (!@list[name]?)
     @list.delete name
@@ -79,14 +79,14 @@ class Fluence::Users < Lockable
     self
   end
 
-  # find an user based on its name
+  # find a user based on its name
   def find(name : String) : User
     user = @list[name]?
     raise NotExists.new "User #{name} is not in the list" unless user
     user
   end
 
-  # find an user based on its name
+  # find a user based on its name
   def find?(name : String) : User?
 		@list[name]?
   end
@@ -117,7 +117,7 @@ class Fluence::Users < Lockable
 
   # No file operation.
   #
-  # Finds an user by its name and check the password.
+  # Finds a user by its name and check the password.
   #
   # Returns nil if it fails
   def auth?(name : String, password : String) : User?
@@ -159,18 +159,3 @@ class Fluence::Users < Lockable
     user
   end
 end
-
-# file = "/tmp/users"
-# ::File.touch(file)
-# include Fluence
-# users = Users.new(file)
-# users.load!
-# pp users
-# user = User.new("arthur", "passwd", %w(admin,user)).encrypt
-# users.add user
-# users.save!
-# p users
-# pp Crypto::Bcrypt::Password.new(user.password) == "passwd"
-# pp users.auth?("arthur", "passwd")
-# pp users.auth?("arthur", "passwdx")
-# pp users.auth?("arthurx", "passwd") # raise here
