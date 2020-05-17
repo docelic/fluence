@@ -1,24 +1,4 @@
 class PagesController < ApplicationController
-  # get /sitemap
-  def sitemap
-    acl_permit! :read
-    pages = Fluence::PAGES.children1
-    media = Fluence::MEDIA.children1
-    title = "Sitemap - #{title()}"
-    render "sitemap.slang"
-  end
-
-  # get /pages/search?q=
-  def search
-    #if query = params.query["q"]
-    # page = Fluence::Page.new(query.not_nil!)
-    # # TODO: a real search
-    #end
-    #page = nil
-    #title = "Search Results - #{title()}"
-    #redirect_to (query.empty? || !page) ? "#{Fluence::OPTIONS.homepage}" : page.url
-    redirect_to "#{Fluence::OPTIONS.homepage}"
-  end
 
   # get /pages/*path
   def show
@@ -160,5 +140,26 @@ class PagesController < ApplicationController
   rescue err
     flash["danger"] = "Error: cannot update #{page.name}, #{err.message}"
     redirect_to page.url
+  end
+
+  # get /sitemap
+  def sitemap
+    acl_permit! :read
+    pages = Fluence::PAGES.children1
+    media = Fluence::MEDIA.children1
+    title = "Sitemap - #{title()}"
+    render "sitemap.slang"
+  end
+
+  # get /pages/search?q=
+  def search
+    #if query = params.query["q"]
+    # page = Fluence::Page.new(query.not_nil!)
+    # # TODO: a real search
+    #end
+    #page = nil
+    #title = "Search Results - #{title()}"
+    #redirect_to (query.empty? || !page) ? "#{Fluence::OPTIONS.homepage}" : page.url
+    redirect_to "#{Fluence::OPTIONS.homepage}"
   end
 end

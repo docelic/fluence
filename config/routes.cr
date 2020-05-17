@@ -1,3 +1,5 @@
+# No need to change defaults.
+
 class Router
   {% for verb in {:get, :post, :delete, :patch, :put, :head} %}
     macro {{verb.id}}(route, controller, method)
@@ -21,6 +23,7 @@ class Router
   {% end %}
 end
 
+# This will issue a redirect to the page configured as homepage.
 Router.get "/", HomeController, :index
 
 Router.get "/sitemap", PagesController, :sitemap

@@ -1,3 +1,5 @@
+# Please configure the defaults to your needs.
+
 module Fluence
 
   # Application config. Feel free to tune the instance variables.
